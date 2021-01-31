@@ -1,27 +1,33 @@
 <template>
-  <div id="app">
-    <div class="cards">
-      <Card
-        v-for="(card, index) in cards"
-        :key="card"
-        :card="card"
-        :is-current="index === 0"
-        @cardAccepted="handleCardAccepted"
-        @cardRejected="handleCardRejected"
-        @cardSkipped="handleCardSkipped"
-        @hideCard="removeCardFromDeck"
-      />
-    </div>
+  <TopBar
+    @add="showAddModal()"
+    @settings="showSettingsModal()"
+    :numCards="cards.length"
+    :readOnly="false"
+  ></TopBar>
+  <div class="cards">
+    <Card
+      v-for="(card, index) in cards"
+      :key="card"
+      :card="card"
+      :is-current="index === 0"
+      @cardAccepted="handleCardAccepted"
+      @cardRejected="handleCardRejected"
+      @cardSkipped="handleCardSkipped"
+      @hideCard="removeCardFromDeck"
+    />
   </div>
 </template>
 
 <script>
 import Card from "./components/Card";
+import TopBar from "./components/TopBar";
 
 export default {
   name: "App",
   components: {
     Card,
+    TopBar,
   },
 
   data() {
@@ -43,6 +49,8 @@ export default {
     removeCardFromDeck() {
       this.cards.shift();
     },
+    showAddModal() {},
+    showSettingsModal() {},
   },
 };
 </script>
