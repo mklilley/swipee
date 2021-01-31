@@ -183,7 +183,7 @@ $fs-card-title: 1.125em;
 .card {
   @include card();
   @include absolute(0);
-  @include sizing(100% 80vw);
+  @include sizing(400px 600px);
   @include flex-center();
 
   @include after() {
@@ -196,7 +196,8 @@ $fs-card-title: 1.125em;
   }
 
   display: flex;
-  max-height: 350px;
+  max-height: 80vh;
+  max-width: 80vw;
   margin: auto;
   font-size: $fs-h2;
   font-weight: $fw-bold;
@@ -214,9 +215,6 @@ $fs-card-title: 1.125em;
   touch-action: none;
   pointer-events: none;
   will-change: transform, opacity;
-
-  height: 100vw;
-
   &.isCurrent {
     pointer-events: auto;
   }
