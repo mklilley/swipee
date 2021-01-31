@@ -48,25 +48,30 @@ export default {
 </script>
 
 <style lang="scss">
-.cards {
-  position: relative;
-  display: flex;
-  margin: 50px;
-  width: 300px;
+@import "./styles/mixins.scss";
+body {
+  margin: 0;
 }
-/* #app {
+#app {
+  box-sizing: border-box;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
-} */
+  height: 100vh;
+}
 
-@import "./styles/mixins.scss";
-
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  text-align: center;
+.cards {
+  padding-left: 0;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  align-items: center;
+  height: calc(
+    100% - 140px
+  ); // 140 = 2*70, 70 comes from TopBar component height
 }
 </style>
