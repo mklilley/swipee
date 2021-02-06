@@ -6,7 +6,11 @@
     :readOnly="false"
   ></TopBar>
 
-  <AddCard v-if="addModalVisible" @cancel="addModalVisible = false"></AddCard>
+  <AddCard
+    v-if="addModalVisible"
+    @cancel="addModalVisible = false"
+    @saved="addModalVisible = false"
+  ></AddCard>
 
   <div class="cards">
     <Card
@@ -95,6 +99,7 @@ label {
   font-weight: 400;
   color: #333;
   margin-right: 10px;
+  font-size: 16px;
 }
 
 textarea {
@@ -135,5 +140,12 @@ button.copied::after {
 
 button.wait::after {
   content: " ⌛";
+}
+
+.error {
+  margin-top: 10px;
+  display: block;
+  color: #e44e42;
+  font-weight: 600;
 }
 </style>
