@@ -1,10 +1,13 @@
 <template>
   <TopBar
-    @add="showAddModal()"
+    @add="openAddModal()"
     @settings="showSettingsModal()"
     :numCards="cards.length"
     :readOnly="false"
   ></TopBar>
+
+  <AddCard v-if="addModalVisible" @cancel="addModalVisible = false"></AddCard>
+
   <div class="cards">
     <Card
       v-for="(card, index) in cards"
@@ -20,19 +23,22 @@
 </template>
 
 <script>
-import Card from "./components/Card";
-import TopBar from "./components/TopBar";
+import Card from "@/components/Card";
+import TopBar from "@/components/TopBar";
+import AddCard from "@/components/AddCard";
 
 export default {
   name: "App",
   components: {
     Card,
     TopBar,
+    AddCard,
   },
 
   data() {
     return {
       cards: ["Test", "Vue.js", "Webpack"],
+      addModalVisible: false,
     };
   },
 
@@ -49,8 +55,10 @@ export default {
     removeCardFromDeck() {
       this.cards.shift();
     },
-    showAddModal() {},
-    showSettingsModal() {},
+    openAddModal() {
+      this.addModalVisible = true;
+  },
+    openSettingsModal() {},
   },
 };
 </script>
