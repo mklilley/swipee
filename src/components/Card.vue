@@ -98,8 +98,9 @@ export default {
 
           if (x > interactXThreshold) this.playCard(ACCEPT_CARD);
           else if (x < -interactXThreshold) this.playCard(REJECT_CARD);
-          else if (y > interactYThreshold) this.playCard(SKIP_CARD);
-          else this.resetCardPosition();
+          else if (y > interactYThreshold) {
+            //this.playCard(SKIP_CARD);
+          } else this.resetCardPosition();
         },
       },
     });
