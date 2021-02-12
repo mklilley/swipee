@@ -1,6 +1,6 @@
 <template>
   <TopBar
-    @add="openAddModal()"
+    @add="addModalVisible = true"
     @settings="settingsModalVisible = true"
     :numCards="cards.length"
     :readOnly="false"
@@ -86,10 +86,6 @@ export default {
     addCardToDeck(card) {
       this.cards.unshift(card.title);
     },
-    openAddModal() {
-      this.addModalVisible = true;
-    },
-    openSettingsModal() {},
     closeWelcomeModal() {
       this.welcomeModalVisible = false;
       localStorage.setItem("haveSeenWelcome", true);
