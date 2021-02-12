@@ -27,7 +27,7 @@
       :card="card"
       :is-current="index === 0"
       @cardAccepted="handleCardAccepted"
-      @cardRejected="handleCardRejected"
+      @cardRejected="handleCardRejected(card.id)"
       @cardSkipped="handleCardSkipped"
       @hideCard="removeCardFromDeck"
     />
@@ -35,7 +35,7 @@
       <p v-on:click.stop="addModalVisible = true">
         <span>No cards, tap to create one</span>
       </p>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -87,8 +87,11 @@ export default {
     handleCardAccepted() {
       console.log("handleCardAccepted");
     },
-    handleCardRejected() {
+    async handleCardRejected(cardId) {
       console.log("handleCardRejected");
+      await db.delete(cardId, {
+        remote: JSON.parse(localStorage.useRemoteStorage),
+      });
     },
     handleCardSkipped() {
       console.log("handleCardSkipped");
