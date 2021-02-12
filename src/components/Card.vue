@@ -31,7 +31,7 @@ export default {
   emits: [HIDE_CARD, ACCEPT_CARD, REJECT_CARD, SKIP_CARD],
   props: {
     card: {
-      type: String,
+      type: Object,
       required: true,
     },
     isCurrent: {
