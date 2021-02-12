@@ -30,6 +30,7 @@
       @cardRejected="handleCardRejected(card.id)"
       @cardSkipped="handleCardSkipped"
       @hideCard="removeCardFromDeck"
+      @failCardAccepted="showNotEnoughCredits"
     />
     <div class="no-card" v-if="cards.length == 0">
       <p v-on:click.stop="addModalVisible = true">
@@ -60,12 +61,14 @@ export default {
 
   async mounted() {
     // If first time using the app, we need to set up some localStorage variables
-    // for keeping track of the welcome screen
     if (localStorage.haveSeenWelcome === undefined) {
       localStorage.haveSeenWelcome = false;
     }
     if (localStorage.useRemoteStorage === undefined) {
       localStorage.useRemoteStorage = false;
+    }
+    if (localStorage.canSaveForLater === undefined) {
+      localStorage.canSaveForLater = true;
     }
 
     // need to JSON prase in order for true/false to be boolean rather than string
@@ -109,6 +112,9 @@ export default {
     loadCards: async function(options = {}) {
       this.cards = await db.read(options);
       return;
+    },
+    showNotEnoughCredits: function() {
+      alert("Not enough credits to save card for later");
     },
   },
 };

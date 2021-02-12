@@ -22,6 +22,7 @@ const ACCEPT_CARD = "cardAccepted";
 const REJECT_CARD = "cardRejected";
 const SKIP_CARD = "cardSkipped";
 const HIDE_CARD = "hideCard";
+const FAIL_ACCEPT_CARD = "failCardAccepted";
 
 export default {
   static: {
@@ -31,7 +32,7 @@ export default {
     interactYThreshold: 150,
     interactXThreshold: 100,
   },
-  emits: [HIDE_CARD, ACCEPT_CARD, REJECT_CARD, SKIP_CARD],
+  emits: [HIDE_CARD, ACCEPT_CARD, REJECT_CARD, SKIP_CARD, FAIL_ACCEPT_CARD],
   props: {
     card: {
       type: Object,
@@ -99,8 +100,14 @@ export default {
           } = this.$options.static;
           this.isInteractAnimating = true;
 
-          if (x > interactXThreshold) this.playCard(ACCEPT_CARD);
-          else if (x < -interactXThreshold) this.playCard(REJECT_CARD);
+          if (x > interactXThreshold) {
+            if (JSON.parse(localStorage.canSaveForLater) === true) {
+              this.playCard(ACCEPT_CARD);
+            } else {
+              this.resetCardPosition();
+              this.$emit(FAIL_ACCEPT_CARD);
+            }
+          } else if (x < -interactXThreshold) this.playCard(REJECT_CARD);
           else if (y > interactYThreshold) {
             //this.playCard(SKIP_CARD);
           } else this.resetCardPosition();
