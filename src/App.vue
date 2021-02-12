@@ -15,7 +15,7 @@
 
   <AddCard
     v-if="addModalVisible"
-    @saved="addCardToDeck"
+    @saved="loadCards"
     @close="addModalVisible = false"
   ></AddCard>
 
@@ -46,6 +46,8 @@ import AddCard from "@/components/AddCard";
 import Welcome from "@/components/Welcome";
 import Settings from "@/components/Settings";
 
+import { db } from "@/services/storage";
+
 export default {
   name: "App",
   components: {
@@ -68,11 +70,13 @@ export default {
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
+
+    await this.loadCards();
   },
 
   data() {
     return {
-      cards: ["Test", "Vue.js", "Webpack"],
+      cards: [],
       addModalVisible: false,
       welcomeModalVisible: false,
       settingsModalVisible: false,
@@ -98,6 +102,10 @@ export default {
     closeWelcomeModal() {
       this.welcomeModalVisible = false;
       localStorage.setItem("haveSeenWelcome", true);
+    },
+    loadCards: async function(options = {}) {
+      this.cards = await db.read(options);
+      return;
     },
   },
 };
