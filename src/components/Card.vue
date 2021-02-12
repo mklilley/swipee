@@ -1,19 +1,23 @@
 <template>
-  <div
+  <a
     v-if="isShowing"
     ref="interactElement"
     :class="{
       isAnimating: isInteractAnimating,
       isCurrent: isCurrent,
+      dragstart: !isInteractAnimating,
     }"
     class="card"
     :style="{ transform: transformString }"
+    :href="card.url"
+    target="_blank"
+    rel="noopener"
   >
     <h3 class="cardTitle">{{ card.title }}</h3>
     <img v-show="isCurrent" :src="card.image" />
     <p>{{ card.domain }}</p>
     <p>{{ card.description }}</p>
-  </div>
+  </a>
 </template>
 
 <script>
@@ -75,6 +79,9 @@ export default {
       listeners: {
         start: () => {
           this.isInteractAnimating = false;
+          // console.log(element.classList);
+          // element.classList.add("dragstart");
+          // console.log(element.classList);
         },
         move: (event) => {
           const {
@@ -271,5 +278,10 @@ $fs-card-title: 1.125em;
       }
     }
   }
+}
+
+// Stop desktop app from opening card url when it's being dragged
+.card.dragstart {
+  pointer-events: none;
 }
 </style>
