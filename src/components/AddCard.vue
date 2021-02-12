@@ -47,6 +47,7 @@
 <script>
 import Modal from "@/components/Modal.vue";
 import linkPreview from "@/services/linkPreview.js";
+import { db } from "@/services/storage";
 
 export default {
   name: "AddCard",
@@ -81,7 +82,10 @@ export default {
       const preview = await linkPreview(this.url);
       // Then save the card data along with link preview
       // Then tell the app that the card was successfully saved
-      this.$emit("saved", preview);
+      await db.create(preview, {
+        remote: JSON.parse(localStorage.useRemoteStorage),
+      });
+      this.$emit("saved");
       this.$emit("close");
     },
   },
