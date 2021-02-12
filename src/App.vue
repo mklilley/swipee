@@ -8,8 +8,8 @@
 
   <AddCard
     v-if="addModalVisible"
-    @cancel="addModalVisible = false"
-    @saved="addModalVisible = false"
+    @saved="addCardToDeck"
+    @close="addModalVisible = false"
   ></AddCard>
 
   <div class="cards">
@@ -58,6 +58,9 @@ export default {
     },
     removeCardFromDeck() {
       this.cards.shift();
+    },
+    addCardToDeck(card) {
+      this.cards.unshift(card.title);
     },
     openAddModal() {
       this.addModalVisible = true;
