@@ -62,6 +62,9 @@ export default {
     if (localStorage.haveSeenWelcome === undefined) {
       localStorage.haveSeenWelcome = false;
     }
+    if (localStorage.useRemoteStorage === undefined) {
+      localStorage.useRemoteStorage = false;
+    }
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
