@@ -9,7 +9,10 @@
     class="card"
     :style="{ transform: transformString }"
   >
-    <h3 class="cardTitle">{{ card }}</h3>
+    <h3 class="cardTitle">{{ card.title }}</h3>
+    <img v-show="isCurrent" :src="card.image" />
+    <p>{{ card.domain }}</p>
+    <p>{{ card.description }}</p>
   </div>
 </template>
 
@@ -197,6 +200,7 @@ $fs-card-title: 1.125em;
   }
 
   display: flex;
+  flex-direction: column;
   max-height: 80vh;
   max-width: 80vw;
   margin: auto;
@@ -228,6 +232,10 @@ $fs-card-title: 1.125em;
 .cardTitle {
   margin: 0 0 15px;
   font-size: $fs-card-title;
+}
+
+.card img {
+  width: 100%;
 }
 
 @for $i from 1 through $cardsTotal {
