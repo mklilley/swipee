@@ -30,6 +30,12 @@
       @cardSkipped="handleCardSkipped"
       @hideCard="removeCardFromDeck"
     />
+    <Card
+      v-if="cards.length == 0"
+      :card="'No cards, tap to create one'"
+      :is-current="true"
+      v-on:click.stop="addModalVisible = true"
+    />
   </div>
 </template>
 
