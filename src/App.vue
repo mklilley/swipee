@@ -6,6 +6,8 @@
     :readOnly="false"
   ></TopBar>
 
+  <Welcome v-if="welcomeModalVisible" @close="closeWelcomeModal"></Welcome>
+
   <AddCard
     v-if="addModalVisible"
     @saved="addCardToDeck"
@@ -30,6 +32,7 @@
 import Card from "@/components/Card";
 import TopBar from "@/components/TopBar";
 import AddCard from "@/components/AddCard";
+import Welcome from "@/components/Welcome";
 
 export default {
   name: "App",
@@ -37,12 +40,25 @@ export default {
     Card,
     TopBar,
     AddCard,
+    Welcome,
+  },
+
+  async mounted() {
+    // If first time using the app, we need to set up some localStorage variables
+    // for keeping track of the welcome screen
+    if (localStorage.haveSeenWelcome === undefined) {
+      localStorage.haveSeenWelcome = false;
+    }
+
+    // need to JSON prase in order for true/false to be boolean rather than string
+    this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
   },
 
   data() {
     return {
       cards: ["Test", "Vue.js", "Webpack"],
       addModalVisible: false,
+      welcomeModalVisible: false,
     };
   },
 
@@ -66,6 +82,10 @@ export default {
       this.addModalVisible = true;
     },
     openSettingsModal() {},
+    closeWelcomeModal() {
+      this.welcomeModalVisible = false;
+      localStorage.setItem("haveSeenWelcome", true);
+    },
   },
 };
 </script>
