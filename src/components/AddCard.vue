@@ -1,5 +1,5 @@
 <template>
-  <Modal v-on:close="$emit('cancel')">
+  <Modal v-on:close="$emit('close')">
     <template v-slot:body>
       <h2>Add new link</h2>
       <!-- First the user inputs a link -->
@@ -49,7 +49,7 @@ import linkPreview from "@/services/linkPreview.js";
 
 export default {
   name: "AddCard",
-  emits: ["cancel", "saved"],
+  emits: ["close", "saved"],
   components: {
     Modal,
   },
