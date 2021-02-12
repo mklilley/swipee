@@ -30,12 +30,11 @@
       @cardSkipped="handleCardSkipped"
       @hideCard="removeCardFromDeck"
     />
-    <Card
-      v-if="cards.length == 0"
-      :card="'No cards, tap to create one'"
-      :is-current="true"
-      v-on:click.stop="addModalVisible = true"
-    />
+    <div class="no-card" v-if="cards.length == 0">
+      <p v-on:click.stop="addModalVisible = true">
+        <span>No cards, tap to create one</span>
+      </p>
+  </div>
   </div>
 </template>
 
@@ -137,6 +136,40 @@ body {
   height: calc(
     100% - 140px
   ); // 140 = 2*70, 70 comes from TopBar component height
+}
+
+.no-card p {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 280px;
+  max-width: 80vw;
+  height: 400px;
+  padding: 0px 10%;
+  background-color: #fff;
+  border-color: grey;
+  border-style: dashed;
+  border-radius: 7px;
+  margin: 5px auto;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  color: grey;
+  font-weight: 600;
+  font-size: 25px;
+  -webkit-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
+  -moz-box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
+  box-shadow: 9px 10px 22px -8px rgba(209, 193, 209, 0.5);
+  will-change: transform;
+}
+
+.no-card {
+  list-style-type: none;
+  position: relative;
+  padding: 10px 10px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 label {
