@@ -1,12 +1,17 @@
 <template>
   <TopBar
     @add="openAddModal()"
-    @settings="showSettingsModal()"
+    @settings="settingsModalVisible = true"
     :numCards="cards.length"
     :readOnly="false"
   ></TopBar>
 
   <Welcome v-if="welcomeModalVisible" @close="closeWelcomeModal"></Welcome>
+
+  <Settings
+    v-if="settingsModalVisible"
+    @close="settingsModalVisible = false"
+  ></Settings>
 
   <AddCard
     v-if="addModalVisible"
@@ -33,6 +38,7 @@ import Card from "@/components/Card";
 import TopBar from "@/components/TopBar";
 import AddCard from "@/components/AddCard";
 import Welcome from "@/components/Welcome";
+import Settings from "@/components/Settings";
 
 export default {
   name: "App",
@@ -41,6 +47,7 @@ export default {
     TopBar,
     AddCard,
     Welcome,
+    Settings,
   },
 
   async mounted() {
@@ -59,6 +66,7 @@ export default {
       cards: ["Test", "Vue.js", "Webpack"],
       addModalVisible: false,
       welcomeModalVisible: false,
+      settingsModalVisible: false,
     };
   },
 
