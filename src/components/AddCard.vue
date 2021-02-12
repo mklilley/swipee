@@ -10,6 +10,7 @@
           type="text"
           placeholder="Link goes here"
           autocomplete="off"
+          ref="urlInput"
         />
         <br /><br />
         <button v-on:click="validateUrl()">Next</button>
@@ -83,6 +84,9 @@ export default {
       this.$emit("saved", preview);
       this.$emit("close");
     },
+  },
+  mounted() {
+    this.$refs.urlInput.focus();
   },
 };
 </script>
