@@ -1,15 +1,20 @@
 <template>
   <Modal v-on:close="$emit('close')">
-    <template v-slot:body> <h2>Settings</h2> </template>
+    <template v-slot:body>
+      <h2>Settings</h2>
+      <button v-on:click="$emit('restoreData')">
+        Restore data from online storage
+      </button>
+      <br /><br />
+    </template>
   </Modal>
 </template>
 
 <script>
 import Modal from "@/components/Modal.vue";
-
 export default {
   name: "Settings",
-  emits: ["close"],
+  emits: ["close", "restoreData"],
   components: {
     Modal,
   },

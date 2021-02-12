@@ -11,6 +11,7 @@
   <Settings
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
+    @restoreData="loadCards({ remote: true })"
   ></Settings>
 
   <AddCard
