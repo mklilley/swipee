@@ -82,6 +82,8 @@ export default {
       const preview = await linkPreview(this.url);
       // Then save the card data along with link preview
       // Then tell the app that the card was successfully saved
+      preview.action = this.action;
+      preview.time = this.time;
       await db.create(preview, {
         remote: JSON.parse(localStorage.useRemoteStorage),
       });
