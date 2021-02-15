@@ -48,7 +48,7 @@ export default {
   border: 2px solid;
   transform: scale(var(--ggs, 1));
   border-radius: 22px;
-  color: rgb(161, 125, 233);
+  color: #df1165;
 }
 .gg-add::after,
 .gg-add::before {
@@ -80,7 +80,7 @@ export default {
   height: 22px;
   border: 2px solid;
   border-radius: 3px;
-  color: rgb(161, 125, 233);
+  color: #df1165;
 }
 
 .gg-dice-5::before {
@@ -107,7 +107,7 @@ export default {
   height: 18px;
   border-radius: 3px;
   border: 2px solid;
-  color: rgb(161, 125, 233);
+  color: #df1165;
 }
 
 .gg-menu-boxed::before {
@@ -139,7 +139,7 @@ export default {
   position: relative;
   transform: scale(var(--ggs, 1));
   width: 8px;
-  color: rgb(161, 125, 233);
+  color: #df1165;
 }
 
 .gg-sort-az::after,
