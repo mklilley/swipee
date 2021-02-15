@@ -241,6 +241,8 @@ $fs-card-title: 1.125em;
   &.isAnimating {
     transition: transform 0.7s $ease-out-back;
   }
+
+  text-decoration: none;
 }
 
 .cardTitle {
