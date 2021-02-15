@@ -84,6 +84,7 @@ export default {
       // Then tell the app that the card was successfully saved
       preview.action = this.action;
       preview.time = this.time;
+      preview.skipped = false;
       await db.create(preview, {
         remote: JSON.parse(localStorage.useRemoteStorage),
       });
