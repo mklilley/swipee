@@ -13,6 +13,12 @@
     target="_blank"
     rel="noopener"
   >
+    <h2 v-if="!isInteractAnimating && swipeDirection == 'right'">
+      Swiping right
+    </h2>
+    <h2 v-if="!isInteractAnimating && swipeDirection == 'left'">
+      Swiping left
+    </h2>
     <h3 class="cardTitle">{{ card.title }}</h3>
     <img v-show="isCurrent" :src="card.image" />
     <p>{{ card.domain }}</p>
@@ -58,6 +64,7 @@ export default {
         y: 0,
         rotation: 0,
       },
+      swipeDirection: "",
     };
   },
 
@@ -89,6 +96,7 @@ export default {
             interactXThreshold,
           } = this.$options.static;
           const x = this.interactPosition.x + event.dx;
+          this.swipeDirection = x > 0 ? "right" : "left";
           const y = this.interactPosition.y + event.dy;
 
           let rotation = interactMaxRotation * (x / interactXThreshold);
