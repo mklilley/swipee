@@ -130,6 +130,33 @@ export default {
       this.welcomeModalVisible = false;
       localStorage.setItem("haveSeenWelcome", true);
     },
+    removeSkippedCards(cards) {
+      const msInDay = 1000 * 60 * 60 * 24;
+      const now = new Date();
+      const cardsWithoutSkipped = cards.filter(function(card) {
+        if (!card.skipped) {
+          // If card hasn't been skipped then show it
+          return true;
+        } else {
+          if ((now - Date.parse(card.skipped)) / msInDay > 1) {
+            // After 1 day, return skipped cards back to the deck. Don't await for the
+            // storage to update - to that async so the filter can run quickly
+            db.update(
+              card.id,
+              {
+                skipped: false,
+              },
+              { remote: JSON.parse(localStorage.useRemoteStorage) }
+            );
+            return true;
+          } else {
+            // Card was skipped less than 24 hours ago, keep it hidden.
+            return false;
+          }
+        }
+      });
+      return cardsWithoutSkipped;
+    },
     newShuffleSeed() {
       localStorage.seed = parseInt(localStorage.seed) + 1;
       localStorage.lastShuffle = new Date();
