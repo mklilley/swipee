@@ -69,9 +69,23 @@ export default {
     if (localStorage.canSaveForLater === undefined) {
       localStorage.canSaveForLater = true;
     }
+    if (localStorage.seed === undefined) {
+      localStorage.seed = 1;
+    }
+    if (localStorage.lastShuffle === undefined) {
+      localStorage.lastShuffle = new Date();
+    }
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
+
+    // If it's been longer than 24 hours since last app load then change shuffleSeed - this shuffles up the deck in a new way
+    const msInDay = 1000 * 60 * 60 * 24;
+    const daySinceLastLoad =
+      (new Date() - Date.parse(localStorage.lastShuffle)) / msInDay;
+    if (daySinceLastLoad > 1) {
+      this.newShuffleSeed();
+    }
 
     await this.loadCards();
   },
@@ -115,6 +129,10 @@ export default {
     closeWelcomeModal() {
       this.welcomeModalVisible = false;
       localStorage.setItem("haveSeenWelcome", true);
+    },
+    newShuffleSeed() {
+      localStorage.seed = parseInt(localStorage.seed) + 1;
+      localStorage.lastShuffle = new Date();
     },
     loadCards: async function(options = {}) {
       this.cards = await db.read(options);
