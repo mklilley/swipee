@@ -26,9 +26,8 @@
       :key="card"
       :card="card"
       :is-current="index === 0"
-      @cardAccepted="handleCardAccepted"
+      @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
-      @cardSkipped="handleCardSkipped"
       @hideCard="removeCardFromDeck"
       @failCardAccepted="showNotEnoughCredits"
     />
@@ -96,8 +95,16 @@ export default {
         remote: JSON.parse(localStorage.useRemoteStorage),
       });
     },
-    handleCardSkipped() {
+    async handleCardSkipped(cardId) {
       console.log("handleCardSkipped");
+      const now = new Date();
+      await db.update(
+        cardId,
+        {
+          skipped: now,
+        },
+        { remote: JSON.parse(localStorage.useRemoteStorage) }
+      );
     },
     removeCardFromDeck() {
       this.cards.shift();
