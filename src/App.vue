@@ -134,6 +134,13 @@ export default {
       localStorage.seed = parseInt(localStorage.seed) + 1;
       localStorage.lastShuffle = new Date();
     },
+    shuffle(cards) {
+      const shuffledDeck = shuffleSeed.shuffle(
+        cards,
+        parseInt(localStorage.seed)
+      );
+      return shuffledDeck;
+    },
     loadCards: async function(options = {}) {
       this.cards = await db.read(options);
       return;
