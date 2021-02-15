@@ -48,6 +48,8 @@ import Settings from "@/components/Settings";
 
 import { db } from "@/services/storage";
 
+import * as shuffleSeed from "shuffle-seed";
+
 export default {
   name: "App",
   components: {
@@ -169,8 +171,13 @@ export default {
       return shuffledDeck;
     },
     loadCards: async function(options = {}) {
-      this.cards = await db.read(options);
-      return;
+      // First read all cards from storage
+      let cards = await db.read(options);
+      // Next shuffle the cards
+      cards = this.shuffle(cards);
+      // Next remove cards that were skipped less than 24 hours ago
+      cards = this.removeSkippedCards(cards);
+      this.cards = cards;
     },
     showNotEnoughCredits: function() {
       alert("Not enough credits to save card for later");
