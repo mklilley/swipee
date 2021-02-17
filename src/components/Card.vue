@@ -13,16 +13,20 @@
     target="_blank"
     rel="noopener"
   >
-    <h2 v-if="!isInteractAnimating && swipeDirection == 'right'">
-      Swiping right
-    </h2>
-    <h2 v-if="!isInteractAnimating && swipeDirection == 'left'">
-      Swiping left
-    </h2>
     <h3 class="cardTitle">{{ card.title }}</h3>
     <img v-show="isCurrent" :src="card.image" />
     <p>{{ card.domain }}</p>
     <p>{{ card.description }}</p>
+    <div v-if="!isInteractAnimating" class="overlay">
+      <i v-if="swipeDirection == 'left'" class="gg-trash"></i>
+      <h2 v-if="swipeDirection == 'left'">
+        Discard
+      </h2>
+      <i v-if="swipeDirection == 'right'" class="gg-time"></i>
+      <h2 v-if="swipeDirection == 'right'">
+        Save for later
+      </h2>
+    </div>
   </a>
 </template>
 
@@ -293,5 +297,87 @@ $fs-card-title: 1.125em;
 // Stop desktop app from opening card url when it's being dragged
 .card.dragstart {
   pointer-events: none;
+}
+
+.card .overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($color: #d94e47, $alpha: 0.8);
+  border-radius: 100px;
+}
+
+.gg-trash {
+  --ggs: 1.5;
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 1));
+  width: 10px;
+  height: 12px;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 2px, inset -2px 0 0, inset 2px 0 0;
+  border-bottom-left-radius: 1px;
+  border-bottom-right-radius: 1px;
+  margin-top: 4px;
+}
+
+.gg-trash::after,
+.gg-trash::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+}
+
+.gg-trash::after {
+  background: currentColor;
+  border-radius: 3px;
+  width: 16px;
+  height: 2px;
+  top: -4px;
+  left: -5px;
+}
+
+.gg-trash::before {
+  width: 10px;
+  height: 4px;
+  border: 2px solid;
+  border-bottom: transparent;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  top: -7px;
+  left: -2px;
+}
+
+.gg-time {
+  --ggs: 1.5;
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 1));
+  width: 18px;
+  height: 18px;
+  border-radius: 100%;
+  border: 2px solid transparent;
+  box-shadow: 0 0 0 2px currentColor;
+}
+
+.gg-time::after {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-left: 2px solid;
+  border-bottom: 2px solid;
+  top: 1px;
+  left: 5px;
 }
 </style>
