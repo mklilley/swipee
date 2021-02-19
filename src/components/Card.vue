@@ -22,18 +22,26 @@
       class="overlay"
     >
       <i class="gg-trash"></i>
-      <h2>
-        Discard
-      </h2>
+      <span>
+        <h2>
+          Discard
+        </h2>
+      </span>
     </div>
+
     <div
       v-if="!isInteractAnimating && swipeDirection == 'right'"
       class="overlay"
     >
       <i class="gg-time"></i>
-      <h2>
-        Save for later
-      </h2>
+      <span>
+        <h2>Save for later</h2>
+      </span>
+
+      <div class="swipe-price">
+        <i class="gg-dollar"></i>
+        <h3>Price: {{ skipPrice }}</h3>
+      </div>
     </div>
   </a>
 </template>
@@ -77,6 +85,7 @@ export default {
         rotation: 0,
       },
       swipeDirection: "",
+      skipPrice: parseInt(localStorage.skipPrice),
     };
   },
 
@@ -98,9 +107,7 @@ export default {
       listeners: {
         start: () => {
           this.isInteractAnimating = false;
-          // console.log(element.classList);
-          // element.classList.add("dragstart");
-          // console.log(element.classList);
+          this.skipPrice = parseInt(localStorage.skipPrice);
         },
         move: (event) => {
           const {
@@ -320,6 +327,24 @@ $fs-card-title: 1.125em;
   border-radius: 100px;
 }
 
+.card .overlay h2,
+h3 {
+  margin: 0;
+}
+
+.card .overlay span {
+  margin: 10px;
+}
+
+.card .overlay .swipe-price {
+  position: absolute;
+  top: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .gg-trash {
   --ggs: 1.5;
   box-sizing: border-box;
@@ -387,5 +412,44 @@ $fs-card-title: 1.125em;
   border-bottom: 2px solid;
   top: 1px;
   left: 5px;
+}
+
+.gg-dollar {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 1));
+  width: 2px;
+  height: 20px;
+  background: currentColor;
+}
+
+.gg-dollar::after,
+.gg-dollar::before {
+  content: "";
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 10px;
+  height: 8px;
+  border: 2px solid;
+}
+
+.gg-dollar::before {
+  border-right: 0;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+  top: 3px;
+  left: -6px;
+  box-shadow: 4px -2px 0 -2px;
+}
+
+.gg-dollar::after {
+  border-left: 0;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
+  bottom: 3px;
+  right: -6px;
+  box-shadow: -4px 2px 0 -2px;
 }
 </style>

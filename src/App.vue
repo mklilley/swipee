@@ -77,6 +77,9 @@ export default {
     if (localStorage.lastShuffle === undefined) {
       localStorage.lastShuffle = new Date();
     }
+    if (localStorage.skipPrice === undefined) {
+      localStorage.skipPrice = 1;
+    }
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
