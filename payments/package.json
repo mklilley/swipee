@@ -1,0 +1,14 @@
+{
+  "name": "swipee-payments",
+  "version": "1.0.0",
+  "description": "Stripe implementation for Swipee",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "stripe": "^7.1.0"
+  }
+}
