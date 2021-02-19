@@ -17,13 +17,21 @@
     <img v-show="isCurrent" :src="card.image" />
     <p>{{ card.domain }}</p>
     <p>{{ card.description }}</p>
-    <div v-if="!isInteractAnimating" class="overlay">
-      <i v-if="swipeDirection == 'left'" class="gg-trash"></i>
-      <h2 v-if="swipeDirection == 'left'">
+    <div
+      v-if="!isInteractAnimating && swipeDirection == 'left'"
+      class="overlay"
+    >
+      <i class="gg-trash"></i>
+      <h2>
         Discard
       </h2>
-      <i v-if="swipeDirection == 'right'" class="gg-time"></i>
-      <h2 v-if="swipeDirection == 'right'">
+    </div>
+    <div
+      v-if="!isInteractAnimating && swipeDirection == 'right'"
+      class="overlay"
+    >
+      <i class="gg-time"></i>
+      <h2>
         Save for later
       </h2>
     </div>
