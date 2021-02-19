@@ -6,23 +6,44 @@
         Restore data from online storage
       </button>
       <br /><br />
+      Credits: {{ credits }}
+
+      <button v-on:click="paymentModalVisible = true">
+        Buy more credits
+      </button>
     </template>
   </Modal>
+
+  <Payment
+    v-if="paymentModalVisible"
+    @close="paymentModalVisible = false"
+    @paymentSuccess="updateCredits"
+  ></Payment>
 </template>
 
 <script>
 import Modal from "@/components/Modal.vue";
+import Payment from "@/components/Payment.vue";
+
 export default {
   name: "Settings",
   emits: ["close", "restoreData"],
   components: {
     Modal,
+    Payment,
   },
   data() {
-    return {};
+    return {
+      credits: parseInt(localStorage.credits),
+      paymentModalVisible: false,
+    };
   },
-  methods: {},
-  mounted() {},
+  methods: {
+    updateCredits() {
+      this.credits = parseInt(localStorage.credits);
+    },
+  },
+  async mounted() {},
 };
 </script>
 
