@@ -68,9 +68,6 @@ export default {
     if (localStorage.useRemoteStorage === undefined) {
       localStorage.useRemoteStorage = false;
     }
-    if (localStorage.canSaveForLater === undefined) {
-      localStorage.canSaveForLater = true;
-    }
     if (localStorage.seed === undefined) {
       localStorage.seed = 1;
     }
@@ -79,6 +76,9 @@ export default {
     }
     if (localStorage.skipPrice === undefined) {
       localStorage.skipPrice = 1;
+    }
+    if (localStorage.credits === undefined) {
+      localStorage.credits = 10;
     }
 
     // need to JSON prase in order for true/false to be boolean rather than string

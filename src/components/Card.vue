@@ -135,7 +135,9 @@ export default {
           this.isInteractAnimating = true;
 
           if (x > interactXThreshold) {
-            if (JSON.parse(localStorage.canSaveForLater) === true) {
+            if (
+              parseInt(localStorage.credits) >= parseInt(localStorage.skipPrice)
+            ) {
               this.playCard(ACCEPT_CARD);
             } else {
               this.resetCardPosition();
