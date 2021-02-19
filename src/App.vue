@@ -124,6 +124,9 @@ export default {
         },
         { remote: JSON.parse(localStorage.useRemoteStorage) }
       );
+      localStorage.credits =
+        parseInt(localStorage.credits) - parseInt(localStorage.skipPrice);
+      localStorage.skipPrice = parseInt(localStorage.skipPrice) * 2;
     },
     removeCardFromDeck() {
       this.cards.shift();
