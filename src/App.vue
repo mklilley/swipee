@@ -14,6 +14,11 @@
     @restoreData="loadCards({ remote: true })"
   ></Settings>
 
+  <Credits
+    v-if="creditsModalVisible"
+    @close="creditsModalVisible = false"
+  ></Credits>
+
   <AddCard
     v-if="addModalVisible"
     @saved="loadCards"
@@ -29,7 +34,7 @@
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
       @hideCard="removeCardFromDeck"
-      @failCardAccepted="showNotEnoughCredits"
+      @failCardAccepted="creditsModalVisible = true"
     />
     <div class="no-card" v-if="cards.length == 0">
       <p v-on:click.stop="addModalVisible = true">
@@ -45,6 +50,7 @@ import TopBar from "@/components/TopBar";
 import AddCard from "@/components/AddCard";
 import Welcome from "@/components/Welcome";
 import Settings from "@/components/Settings";
+import Credits from "@/components/Credits";
 
 import { db } from "@/services/storage";
 
@@ -58,6 +64,7 @@ export default {
     AddCard,
     Welcome,
     Settings,
+    Credits,
   },
 
   async mounted() {
@@ -101,6 +108,7 @@ export default {
       addModalVisible: false,
       welcomeModalVisible: false,
       settingsModalVisible: false,
+      creditsModalVisible: false,
     };
   },
 
@@ -184,9 +192,6 @@ export default {
       // Next remove cards that were skipped less than 24 hours ago
       cards = this.removeSkippedCards(cards);
       this.cards = cards;
-    },
-    showNotEnoughCredits: function() {
-      alert("Not enough credits to save card for later");
     },
   },
 };
