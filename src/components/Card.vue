@@ -326,7 +326,7 @@ $fs-card-title: 1.125em;
   width: 100%;
   height: 100%;
   background-color: rgba($color: #d94e47, $alpha: 0.8);
-  border-radius: 100px;
+  border-radius: 15px;
 }
 
 .card .overlay h2,
