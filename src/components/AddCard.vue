@@ -38,7 +38,7 @@
         <input type="radio" value="long" v-model="time" />
         Long <br /><br />
 
-        <button v-on:click="saveCard()">Next</button>
+        <button v-on:click="saveCard($event)">Next</button>
       </div>
     </template>
   </Modal>
@@ -78,18 +78,27 @@ export default {
       }
     },
     async createLinkPreview() {},
-    async saveCard() {
-      const preview = await linkPreview(this.url);
-      // Then save the card data along with link preview
-      // Then tell the app that the card was successfully saved
-      preview.action = this.action;
-      preview.time = this.time;
-      preview.skipped = false;
-      await db.create(preview, {
-        remote: JSON.parse(localStorage.useRemoteStorage),
+    async saveCard(event) {
+      event.target.classList.toggle("wait");
+      const preview = await linkPreview(this.url).catch((err) => {
+        console.log(err);
+        alert("Sorry, something went wrong generating a preview for the link");
+        event.target.classList.toggle("wait");
       });
-      this.$emit("saved");
-      this.$emit("close");
+      event.target.classList.toggle("wait");
+
+      if (preview) {
+        // Then save the card data along with link preview
+        // Then tell the app that the card was successfully saved
+        preview.action = this.action;
+        preview.time = this.time;
+        preview.skipped = false;
+        await db.create(preview, {
+          remote: JSON.parse(localStorage.useRemoteStorage),
+        });
+        this.$emit("saved");
+        this.$emit("close");
+      }
     },
   },
   mounted() {
