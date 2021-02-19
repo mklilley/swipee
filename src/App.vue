@@ -298,7 +298,7 @@ button.copied::after {
 }
 
 button.wait::after {
-  content: " ⌛";
+  content: " ⏳";
 }
 
 .error {
