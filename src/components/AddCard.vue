@@ -77,7 +77,6 @@ export default {
         this.error = true;
       }
     },
-    async createLinkPreview() {},
     async saveCard(event) {
       event.target.classList.toggle("wait");
       const preview = await linkPreview(this.url).catch((err) => {
