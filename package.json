@@ -13,7 +13,8 @@
     "interactjs": "^1.10.2",
     "register-service-worker": "^1.7.1",
     "shuffle-seed": "github:mklilley/shuffle-seed",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue3-click-away": "^1.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
