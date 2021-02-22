@@ -2,9 +2,17 @@
   <TopBar
     @add="addModalVisible = true"
     @settings="settingsModalVisible = true"
+    @filter="filterVisible = !filterVisible"
     :numCards="cards.length"
     :readOnly="false"
   ></TopBar>
+
+  <ChipsMultiselect
+    v-if="filterVisible"
+    v-model="selectedFilterItems"
+    :items="filterItems"
+    @update:modelValue="updateFilterItems"
+  ></ChipsMultiselect>
 
   <Welcome v-if="welcomeModalVisible" @close="closeWelcomeModal"></Welcome>
 
@@ -51,6 +59,7 @@ import AddCard from "@/components/AddCard";
 import Welcome from "@/components/Welcome";
 import Settings from "@/components/Settings";
 import Credits from "@/components/Credits";
+import ChipsMultiselect from "@/components/ChipsMultiselect";
 
 import { db } from "@/services/storage";
 
@@ -65,6 +74,7 @@ export default {
     Welcome,
     Settings,
     Credits,
+    ChipsMultiselect,
   },
 
   async mounted() {
@@ -88,6 +98,8 @@ export default {
       localStorage.credits = 10;
     }
 
+    this.filterItems = this.initialFilterItems();
+
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
 
@@ -109,10 +121,56 @@ export default {
       welcomeModalVisible: false,
       settingsModalVisible: false,
       creditsModalVisible: false,
+      filterVisible: false,
+      selectedFilterItems: null,
+      filterItems: [],
     };
   },
 
   methods: {
+    initialFilterItems() {
+      return [
+        {
+          id: 1,
+          label: "📚 Read",
+          type: "action",
+        },
+        {
+          id: 2,
+          label: "📺 Watch",
+          type: "action",
+        },
+        {
+          id: 3,
+          label: "🎧 Listen",
+          type: "action",
+        },
+        {
+          id: 4,
+          label: "⚡️ Short",
+          type: "time",
+        },
+        {
+          id: 5,
+          label: "⏳ Medium",
+          type: "time",
+        },
+        {
+          id: 6,
+          label: "🦥 Long",
+          type: "time",
+        },
+      ];
+    },
+    updateFilterItems(filterItemsSelected) {
+      let items = this.initialFilterItems();
+      // This ensures that once you've picked a filter of a certain type you cannot choose another filter of the same type
+      // i.e. if you have selected "watch" then you cannot select "read"
+      filterItemsSelected.forEach((element) => {
+        items = items.filter((item) => item.type !== element.type);
+      });
+      this.filterItems = items;
+    },
     handleCardAccepted() {
       console.log("handleCardAccepted");
     },
