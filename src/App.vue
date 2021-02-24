@@ -61,6 +61,9 @@ import Settings from "@/components/Settings";
 import Credits from "@/components/Credits";
 import ChipsMultiselect from "@/components/ChipsMultiselect";
 
+import isEqual from "lodash/isEqual";
+import pick from "lodash/pick";
+
 import { db } from "@/services/storage";
 
 import * as shuffleSeed from "shuffle-seed";
@@ -123,6 +126,7 @@ export default {
       creditsModalVisible: false,
       filterVisible: false,
       selectedFilterItems: null,
+      selectedFilterItemsObject: {},
       filterItems: [],
     };
   },
@@ -133,43 +137,56 @@ export default {
         {
           id: 1,
           label: "📚 Read",
+          _label: "read",
           type: "action",
         },
         {
           id: 2,
           label: "📺 Watch",
+          _label: "watch",
           type: "action",
         },
         {
           id: 3,
           label: "🎧 Listen",
+          _label: "listen",
           type: "action",
         },
         {
           id: 4,
           label: "⚡️ Short",
+          _label: "short",
           type: "time",
         },
         {
           id: 5,
           label: "⏳ Medium",
+          _label: "medium",
           type: "time",
         },
         {
           id: 6,
           label: "🦥 Long",
+          _label: "long",
           type: "time",
         },
       ];
     },
     updateFilterItems(filterItemsSelected) {
       let items = this.initialFilterItems();
-      // This ensures that once you've picked a filter of a certain type you cannot choose another filter of the same type
-      // i.e. if you have selected "watch" then you cannot select "read"
+
+      this.selectedFilterItemsObject = {};
       filterItemsSelected.forEach((element) => {
+        // This creates an object describing which filters are currently enabled.
+        // It makes it easier to filter cards, cf function removedFilteredCards
+        this.selectedFilterItemsObject[element.type] = element._label;
+
+        // This ensures that once you've picked a filter of a certain type you cannot choose another filter of the same type
+        // i.e. if you have selected "watch" then you cannot select "read"
         items = items.filter((item) => item.type !== element.type);
       });
       this.filterItems = items;
+      this.loadCards();
     },
     handleCardAccepted() {
       console.log("handleCardAccepted");
@@ -231,6 +248,25 @@ export default {
       });
       return cardsWithoutSkipped;
     },
+    removedFilteredCards(cards) {
+      if (isEqual(this.selectedFilterItemsObject, {})) {
+        return cards;
+      } else {
+        const filteredCards = cards.filter((card) => {
+          const itemsToFilterBy = pick(card, ["action", "time"]);
+          // This line below takes current filter object and overwrites the
+          // newly created itemsToFilterBy object. The idea is that if this
+          // overwriting process leaves the itemsToFilterBy unchanged then
+          // the card passes through the filter. Otherwise it is stopped from being shown.
+          const filteredItems = {
+            ...itemsToFilterBy,
+            ...this.selectedFilterItemsObject,
+          };
+          return isEqual(filteredItems, itemsToFilterBy);
+        });
+        return filteredCards;
+      }
+    },
     newShuffleSeed() {
       localStorage.seed = parseInt(localStorage.seed) + 1;
       localStorage.lastShuffle = new Date();
@@ -249,6 +285,8 @@ export default {
       cards = this.shuffle(cards);
       // Next remove cards that were skipped less than 24 hours ago
       cards = this.removeSkippedCards(cards);
+      // Next remove cards that have been filterd out
+      cards = this.removedFilteredCards(cards);
       this.cards = cards;
     },
   },
