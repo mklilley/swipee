@@ -172,7 +172,7 @@ export default {
         },
       ];
     },
-    updateFilterItems(filterItemsSelected) {
+    async updateFilterItems(filterItemsSelected) {
       let items = this.initialFilterItems();
 
       this.selectedFilterItemsObject = {};
@@ -186,7 +186,7 @@ export default {
         items = items.filter((item) => item.type !== element.type);
       });
       this.filterItems = items;
-      this.loadCards();
+      await this.loadCards();
     },
     handleCardAccepted() {
       console.log("handleCardAccepted");
