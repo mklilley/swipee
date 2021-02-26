@@ -11,6 +11,7 @@
     "@stripe/stripe-js": "^1.12.1",
     "core-js": "^3.6.5",
     "interactjs": "^1.10.2",
+    "lodash": "^4.17.21",
     "register-service-worker": "^1.7.1",
     "shuffle-seed": "github:mklilley/shuffle-seed",
     "vue": "^3.0.0",
