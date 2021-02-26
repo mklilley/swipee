@@ -28,6 +28,12 @@
       <button v-on:click="deleteDataModalVisible = true">
         Delete all your data
       </button>
+
+      <br /><br />
+
+      <button v-on:click="importDataModalVisible = true">
+        Import data from file
+      </button>
     </template>
   </Modal>
 
@@ -46,6 +52,11 @@
     @close="deleteDataModalVisible = false"
   ></DeleteData>
 
+  <ImportData
+    v-if="importDataModalVisible"
+    @close="importDataModalVisible = false"
+  ></ImportData>
+
   <Credits
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
@@ -58,6 +69,7 @@ import Credits from "@/components/Credits.vue";
 import Feedback from "@/components/Feedback.vue";
 import Welcome from "@/components/Welcome.vue";
 import DeleteData from "@/components/DeleteData.vue";
+import ImportData from "@/components/ImportData.vue";
 
 export default {
   name: "Settings",
@@ -68,6 +80,7 @@ export default {
     Feedback,
     Welcome,
     DeleteData,
+    ImportData,
   },
   data() {
     return {
@@ -76,6 +89,7 @@ export default {
       feedbackModalVisible: false,
       welcomeModalVisible: false,
       deleteDataModalVisible: false,
+      importDataModalVisible: false,
     };
   },
   methods: {
