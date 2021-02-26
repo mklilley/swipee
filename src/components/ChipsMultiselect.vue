@@ -2,6 +2,7 @@
 work as plugin in vue3 so created my own component from the source code // I
 also had to adapt and use vue3-click-away instead of v-on-click-outside
 <template>
+  <div v-click-away="deactivate" class="filter">
     <div class="selecteditems" @click.prevent="toggleActivate()">
       <ul class="chips">
         <li
@@ -19,7 +20,7 @@ also had to adapt and use vue3-click-away instead of v-on-click-outside
           <span class="chips--remove"><b>x</b></span>
         </li>
 
-        <li class="chips__itemInput" v-if="items.length !== 0">
+        <li class="chips__itemInput" v-if="selectedItems.length === 0">
           <!-- <input
             v-model="searchedText"
             @focus.prevent="activate()"
@@ -30,7 +31,7 @@ also had to adapt and use vue3-click-away instead of v-on-click-outside
             placeholder="Filter"
             ref="search"
           /> -->
-          <span v-if="selectedItems.length === 0">Tap to filter</span>
+          <span class="filter-placeholder">Tap to filter</span>
         </li>
       </ul>
     </div>
@@ -154,7 +155,7 @@ export default {
     },
     toggleActivate() {
       this.showList = !this.showList;
-  },
+    },
   },
 };
 </script>
@@ -204,7 +205,7 @@ export default {
 .allitems
   cursor: pointer
   border: 1px solid #dbdbdb
-  max-height: 150px
+  max-height: 130px
   height: calc(100vh - 240px)
   overflow-y: scroll
 
@@ -218,4 +219,15 @@ export default {
     &:hover
       background: rgba(50, 115, 220, 1)
       color: #ffffff
+
+.chips__itemInput
+  margin: 4px
+  padding: 6px
+
+.filter
+ margin:0
+
+ul
+ margin:0
+ padding:0
 </style>
