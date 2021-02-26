@@ -187,7 +187,7 @@ export default {
     color: white
 
     &:hover
-      background-color: rgba(50, 115, 220, .3)
+      background-color: rgb(223, 17, 101, 0.5)
 
   &__itemInput
     display: inline-block
@@ -222,8 +222,9 @@ export default {
     color: #73345e
 
     &:hover
-      background: rgba(50, 115, 220, 1)
+      background: rgb(223, 17, 101)
       color: #ffffff
+      font-weight: bold
 
 .chips__itemInput
   margin: 4px
