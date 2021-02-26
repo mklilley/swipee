@@ -16,8 +16,19 @@
       <button v-on:click="feedbackModalVisible = true">
         Send feedback
       </button>
+
+      <br /><br />
+
+      <button v-on:click="welcomeModalVisible = true">
+        Show welome screen again
+      </button>
     </template>
   </Modal>
+
+  <Welcome
+    v-if="welcomeModalVisible"
+    @close="welcomeModalVisible = false"
+  ></Welcome>
 
   <Feedback
     v-if="feedbackModalVisible"
@@ -34,6 +45,7 @@
 import Modal from "@/components/Modal.vue";
 import Credits from "@/components/Credits.vue";
 import Feedback from "@/components/Feedback.vue";
+import Welcome from "@/components/Welcome.vue";
 
 export default {
   name: "Settings",
@@ -42,12 +54,14 @@ export default {
     Modal,
     Credits,
     Feedback,
+    Welcome,
   },
   data() {
     return {
       credits: parseInt(localStorage.credits),
       creditsModalVisible: false,
       feedbackModalVisible: false,
+      welcomeModalVisible: false,
     };
   },
   methods: {
