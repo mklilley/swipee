@@ -100,10 +100,10 @@ export default {
         preview.time = this.time;
         preview.deck = this.deck;
         preview.skipped = false;
-        await db.create(preview, {
+        const newCard = await db.create(preview, {
           remote: JSON.parse(localStorage.useRemoteStorage),
         });
-        this.$emit("saved");
+        this.$emit("saved", newCard);
         this.$emit("close");
       }
     },

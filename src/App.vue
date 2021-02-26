@@ -30,7 +30,7 @@
 
   <AddCard
     v-if="addModalVisible"
-    @saved="loadCards"
+    @saved="addSavedCardToDeck"
     @close="addModalVisible = false"
   ></AddCard>
 
@@ -296,6 +296,9 @@ export default {
       // Next remove cards that have been filterd out
       cards = this.removedFilteredCards(cards);
       this.cards = cards;
+    },
+    addSavedCardToDeck(newCard) {
+      this.cards.push(newCard);
     },
   },
 };
