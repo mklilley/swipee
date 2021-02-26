@@ -21,16 +21,17 @@ also had to adapt and use vue3-click-away instead of v-on-click-outside
         </li>
 
         <li class="chips__itemInput" v-if="items.length !== 0">
-          <input
+          <!-- <input
             v-model="searchedText"
             @focus.prevent="activate()"
             @keyup.esc="deactivate()"
             @keyup.enter="enterToSelectItem()"
             class="chips__input--fake"
             type="text"
-            placeholder="Search"
+            placeholder="Filter"
             ref="search"
-          />
+          /> -->
+          <span v-if="selectedItems.length === 0">Tap to filter</span>
         </li>
       </ul>
     </div>
