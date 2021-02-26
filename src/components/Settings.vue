@@ -10,8 +10,19 @@
       <button v-on:click="creditsModalVisible = true">
         Your credits
       </button>
+
+      <br /><br />
+
+      <button v-on:click="feedbackModalVisible = true">
+        Send feedback
+      </button>
     </template>
   </Modal>
+
+  <Feedback
+    v-if="feedbackModalVisible"
+    @close="feedbackModalVisible = false"
+  ></Feedback>
 
   <Credits
     v-if="creditsModalVisible"
@@ -22,6 +33,7 @@
 <script>
 import Modal from "@/components/Modal.vue";
 import Credits from "@/components/Credits.vue";
+import Feedback from "@/components/Feedback.vue";
 
 export default {
   name: "Settings",
@@ -29,11 +41,13 @@ export default {
   components: {
     Modal,
     Credits,
+    Feedback,
   },
   data() {
     return {
       credits: parseInt(localStorage.credits),
       creditsModalVisible: false,
+      feedbackModalVisible: false,
     };
   },
   methods: {
