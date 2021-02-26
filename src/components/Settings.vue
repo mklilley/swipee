@@ -22,6 +22,12 @@
       <button v-on:click="welcomeModalVisible = true">
         Show welome screen again
       </button>
+
+      <br /><br />
+
+      <button v-on:click="deleteDataModalVisible = true">
+        Delete all your data
+      </button>
     </template>
   </Modal>
 
@@ -35,6 +41,11 @@
     @close="feedbackModalVisible = false"
   ></Feedback>
 
+  <DeleteData
+    v-if="deleteDataModalVisible"
+    @close="deleteDataModalVisible = false"
+  ></DeleteData>
+
   <Credits
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
@@ -46,6 +57,7 @@ import Modal from "@/components/Modal.vue";
 import Credits from "@/components/Credits.vue";
 import Feedback from "@/components/Feedback.vue";
 import Welcome from "@/components/Welcome.vue";
+import DeleteData from "@/components/DeleteData.vue";
 
 export default {
   name: "Settings",
@@ -55,6 +67,7 @@ export default {
     Credits,
     Feedback,
     Welcome,
+    DeleteData,
   },
   data() {
     return {
@@ -62,6 +75,7 @@ export default {
       creditsModalVisible: false,
       feedbackModalVisible: false,
       welcomeModalVisible: false,
+      deleteDataModalVisible: false,
     };
   },
   methods: {
