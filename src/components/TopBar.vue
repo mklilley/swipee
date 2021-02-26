@@ -4,7 +4,7 @@
       @click.prevent="$emit('filter')"
       v-if="numCards != 0 || filterBarVisible"
     >
-      <i class="gg-sort-az"></i>
+      <i class="gg-filters"></i>
     </div>
 
     <div
@@ -131,40 +131,33 @@ export default {
   box-shadow: 0 4px 0, 0 8px 0;
 }
 
-.gg-sort-az,
-.gg-sort-az::after,
-.gg-sort-az::before {
+.gg-filters {
+  --ggs: 1.8;
+  color: #df1165;
   display: block;
   box-sizing: border-box;
-  height: 2px;
-  border-radius: 4px;
-  background: currentColor;
-}
-
-.gg-sort-az {
-  --ggs: 1.8;
   position: relative;
   transform: scale(var(--ggs, 1));
-  width: 8px;
-  color: #df1165;
+  width: 19px;
+  height: 19px;
+  background: radial-gradient(circle, currentColor 26%, transparent 26%);
 }
 
-.gg-sort-az::after,
-.gg-sort-az::before {
+.gg-filters::after,
+.gg-filters::before {
   content: "";
+  display: block;
+  box-sizing: border-box;
   position: absolute;
+  border: 2px solid;
+  border-radius: 100%;
+  width: 14px;
+  height: 14px;
 }
 
-.gg-sort-az::before {
-  width: 12px;
-  top: -4px;
-  left: -2px;
-}
-
-.gg-sort-az::after {
-  width: 4px;
-  top: 4px;
-  left: 2px;
+.gg-filters::after {
+  bottom: 0;
+  right: 0;
 }
 
 .top-bar {
