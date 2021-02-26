@@ -74,6 +74,8 @@ const db = {
 
     // Save the updated cards collection
     localStorage.setItem(key, JSON.stringify(allCards));
+
+    return newCard;
   },
   read: async function(options = {}) {
     let cards;
@@ -148,14 +150,14 @@ const db = {
 
     // Only delete data on the remote database if remote flag is true
     if (options.remote === true) {
-      await remote.delete(id).then(success => {
+      await remote.delete(id).then((success) => {
         // If the remote database fails, we need to log the failure
         if (!success) {
           recordRemoteFail(id, "delete");
         }
       });
     }
-  }
+  },
 };
 
 export { db };
