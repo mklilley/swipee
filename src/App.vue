@@ -2,7 +2,7 @@
   <TopBar
     @add="addModalVisible = true"
     @settings="settingsModalVisible = true"
-    @filter="filterVisible = !filterVisible"
+    @filter="toggleFilterBar()"
     :numCards="cards.length"
     :readOnly="false"
   ></TopBar>
@@ -132,6 +132,13 @@ export default {
   },
 
   methods: {
+    async toggleFilterBar() {
+      this.filterItems = this.initialFilterItems();
+      this.selectedFilterItems = null;
+      this.selectedFilterItemsObject = {};
+      this.filterVisible = !this.filterVisible;
+      await this.loadCards();
+    },
     initialFilterItems() {
       return [
         {
