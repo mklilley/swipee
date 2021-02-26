@@ -41,7 +41,10 @@ also had to adapt and use vue3-click-away instead of v-on-click-outside
           class="allitems__list"
           v-for="item in filteredAllItems"
           :key="item.id"
-          @click="onSelectItem(item)"
+          @click="
+            onSelectItem(item);
+            deactivate();
+          "
         >
           <template v-if="sortingProperty">
             <span>{{ item[sortingProperty] }}</span>
