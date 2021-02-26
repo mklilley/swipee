@@ -34,6 +34,12 @@
       <button v-on:click="importDataModalVisible = true">
         Import data from file
       </button>
+
+      <br /><br />
+
+      <button v-on:click="resetAppModalVisible = true">
+        Reset App
+      </button>
     </template>
   </Modal>
 
@@ -57,6 +63,11 @@
     @close="importDataModalVisible = false"
   ></ImportData>
 
+  <ResetApp
+    v-if="resetAppModalVisible"
+    @close="resetAppModalVisible = false"
+  ></ResetApp>
+
   <Credits
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
@@ -70,6 +81,7 @@ import Feedback from "@/components/Feedback.vue";
 import Welcome from "@/components/Welcome.vue";
 import DeleteData from "@/components/DeleteData.vue";
 import ImportData from "@/components/ImportData.vue";
+import ResetApp from "@/components/ResetApp.vue";
 
 export default {
   name: "Settings",
@@ -81,6 +93,7 @@ export default {
     Welcome,
     DeleteData,
     ImportData,
+    ResetApp,
   },
   data() {
     return {
@@ -90,6 +103,7 @@ export default {
       welcomeModalVisible: false,
       deleteDataModalVisible: false,
       importDataModalVisible: false,
+      resetAppModalVisible: false,
     };
   },
   methods: {
