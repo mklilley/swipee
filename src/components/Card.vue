@@ -242,7 +242,8 @@ $fs-card-title: 1.125em;
     background: rgba($c-black, 0.3);
   }
 
-  display: flex;
+  word-break: break-word;
+
   flex-direction: column;
   max-height: 80vh;
   max-width: 80vw;
