@@ -2,8 +2,7 @@
 work as plugin in vue3 so created my own component from the source code // I
 also had to adapt and use vue3-click-away instead of v-on-click-outside
 <template>
-  <div v-click-away="deactivate">
-    <div class="selecteditems" @click.prevent="activate()">
+    <div class="selecteditems" @click.prevent="toggleActivate()">
       <ul class="chips">
         <li
           v-for="item in modelValue"
@@ -153,6 +152,9 @@ export default {
     deactivate() {
       this.showList = false;
     },
+    toggleActivate() {
+      this.showList = !this.showList;
+  },
   },
 };
 </script>
