@@ -40,6 +40,12 @@
       <button v-on:click="resetAppModalVisible = true">
         Reset App
       </button>
+
+      <br /><br />
+
+      <button v-on:click="downloadData">
+        Download your data
+      </button>
     </template>
   </Modal>
 
@@ -89,6 +95,8 @@ import ResetApp from "@/components/ResetApp.vue";
 
 import { db } from "@/services/storage";
 
+import pick from "lodash/pick";
+
 export default {
   name: "Settings",
   emits: ["close", "reloadCards"],
@@ -116,6 +124,38 @@ export default {
     };
   },
   methods: {
+    downloadData() {
+      //  Adapted from https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
+
+      let data = this.cards.map(function(card) {
+        return pick(card, [
+          "action",
+          "deck",
+          "description",
+          "domain",
+          "image",
+          "skipped",
+          "time",
+          "title",
+          "url",
+        ]);
+      });
+
+      var element = document.createElement("a");
+      element.setAttribute(
+        "href",
+        "data:text/plain;charset=utf-8," +
+          encodeURIComponent(JSON.stringify(data))
+      );
+      element.setAttribute("download", "swipee.json");
+
+      element.style.display = "none";
+      document.body.appendChild(element);
+
+      element.click();
+
+      document.body.removeChild(element);
+    },
     updateCredits() {
       this.credits = parseInt(localStorage.credits);
     },
