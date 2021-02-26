@@ -162,10 +162,9 @@ export default {
 
 <style lang="sass" scoped>
 .chips
-  background-color: #ffffff
-  border: 1px solid #dbdbdb
-  border-radius: 4px
-  color: #363636
+  background-color: white
+  border: 1px solid #73345e
+  color: #73345e
   padding-bottom: calc(0.375em - 1px)
   padding-left: calc(0.625em - 1px)
   padding-right: calc(0.625em - 1px)
@@ -174,22 +173,25 @@ export default {
 
   &--remove
     margin-right: 1px
-    margin-left: 3px
-    color: #cc0029
+    margin-left: 6px
+    color: #73345e
 
   &__item
     display: inline-block
-    background-color: rgba(50, 115, 220, .2)
+    background-color: #df1165
+    font-weight: bold
     margin: 4px
     padding: 6px
     border-radius: 6px
     transition: 0.3s
+    color: white
 
     &:hover
       background-color: rgba(50, 115, 220, .3)
 
   &__itemInput
     display: inline-block
+
 
   &__input--fake
     border: none
@@ -204,7 +206,9 @@ export default {
 
 .allitems
   cursor: pointer
-  border: 1px solid #dbdbdb
+  border-left: 1px solid #73345e
+  border-right: 1px solid #73345e
+  border-bottom: 1px solid #73345e
   max-height: 130px
   height: calc(100vh - 240px)
   overflow-y: scroll
@@ -215,6 +219,7 @@ export default {
   &__list
     padding: 6px
     transition: 0.3s
+    color: #73345e
 
     &:hover
       background: rgba(50, 115, 220, 1)
@@ -226,6 +231,7 @@ export default {
 
 .filter
  margin:0
+ color: white
 
 ul
  margin:0
