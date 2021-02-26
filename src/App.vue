@@ -20,7 +20,8 @@
   <Settings
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
-    @restoreData="loadCards({ remote: true })"
+    @reloadCards="loadCards"
+    :cards="cards"
   ></Settings>
 
   <Credits

@@ -2,7 +2,7 @@
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
       <h2>Settings</h2>
-      <button v-on:click="$emit('restoreData')">
+      <button v-on:click="$emit('reloadCards', { remote: true })">
         Restore data from online storage
       </button>
       <br /><br />
@@ -56,6 +56,10 @@
   <DeleteData
     v-if="deleteDataModalVisible"
     @close="deleteDataModalVisible = false"
+    @deleteAllSuccess="$emit('reloadCards')"
+    :boxStatus="boxStatus"
+    :useRemoteStorage="useRemoteStorage"
+    :cards="cards"
   ></DeleteData>
 
   <ImportData
@@ -83,9 +87,11 @@ import DeleteData from "@/components/DeleteData.vue";
 import ImportData from "@/components/ImportData.vue";
 import ResetApp from "@/components/ResetApp.vue";
 
+import { db } from "@/services/storage";
+
 export default {
   name: "Settings",
-  emits: ["close", "restoreData"],
+  emits: ["close", "reloadCards"],
   components: {
     Modal,
     Credits,
@@ -95,9 +101,12 @@ export default {
     ImportData,
     ResetApp,
   },
+  props: { cards: Array },
   data() {
     return {
       credits: parseInt(localStorage.credits),
+      useRemoteStorage: JSON.parse(localStorage.useRemoteStorage),
+      boxStatus: {},
       creditsModalVisible: false,
       feedbackModalVisible: false,
       welcomeModalVisible: false,
@@ -111,7 +120,9 @@ export default {
       this.credits = parseInt(localStorage.credits);
     },
   },
-  async mounted() {},
+  async mounted() {
+    this.boxStatus = await db.status();
+  },
 };
 </script>
 
