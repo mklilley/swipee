@@ -174,7 +174,7 @@ export default {
         },
         {
           id: 6,
-          label: "🦥 Long",
+          label: "⏰ Long",
           _label: "long",
           type: "time",
         },
