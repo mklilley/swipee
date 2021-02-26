@@ -348,6 +348,12 @@ h3 {
   align-items: center;
 }
 
+.card img {
+  object-fit: cover;
+  width: 100%;
+  height: 40%;
+}
+
 .gg-trash {
   --ggs: 1.5;
   box-sizing: border-box;
