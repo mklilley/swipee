@@ -1,6 +1,14 @@
 <template>
   <Modal v-on:close="$emit('close')">
-    <template v-slot:body> <h1>ResetApp</h1> </template>
+    <template v-slot:body>
+      <h1>ResetApp</h1>
+      Resetting the app will delete all local data and give you new online
+      storage credentials. Your online data will persist, but you will lose
+      access to it unless you have taken note of your storage ID and key.
+      <br /><br />
+      <button v-on:click="resetApp()">Yes, reset app</button> <br /><br />
+      <button v-on:click="$emit('close')">No, take me back</button>
+    </template>
   </Modal>
 </template>
 
@@ -16,7 +24,12 @@ export default {
   data() {
     return {};
   },
-  methods: {},
+  methods: {
+    resetApp() {
+      localStorage.clear();
+      location.reload();
+    },
+  },
   mounted() {},
 };
 </script>
