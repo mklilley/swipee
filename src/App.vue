@@ -32,6 +32,7 @@
     v-if="addModalVisible"
     @saved="addSavedCardToDeck"
     @close="addModalVisible = false"
+    :cards="cards"
   ></AddCard>
 
   <div class="cards">

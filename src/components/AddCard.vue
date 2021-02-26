@@ -13,7 +13,7 @@
           ref="urlInput"
         /><br />
         <button v-on:click="validateUrl()">Next</button>
-        <span class="error" v-show="error">Oops! Not a valid url.</span>
+        <span class="error" v-show="error">{{ errorText }}</span>
       </div>
 
       <!-- Next the user selects whether the link is something to read,watch or listen -->
@@ -71,9 +71,17 @@ import Modal from "@/components/Modal.vue";
 import linkPreview from "@/services/linkPreview.js";
 import { db } from "@/services/storage";
 
+import find from "lodash/find";
+
 export default {
   name: "AddCard",
   emits: ["close", "saved"],
+  props: {
+    cards: {
+      type: Array,
+      required: true,
+    },
+  },
   components: {
     Modal,
   },
@@ -85,6 +93,7 @@ export default {
       time: "short",
       stage: 1,
       error: false,
+      errorText: "",
     };
   },
   methods: {
@@ -92,7 +101,8 @@ export default {
       this.stage += 1;
     },
     validateUrl() {
-      // This checks the users input to see if it corresponds to a url.
+      // This checks the users input to see if it corresponds to a url. Also checks to see if
+      // this url has already been added
 
       // This regex pattern will recogise most standard links. Improvements are welcome 🙏.
       const urlRegex = /(\b(https?):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
@@ -100,10 +110,17 @@ export default {
       const links = this.url.match(urlRegex);
 
       if (links !== null) {
-        this.url = links[0];
-        this.next();
+        const duplicate = find(this.cards, { url: links[0] });
+        if (!duplicate) {
+          this.url = links[0];
+          this.next();
+        } else {
+          this.error = true;
+          this.errorText = "Oops! You've already saved this link.";
+        }
       } else {
         this.error = true;
+        this.errorText = "Oops! Not a valid link";
       }
     },
     async saveCard(event) {
