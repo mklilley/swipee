@@ -56,7 +56,14 @@ export default {
     Modal,
   },
   data() {
-    return { url: "", action: "read", time: "short", stage: 1, error: false };
+    return {
+      url: "",
+      deck: "default",
+      action: "read",
+      time: "short",
+      stage: 1,
+      error: false,
+    };
   },
   methods: {
     next() {
@@ -91,6 +98,7 @@ export default {
         // Then tell the app that the card was successfully saved
         preview.action = this.action;
         preview.time = this.time;
+        preview.deck = this.deck;
         preview.skipped = false;
         await db.create(preview, {
           remote: JSON.parse(localStorage.useRemoteStorage),
