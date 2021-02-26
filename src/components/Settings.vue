@@ -71,6 +71,8 @@
   <ImportData
     v-if="importDataModalVisible"
     @close="importDataModalVisible = false"
+    @importSuccess="$emit('reloadCards')"
+    :useRemoteStorage="useRemoteStorage"
   ></ImportData>
 
   <ResetApp
