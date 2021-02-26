@@ -1,6 +1,9 @@
 <template>
   <div class="top-bar">
-    <div @click.prevent="$emit('filter')" v-if="numCards != 0">
+    <div
+      @click.prevent="$emit('filter')"
+      v-if="numCards != 0 || filterBarVisible"
+    >
       <i class="gg-sort-az"></i>
     </div>
 
@@ -30,6 +33,10 @@ export default {
       required: true,
     },
     readOnly: {
+      type: Boolean,
+      required: true,
+    },
+    filterBarVisible: {
       type: Boolean,
       required: true,
     },

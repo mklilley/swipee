@@ -4,6 +4,7 @@
     @settings="settingsModalVisible = true"
     @filter="toggleFilterBar()"
     :numCards="cards.length"
+    :filterBarVisible="filterVisible"
     :readOnly="false"
   ></TopBar>
 
