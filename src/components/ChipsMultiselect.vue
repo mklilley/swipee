@@ -66,9 +66,7 @@ const sortBy = (key) => {
 };
 
 export default {
-  mounted() {
-    this.selectedItems = [];
-  },
+  mounted() {},
   props: {
     items: {
       type: Array,
@@ -86,8 +84,8 @@ export default {
   data() {
     return {
       searchedText: null,
-      selectedItems: null,
-      showList: false,
+      selectedItems: [],
+      showList: true,
     };
   },
   computed: {
