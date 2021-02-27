@@ -69,13 +69,35 @@ export default {
     },
     async addDataFromFile(cards, event) {
       let promCreate = [];
+
+      // Check imported data to see if it contains all the right data
+      let problemCards = [];
+      const requiredKeys = ["action", "time", "url"];
+      const linkPreviewKeys = ["title", "description", "domain", "image"];
       for (let card of cards) {
-        promCreate.push(db.create(card, { remote: this.useRemoteStorage }));
+        if (requiredKeys.every((key) => Object.keys(card).includes(key))) {
+          if (linkPreviewKeys.every((key) => Object.keys(card).includes(key))) {
+            card.deck = card.deck || "default";
+            card.flipped = card.flipped || false;
+            promCreate.push(db.create(card, { remote: this.useRemoteStorage }));
+          } else {
+            // TODO: go get the link preview
+            problemCards.push(card.url);
+          }
+        } else {
+          problemCards.push(card.url);
+        }
       }
 
       event.target.classList.toggle("wait");
       await Promise.all(promCreate);
       event.target.classList.toggle("wait");
+      if (problemCards.length !== 0) {
+        console.log(problemCards);
+        alert(
+          "Some links could not be imported: " + JSON.stringify(problemCards)
+        );
+      }
       this.$emit("importSuccess");
       this.$emit("close");
     },
