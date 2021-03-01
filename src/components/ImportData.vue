@@ -39,6 +39,78 @@ export default {
     return { fileOK: false, file: {}, addFromFileError: "", error: false };
   },
   methods: {
+    csvToJs(csv) {
+      // https://gist.github.com/jonmaim/7b896cf5c8cfe932a3dd
+      // Start from https://gist.github.com/iwek/7154578#file-csv-to-json-js
+      // and fix the issue with double quoted values
+      try {
+        var lines = csv.split("\n");
+        var result = [];
+        var headers = lines[0].split(",");
+
+        for (var i = 1; i < lines.length; i++) {
+          var obj = {};
+
+          var row = lines[i],
+            queryIdx = 0,
+            startValueIdx = 0,
+            idx = 0;
+
+          if (row.trim() === "") {
+            continue;
+          }
+
+          while (idx < row.length) {
+            /* if we meet a double quote we skip until the next one */
+            var c = row[idx];
+
+            if (c === '"') {
+              do {
+                c = row[++idx];
+              } while (c !== '"' && idx < row.length - 1);
+            }
+
+            if (
+              c === "," ||
+              /* handle end of line with no comma */ idx === row.length - 1
+            ) {
+              let length = idx - startValueIdx;
+              if (idx === row.length - 1) {
+                length++;
+              }
+              /*we've got a value */
+
+              var value = row.substr(startValueIdx, length).trim();
+
+              /* skip first double quote */
+              if (value[0] === '"') {
+                value = value.substr(1);
+              }
+              /* skip last comma */
+              if (value[value.length - 1] === ",") {
+                value = value.substr(0, value.length - 1);
+              }
+              /* skip last double quote */
+              if (value[value.length - 1] === '"') {
+                value = value.substr(0, value.length - 1);
+              }
+
+              var key = headers[queryIdx++];
+              obj[key] = value;
+              startValueIdx = idx + 1;
+            }
+
+            ++idx;
+          }
+
+          result.push(obj);
+        }
+        return result;
+      } catch (err) {
+        console.log(err);
+        return false;
+      }
+    },
     readFile(event) {
       this.fileOK = false;
       this.error = false;
@@ -58,9 +130,16 @@ export default {
             }
             this.fileOK = true;
           } catch (error) {
-            this.error = true;
-            this.fileOK = false;
-            this.addFromFileError = "Error: Data not in correct format.";
+            console.log(error);
+            this.file = this.csvToJs(reader.result);
+            console.log(this.file);
+            if (!this.file) {
+              this.error = true;
+              this.fileOK = false;
+              this.addFromFileError = "Error: Data not in correct format.";
+            } else {
+              this.fileOK = true;
+            }
           }
         };
 
@@ -88,7 +167,8 @@ export default {
           if (linkPreviewKeys.every((key) => Object.keys(card).includes(key))) {
             // Card has all the keys needed to create a link preview
             card.deck = card.deck || "default";
-            card.flipped = card.flipped || false;
+            card.skipped =
+              card.skipped === undefined ? false : JSON.parse(card.skipped);
             promCreateCards.push(
               db.create(card, { remote: this.useRemoteStorage })
             );
