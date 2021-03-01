@@ -24,6 +24,10 @@ import Modal from "@/components/Modal.vue";
 
 import { db } from "@/services/storage";
 
+import linkPreview from "@/services/linkPreview.js";
+
+import pick from "lodash/pick";
+
 export default {
   name: "ImportData",
   emits: ["close", "importSuccess"],
@@ -68,29 +72,55 @@ export default {
       }
     },
     async addDataFromFile(cards, event) {
-      let promCreate = [];
+      event.target.classList.toggle("wait");
+
+      let promCreateCards = []; // will hold promises to create many cards
+      let promLinkPreviews = []; // will hold promises to create many links previews
+      let promLinkPreviewCards = []; // will hold required card info of links having preview currently made for them
+      let problemCards = []; // will hold url of links that don't have required info or cannot have link preview generated for them
 
       // Check imported data to see if it contains all the right data
-      let problemCards = [];
       const requiredKeys = ["action", "time", "url"];
       const linkPreviewKeys = ["title", "description", "domain", "image"];
       for (let card of cards) {
         if (requiredKeys.every((key) => Object.keys(card).includes(key))) {
+          // Card has all the required keys
           if (linkPreviewKeys.every((key) => Object.keys(card).includes(key))) {
+            // Card has all the keys needed to create a link preview
             card.deck = card.deck || "default";
             card.flipped = card.flipped || false;
-            promCreate.push(db.create(card, { remote: this.useRemoteStorage }));
+            promCreateCards.push(
+              db.create(card, { remote: this.useRemoteStorage })
+            );
           } else {
-            // TODO: go get the link preview
-            problemCards.push(card.url);
+            // Card doens't have all the keys necessary to make a link preview so need to generate the preview for the url
+            promLinkPreviews.push(linkPreview(card.url));
+            promLinkPreviewCards.push(pick(card, requiredKeys));
           }
         } else {
+          // Card doesn't have required keys
           problemCards.push(card.url);
         }
       }
 
-      event.target.classList.toggle("wait");
-      await Promise.all(promCreate);
+      const linkPreviews = await Promise.all(promLinkPreviews);
+      linkPreviews.forEach((element, i) => {
+        if (element) {
+          // link preview service success. Merge new keys with required keys.
+          const card = {
+            ...promLinkPreviewCards[i],
+            ...element,
+          };
+          promCreateCards.push(
+            db.create(card, { remote: this.useRemoteStorage })
+          );
+        } else {
+          // link preview service failed to generate link preview
+          problemCards.push(promLinkPreviewCards[i].url);
+        }
+      });
+
+      await Promise.all(promCreateCards);
       event.target.classList.toggle("wait");
       if (problemCards.length !== 0) {
         console.log(problemCards);
