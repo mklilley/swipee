@@ -125,11 +125,7 @@ export default {
     },
     async saveCard(event) {
       event.target.classList.toggle("wait");
-      const preview = await linkPreview(this.url).catch((err) => {
-        console.log(err);
-        alert("Sorry, something went wrong generating a preview for the link");
-        event.target.classList.toggle("wait");
-      });
+      const preview = await linkPreview(this.url);
       event.target.classList.toggle("wait");
 
       if (preview) {
@@ -144,6 +140,11 @@ export default {
         });
         this.$emit("saved", newCard);
         this.$emit("close");
+      } else {
+        alert(
+          "Sorry, something went wrong when generating a preview for the link"
+        );
+        return;
       }
     },
   },
