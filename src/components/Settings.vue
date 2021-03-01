@@ -111,7 +111,6 @@ export default {
     ImportData,
     ResetApp,
   },
-  props: { cards: Array },
   data() {
     return {
       credits: parseInt(localStorage.credits),
@@ -123,6 +122,7 @@ export default {
       deleteDataModalVisible: false,
       importDataModalVisible: false,
       resetAppModalVisible: false,
+      cards: [],
     };
   },
   methods: {
@@ -164,6 +164,7 @@ export default {
   },
   async mounted() {
     this.boxStatus = await db.status();
+    this.cards = await db.read();
   },
 };
 </script>

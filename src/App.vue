@@ -21,7 +21,6 @@
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
-    :cards="cards"
   ></Settings>
 
   <Credits
