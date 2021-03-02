@@ -117,26 +117,38 @@ export default {
 
       let file = event.target.files[0];
 
-      if (file) {
+      if (
+        file.type.includes("text/csv") ||
+        file.type.includes("application/json")
+      ) {
         let reader = new FileReader();
 
         reader.readAsText(file);
 
         reader.onload = () => {
+          if (file.type.includes("application/json")) {
+            // File is JSON
           try {
             this.file = JSON.parse(reader.result);
             if (!Array.isArray(this.file)) {
-              throw new Error("Data not in array format.");
+                throw new Error("JSON data not in array format.");
             }
             this.fileOK = true;
-          } catch (error) {
-            console.log(error);
+            } catch (err) {
+              this.error = true;
+              this.fileOK = false;
+              console.log(err);
+              this.addFromFileError =
+                "Error: File format looks like JSON, but it cannot be processed.";
+            }
+          } else {
+            // File is CSV
             this.file = this.csvToJs(reader.result);
-            console.log(this.file);
             if (!this.file) {
               this.error = true;
               this.fileOK = false;
-              this.addFromFileError = "Error: Data not in correct format.";
+              this.addFromFileError =
+                "Error: File format looks like CSV, but it cannot be processed.";
             } else {
               this.fileOK = true;
             }
@@ -148,6 +160,10 @@ export default {
           this.fileOK = false;
           this.addFromFileError = reader.error;
         };
+      } else {
+        this.error = true;
+        this.fileOK = false;
+        this.addFromFileError = "File must be in CSV of JSON format";
       }
     },
     async addDataFromFile(cards, event) {
