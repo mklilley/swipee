@@ -86,6 +86,22 @@ export default {
     // If first time using the app, we need to set up some localStorage variables
     if (localStorage.haveSeenWelcome === undefined) {
       localStorage.haveSeenWelcome = false;
+      // Create a local welcome card to show the user how to use the app.
+      await db.create(
+        {
+          action: "read",
+          time: "short",
+          url: "",
+          image: "https://cdn.onlinewebfonts.com/svg/img_435127.png",
+          description:
+            "Swipe left to discard. Swipe right to save for later. Save with caution - it'll cost you. The price doubles for each saved card but does reset after 24 hours. We've given you 10 free credits to get you started.",
+          domain: "",
+          skipped: false,
+          title: "How to use Swipee",
+          id: 1,
+        },
+        { remote: false }
+      );
     }
     if (localStorage.useRemoteStorage === undefined) {
       localStorage.useRemoteStorage = false;
