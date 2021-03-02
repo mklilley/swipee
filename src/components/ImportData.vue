@@ -189,6 +189,9 @@ export default {
             card.deck = card.deck || "default";
             card.skipped =
               card.skipped === undefined ? false : JSON.parse(card.skipped);
+            card.time = card.time.toLowerCase();
+            card.action = card.action.toLowerCase();
+
             promCreateCards.push(
               db.create(card, { remote: this.useRemoteStorage })
             );
