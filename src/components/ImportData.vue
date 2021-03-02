@@ -128,12 +128,12 @@ export default {
         reader.onload = () => {
           if (file.type.includes("application/json")) {
             // File is JSON
-          try {
-            this.file = JSON.parse(reader.result);
-            if (!Array.isArray(this.file)) {
+            try {
+              this.file = JSON.parse(reader.result);
+              if (!Array.isArray(this.file)) {
                 throw new Error("JSON data not in array format.");
-            }
-            this.fileOK = true;
+              }
+              this.fileOK = true;
             } catch (err) {
               this.error = true;
               this.fileOK = false;
@@ -182,6 +182,10 @@ export default {
           // Card has all the required keys
           if (linkPreviewKeys.every((key) => Object.keys(card).includes(key))) {
             // Card has all the keys needed to create a link preview
+
+            // Pick only keys we need, just in case user has supplied additional uneccessary data
+            card = pick(card, requiredKeys.concat(linkPreviewKeys));
+
             card.deck = card.deck || "default";
             card.skipped =
               card.skipped === undefined ? false : JSON.parse(card.skipped);
