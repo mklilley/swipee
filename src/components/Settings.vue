@@ -65,7 +65,6 @@
     @deleteAllSuccess="$emit('reloadCards')"
     :boxStatus="boxStatus"
     :useRemoteStorage="useRemoteStorage"
-    :cards="cards"
   ></DeleteData>
 
   <ImportData
@@ -122,14 +121,13 @@ export default {
       deleteDataModalVisible: false,
       importDataModalVisible: false,
       resetAppModalVisible: false,
-      cards: [],
     };
   },
   methods: {
-    downloadData() {
+    async downloadData() {
       //  Adapted from https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
-
-      let data = this.cards.map(function(card) {
+      const cards = await db.read();
+      let data = cards.map(function(card) {
         return pick(card, [
           "action",
           "deck",
@@ -164,7 +162,6 @@ export default {
   },
   async mounted() {
     this.boxStatus = await db.status();
-    this.cards = await db.read();
   },
 };
 </script>

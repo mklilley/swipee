@@ -28,9 +28,9 @@ export default {
   components: {
     Modal,
   },
-  props: ["boxStatus", "useRemoteStorage", "cards"],
+  props: ["boxStatus", "useRemoteStorage"],
   data() {
-    return {};
+    return { cards: [] };
   },
   methods: {
     async deleteAllData(event) {
@@ -50,7 +50,9 @@ export default {
       this.$emit("close");
     },
   },
-  mounted() {},
+  async mounted() {
+    this.cards = await db.read();
+  },
 };
 </script>
 
