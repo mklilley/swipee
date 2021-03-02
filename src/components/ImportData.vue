@@ -6,12 +6,40 @@
       <input type="file" @change="readFile" /><br /><br />
       <span class="error" v-show="error"
         >{{ addFromFileError }} <br />
+        <pre v-show="error == 'JSON'">
+[
+  {
+    "action": "read",
+    "time": "short",
+    "url": "https://eg.com/article"
+  },
+    {
+    "action": "watch",
+    "time": "long",
+    "url": "https://eg.com/video"
+  }
+]
+      </pre
+        >
+        <pre v-show="error == 'CSV'">
+url,action,time
+https://eg.com/article,read,short
+https://eg.com/video,watch,long
+
+      </pre
+        >
+        <span v-if="error !== true"
+          >Additional fields can also be supplied: title, domain, description,
+          image, deck, skipped.</span
+        >
+        <br />
         See
         <a href="https://github.com/mklilley/swipee" refl="noopener"
           >Swipee Github</a
         >
-        for more help formatting your data.</span
-      >
+        for more help formatting your data.
+      </span>
+
       <button v-show="fileOK" v-on:click="addDataFromFile(file, $event)">
         Add data
       </button>
@@ -135,20 +163,20 @@ export default {
               }
               this.fileOK = true;
             } catch (err) {
-              this.error = true;
+              this.error = "JSON";
               this.fileOK = false;
               console.log(err);
               this.addFromFileError =
-                "Error: File format looks like JSON, but it cannot be processed.";
+                "Error: File format looks like JSON, but it cannot be processed. Minimum formatting requirements are:";
             }
           } else {
             // File is CSV
             this.file = this.csvToJs(reader.result);
             if (!this.file) {
-              this.error = true;
+              this.error = "CSV";
               this.fileOK = false;
               this.addFromFileError =
-                "Error: File format looks like CSV, but it cannot be processed.";
+                "Error: File format looks like CSV, but it cannot be processed. Minimum formatting requirements are:";
             } else {
               this.fileOK = true;
             }
@@ -163,7 +191,7 @@ export default {
       } else {
         this.error = true;
         this.fileOK = false;
-        this.addFromFileError = "File must be in CSV of JSON format";
+        this.addFromFileError = "File must be in CSV of JSON format.";
       }
     },
     async addDataFromFile(cards, event) {
@@ -246,5 +274,9 @@ export default {
   display: block;
   color: #e44e42;
   font-weight: 600;
+}
+
+pre {
+  text-align: left;
 }
 </style>
