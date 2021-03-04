@@ -6,6 +6,7 @@
       isAnimating: isInteractAnimating,
       isCurrent: isCurrent,
       dragstart: !isInteractAnimating,
+      stacked: stacked,
     }"
     class="card"
     :style="{ transform: transformString }"
@@ -69,6 +70,10 @@ export default {
       required: true,
     },
     isCurrent: {
+      type: Boolean,
+      required: true,
+    },
+    stacked: {
       type: Boolean,
       required: true,
     },
@@ -229,7 +234,6 @@ $fs-card-title: 1.125em;
 
 .card {
   @include card();
-  @include absolute(0);
   @include sizing(400px 600px);
   @include flex-center();
 
@@ -247,7 +251,7 @@ $fs-card-title: 1.125em;
   flex-direction: column;
   max-height: 80vh;
   max-width: 80vw;
-  margin: auto;
+  margin: 10px;
   font-size: $fs-h2;
   font-weight: $fw-bold;
   color: $c-white;
@@ -256,9 +260,7 @@ $fs-card-title: 1.125em;
     $primary-gradient-start 2%,
     $primary-gradient-end 100%
   );
-  opacity: 0;
-  transform: translateY($defaultTranslation) scale($defaultScale);
-  transform-origin: 50%, 100%;
+  opacity: 1;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   user-select: none;
   touch-action: none;
@@ -275,6 +277,13 @@ $fs-card-title: 1.125em;
   text-decoration: none;
 }
 
+.card.stacked {
+  @include absolute(0);
+  transform: translateY($defaultTranslation) scale($defaultScale);
+  transform-origin: 50%, 100%;
+  margin: auto;
+}
+
 .cardTitle {
   margin: 0 0 15px;
   font-size: $fs-card-title;
@@ -289,7 +298,7 @@ $fs-card-title: 1.125em;
   $translation: $cardsPositionOffset * $index;
   $scale: 1 - ($cardsScaleOffset * $index);
 
-  .card:nth-child(#{$i}) {
+  .card.stacked:nth-child(#{$i}) {
     z-index: $cardsTotal - $index;
     opacity: 1;
     transform: translateY($translation) scale($scale);

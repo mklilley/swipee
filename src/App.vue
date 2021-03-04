@@ -35,12 +35,16 @@
     :cards="cards"
   ></AddCard>
 
-  <div class="cards">
+  <div
+    class="cards"
+    :class="{ stacked: !showAllCards, filterVisible: filterVisible }"
+  >
     <Card
       v-for="(card, index) in cards"
       :key="card"
       :card="card"
-      :is-current="index === 0"
+      :is-current="index === 0 || showAllCards"
+      :stacked="!showAllCards"
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
       @hideCard="removeCardFromDeck"
@@ -146,6 +150,7 @@ export default {
       selectedFilterItems: null,
       selectedFilterItemsObject: {},
       filterItems: [],
+      showAllCards: false,
     };
   },
 
@@ -339,14 +344,24 @@ body {
 .cards {
   padding-left: 0;
   display: flex;
-  flex-flow: row wrap;
+  flex-direction: column;
   justify-content: center;
-  position: relative;
+  position: absolute;
+  top: 90px;
+  left: 0;
+  right: 0;
   box-sizing: border-box;
   align-items: center;
+}
+
+.cards.filterVisible {
+  top: 120px;
+}
+
+.cards.stacked {
   height: calc(
     100% - 140px
-  ); // 140 = 2*70, 70 comes from TopBar component height
+  ); // 140 = 2*70, 70 comes from TopBar component height}
 }
 
 .no-card p {

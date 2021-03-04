@@ -162,10 +162,14 @@ export default {
 
 .top-bar {
   display: flex;
+  position: fixed;
   justify-content: space-around;
   align-items: center;
   height: 70px;
   background-color: white;
   z-index: 1000;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 </style>

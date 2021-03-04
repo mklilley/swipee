@@ -212,6 +212,7 @@ export default {
   max-height: 130px
   height: calc(100vh - 240px)
   overflow-y: scroll
+  background-color: white
 
   ul
     list-style: none
@@ -233,6 +234,11 @@ export default {
 .filter
  margin:0
  color: white
+ z-index: 1000
+ position: fixed
+ left: 0
+ right:0
+ top: 70px
 
 ul
  margin:0
