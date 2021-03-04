@@ -46,6 +46,12 @@
       <button v-on:click="downloadData">
         Download your data
       </button>
+
+      <br /><br />
+
+      <button v-on:click="$emit('toggleAllCards')">
+        Toggle show all cards
+      </button>
     </template>
   </Modal>
 
@@ -100,7 +106,7 @@ import pick from "lodash/pick";
 
 export default {
   name: "Settings",
-  emits: ["close", "reloadCards"],
+  emits: ["close", "reloadCards", "toggleAllCards"],
   components: {
     Modal,
     Credits,

@@ -21,6 +21,10 @@
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
+    @toggleAllCards="
+      showAllCards = !showAllCards;
+      settingsModalVisible = false;
+    "
   ></Settings>
 
   <Credits
