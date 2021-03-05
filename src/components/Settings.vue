@@ -49,9 +49,12 @@
 
       <br /><br />
 
-      <button v-on:click="$emit('toggleAllCards')">
-        <span v-if="!allCardsVisible">Show all cards</span>
-        <span v-else> Hide cards</span>
+      <button v-if="!allCardsVisible" v-on:click="toggleAllCards($event)">
+        Show all cards <br />
+        Price: {{ skipPrice }}
+      </button>
+      <button v-else v-on:click="toggleAllCards($event)">
+        Hide cards
       </button>
     </template>
   </Modal>
@@ -107,7 +110,7 @@ import pick from "lodash/pick";
 
 export default {
   name: "Settings",
-  emits: ["close", "reloadCards", "toggleAllCards"],
+  emits: ["close", "reloadCards", "hideCards", "showCards"],
   components: {
     Modal,
     Credits,
@@ -117,10 +120,9 @@ export default {
     ImportData,
     ResetApp,
   },
-  props: ["allCardsVisible"],
+  props: ["allCardsVisible", "skipPrice"],
   data() {
     return {
-      credits: parseInt(localStorage.credits),
       useRemoteStorage: JSON.parse(localStorage.useRemoteStorage),
       boxStatus: {},
       creditsModalVisible: false,
@@ -132,6 +134,25 @@ export default {
     };
   },
   methods: {
+    toggleAllCards(event) {
+      if (this.allCardsVisible) {
+        this.$emit("hideCards");
+      } else {
+        if (
+          parseInt(localStorage.credits) >= parseInt(localStorage.skipPrice)
+        ) {
+          event.target.classList.add("success");
+          console.log(event.target.classList);
+          let successTimer = setTimeout(() => {
+            event.target.classList.remove("success");
+            clearTimeout(successTimer);
+            this.$emit("showCards");
+          }, 700);
+        } else {
+          this.creditsModalVisible = true;
+        }
+      }
+    },
     async downloadData() {
       //  Adapted from https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
       const cards = await db.read();
@@ -163,9 +184,6 @@ export default {
       element.click();
 
       document.body.removeChild(element);
-    },
-    updateCredits() {
-      this.credits = parseInt(localStorage.credits);
     },
   },
   async mounted() {

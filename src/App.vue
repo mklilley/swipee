@@ -19,13 +19,12 @@
 
   <Settings
     :allCardsVisible="allCardsVisible"
+    :skipPrice="skipPrice"
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
-    @toggleAllCards="
-      allCardsVisible = !allCardsVisible;
-      settingsModalVisible = false;
-    "
+    @showCards="showAllCards"
+    @hideCards="allCardsVisible = false"
   ></Settings>
 
   <Credits
@@ -129,6 +128,7 @@ export default {
     }
 
     this.filterItems = this.initialFilterItems();
+    this.skipPrice = localStorage.skipPrice;
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
@@ -156,10 +156,15 @@ export default {
       selectedFilterItemsObject: {},
       filterItems: [],
       allCardsVisible: false,
+      skipPrice: 0,
     };
   },
 
   methods: {
+    showAllCards() {
+      this.allCardsVisible = true;
+      this.useCreditsUpdatePrice();
+    },
     async toggleFilterBar() {
       this.filterItems = this.initialFilterItems();
       this.selectedFilterItems = null;
@@ -248,6 +253,7 @@ export default {
       localStorage.credits =
         parseInt(localStorage.credits) - parseInt(localStorage.skipPrice);
       localStorage.skipPrice = parseInt(localStorage.skipPrice) * 2;
+      this.skipPrice = localStorage.skipPrice;
     },
     removeCardFromDeck(i) {
       this.cards.splice(i, 1);
