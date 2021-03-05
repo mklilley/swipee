@@ -242,6 +242,9 @@ export default {
         },
         { remote: JSON.parse(localStorage.useRemoteStorage) }
       );
+      this.useCreditsUpdatePrice();
+    },
+    useCreditsUpdatePrice() {
       localStorage.credits =
         parseInt(localStorage.credits) - parseInt(localStorage.skipPrice);
       localStorage.skipPrice = parseInt(localStorage.skipPrice) * 2;
