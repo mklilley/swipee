@@ -4,6 +4,12 @@
       <h3>Buy 10 credits for GBP £{{ price }}</h3>
       <!-- Display a payment form -->
       <form @submit="payWithCard($event)">
+        <input
+          v-model="email"
+          type="text"
+          id="email"
+          placeholder="Email for receipt (optional)"
+        />
         <div id="card-element">⏳<!--Stripe.js injects the Card Element--></div>
         <button :disabled="canPayNow == false">
           Pay now
@@ -57,6 +63,7 @@ export default {
       canPayNow: false,
       cardError: "",
       price: "...",
+      email: "",
     };
   },
   methods: {
@@ -66,6 +73,7 @@ export default {
       const result = await this.stripe.confirmCardPayment(
         this.paymentIntent.clientSecret,
         {
+          receipt_email: this.email,
           payment_method: {
             card: this.card,
           },
@@ -75,6 +83,7 @@ export default {
       if (result.error) {
         // Show error to your customer
         console.log(result.error.message);
+        this.cardError = result.error.message;
       } else {
         // The payment succeeded!
         localStorage.credits = parseInt(localStorage.credits) + 10;
@@ -229,7 +238,7 @@ input {
 }
 
 #card-error {
-  color: rgb(105, 115, 134);
+  color: #e44e42;
   text-align: left;
   font-size: 13px;
   line-height: 17px;
