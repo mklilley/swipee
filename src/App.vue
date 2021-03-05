@@ -40,6 +40,13 @@
     :cards="cards"
   ></AddCard>
 
+  <SyncWarning
+    v-if="syncWarningVisible"
+    @close="syncWarningVisible = false"
+    :message="syncInfo"
+    @reloadCards="loadCards"
+  ></SyncWarning>
+
   <div
     class="cards"
     :class="{ stacked: !allCardsVisible, filterVisible: filterVisible }"
@@ -71,6 +78,7 @@ import Welcome from "@/components/Welcome";
 import Settings from "@/components/Settings";
 import Credits from "@/components/Credits";
 import ChipsMultiselect from "@/components/ChipsMultiselect";
+import SyncWarning from "@/components/SyncWarning";
 
 import isEqual from "lodash/isEqual";
 import pick from "lodash/pick";
@@ -89,6 +97,7 @@ export default {
     Settings,
     Credits,
     ChipsMultiselect,
+    SyncWarning,
   },
 
   async mounted() {
@@ -127,6 +136,9 @@ export default {
     if (localStorage.credits === undefined) {
       localStorage.credits = 10;
     }
+    if (localStorage.showSyncWarnings === undefined) {
+      localStorage.showSyncWarnings = true;
+    }
 
     this.filterItems = this.initialFilterItems();
     this.skipPrice = localStorage.skipPrice;
@@ -143,6 +155,15 @@ export default {
     }
 
     await this.loadCards();
+
+    this.boxStatus = await db.status();
+
+    if (JSON.parse(localStorage.useRemoteStorage)) {
+      //this.keepDataAlive();
+      if (JSON.parse(localStorage.showSyncWarnings) && this.boxStatus) {
+        this.checkForRemoteCardChanges();
+      }
+    }
   },
 
   data() {
@@ -158,10 +179,30 @@ export default {
       filterItems: [],
       allCardsVisible: false,
       skipPrice: 0,
+      boxStatus: {},
+      syncWarningVisible: false,
     };
   },
 
   methods: {
+    async checkForRemoteCardChanges() {
+      this.syncInfo = "";
+      //First check if local card number is different to what's on remote
+      if (this.boxStatus.numCards !== this.cards.length) {
+        // Show sync warning to user
+        this.syncInfo = `Local cards: ${this.cards.length}, Remote cards: ${this.boxStatus.numCards}.`;
+        this.syncWarningVisible = true;
+      } else if (this.boxStatus.remoteUpdatedOn) {
+        // Next check if the online storage has been updated since the user last did
+        // an update from this device. If so then show sync warning screen
+        if (
+          new Date(this.boxStatus.remoteUpdatedOn) >
+          new Date(localStorage.remoteUpdatedOn)
+        ) {
+          this.syncWarningVisible = true;
+        }
+      }
+    },
     showAllCards() {
       this.allCardsVisible = true;
       this.useCreditsUpdatePrice();

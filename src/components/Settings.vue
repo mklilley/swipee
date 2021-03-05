@@ -54,6 +54,23 @@
               Restore data from online storage
             </button> -->
 
+            <span class="error" v-if="boxStatus == false">
+              Problem with online storage</span
+            ><br />
+
+            <div>
+              <label v-if="useRemoteStorage" class="switch">
+                Toggle sync warnings
+                <input
+                  :disabled="boxStatus == false"
+                  type="checkbox"
+                  v-model="showSyncWarnings"
+                  @change="toggleSyncWarnings()"
+                />
+                <span class="slider round"></span><br /><br />
+              </label>
+            </div>
+
             <div v-if="useRemoteStorage">
               My storage box ID:<br />
               <strong>{{ boxID }}</strong>
@@ -194,9 +211,13 @@ export default {
       purchasesVisible: false,
       boxID: "",
       apiKey: "",
+      showSyncWarnings: localStorage.showSyncWarnings,
     };
   },
   methods: {
+    toggleSyncWarnings() {
+      localStorage.showSyncWarnings = this.showSyncWarnings;
+    },
     copyToClipboard(text, event) {
       navigator.clipboard.writeText(text).then(
         () => {
