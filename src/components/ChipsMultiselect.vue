@@ -213,6 +213,7 @@ export default {
   height: calc(100vh - 240px)
   overflow-y: scroll
   background-color: white
+  width: 100vw
 
   ul
     list-style: none
@@ -239,6 +240,7 @@ export default {
  left: 0
  right:0
  top: 70px
+ width: 100vw
 
 ul
  margin:0
