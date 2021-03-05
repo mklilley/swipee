@@ -135,4 +135,9 @@ textarea {
   font-family: "Montserrat", sans-serif;
   height: 200px;
 }
+
+button {
+  background-color: rgb(115, 52, 94);
+  border-color: rgb(115, 52, 94);
+}
 </style>

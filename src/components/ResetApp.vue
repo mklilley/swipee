@@ -45,4 +45,9 @@ input {
   color: #e44e42;
   font-weight: 600;
 }
+
+button {
+  background-color: rgb(115, 52, 94);
+  border-color: rgb(115, 52, 94);
+}
 </style>
