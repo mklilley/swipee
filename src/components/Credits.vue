@@ -4,7 +4,7 @@
       <h2>{{ creditsTitle }}</h2>
       Your credits: {{ credits }} <br />
       <br />
-      Price: {{ skipPrice }} <br /><br />
+      Save for later / See all cards price: {{ skipPrice }} <br /><br />
 
       <button v-on:click="paymentModalVisible = true">
         Buy more credits
