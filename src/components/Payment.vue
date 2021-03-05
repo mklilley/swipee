@@ -77,7 +77,6 @@ export default {
         console.log(result.error.message);
       } else {
         // The payment succeeded!
-        console.log(result.paymentIntent.id);
         localStorage.credits = parseInt(localStorage.credits) + 10;
         this.$emit("paymentSuccess");
         event.submitter.classList.add("success");
@@ -92,10 +91,17 @@ export default {
   },
   async mounted() {
     this.price = await fetch("https://dev.lilley.io/payments/prices")
-      .then(function(result) {
-        return result.json();
+      .then(async (result) => {
+        const json = await result.json();
+        if (result.status == 200) {
+          return (json.creditsBundle10 / 100).toFixed(2);
+        } else throw Error(json.message);
       })
-      .then((json) => (json.creditsBundle10 / 100).toFixed(2));
+      .catch((error) => {
+        console.log(error);
+        this.cardError += error;
+      });
+
     this.stripe = await loadStripe(
       "pk_test_51IMXW3AQfv8gg5JbltVApZu0UrsGNTl1UzzWTV80QRclffQdb9V7HUNasEblD1yNmrTsFP0QrJ1ehFFAwldVq7uP00XKzGPort"
     );
@@ -109,37 +115,51 @@ export default {
         },
         body: JSON.stringify(this.purchase),
       }
-    ).then(function(result) {
-      return result.json();
-    });
+    )
+      .then(async (result) => {
+        const json = await result.json();
+        if (result.status == 200) {
+          return json;
+        } else throw Error(json.message);
+      })
+      .catch((error) => {
+        console.log(error);
+        this.cardError += error;
+      });
 
-    var elements = this.stripe.elements();
+    if (this.paymentIntent) {
+      var elements = this.stripe.elements();
 
-    var style = {
-      base: {
-        color: "#32325d",
-        fontFamily: "Arial, sans-serif",
-        fontSmoothing: "antialiased",
-        fontSize: "16px",
-        "::placeholder": {
+      var style = {
+        base: {
           color: "#32325d",
+          fontFamily: "Arial, sans-serif",
+          fontSmoothing: "antialiased",
+          fontSize: "16px",
+          "::placeholder": {
+            color: "#32325d",
+          },
         },
-      },
-      invalid: {
-        fontFamily: "Arial, sans-serif",
-        color: "#fa755a",
-        iconColor: "#fa755a",
-      },
-    };
+        invalid: {
+          fontFamily: "Arial, sans-serif",
+          color: "#fa755a",
+          iconColor: "#fa755a",
+        },
+      };
 
-    this.card = elements.create("card", { style: style });
-    // Stripe injects an iframe into the DOM
-    this.card.mount("#card-element");
+      this.card = elements.create("card", { style: style });
+      // Stripe injects an iframe into the DOM
+      this.card.mount("#card-element");
 
-    this.card.on("change", (event) => {
-      this.canPayNow = !event.empty;
-      this.cardError = event.error ? event.error.message : "";
-    });
+      this.card.on("change", (event) => {
+        this.canPayNow = !event.empty;
+        this.cardError = event.error ? event.error.message : "";
+      });
+    } else {
+      alert(
+        "Unable to take payments for credit bundles. See error messages for more detail."
+      );
+    }
   },
 };
 </script>
