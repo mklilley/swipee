@@ -51,7 +51,7 @@
       :stacked="!showAllCards"
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
-      @hideCard="removeCardFromDeck"
+      @hideCard="removeCardFromDeck(index)"
       @failCardAccepted="creditsModalVisible = true"
     />
     <div class="no-card" v-if="cards.length == 0">
@@ -245,8 +245,8 @@ export default {
         parseInt(localStorage.credits) - parseInt(localStorage.skipPrice);
       localStorage.skipPrice = parseInt(localStorage.skipPrice) * 2;
     },
-    removeCardFromDeck() {
-      this.cards.shift();
+    removeCardFromDeck(i) {
+      this.cards.splice(i, 1);
     },
     closeWelcomeModal() {
       this.welcomeModalVisible = false;
