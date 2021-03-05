@@ -18,12 +18,12 @@
   <Welcome v-if="welcomeModalVisible" @close="closeWelcomeModal"></Welcome>
 
   <Settings
-    :allCardsVisible="showAllCards"
+    :allCardsVisible="allCardsVisible"
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
     @toggleAllCards="
-      showAllCards = !showAllCards;
+      allCardsVisible = !allCardsVisible;
       settingsModalVisible = false;
     "
   ></Settings>
@@ -42,14 +42,14 @@
 
   <div
     class="cards"
-    :class="{ stacked: !showAllCards, filterVisible: filterVisible }"
+    :class="{ stacked: !allCardsVisible, filterVisible: filterVisible }"
   >
     <Card
       v-for="(card, index) in cards"
       :key="card"
       :card="card"
-      :is-current="index === 0 || showAllCards"
-      :stacked="!showAllCards"
+      :is-current="index === 0 || allCardsVisible"
+      :stacked="!allCardsVisible"
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
       @hideCard="removeCardFromDeck(index)"
@@ -155,7 +155,7 @@ export default {
       selectedFilterItems: null,
       selectedFilterItemsObject: {},
       filterItems: [],
-      showAllCards: false,
+      allCardsVisible: false,
     };
   },
 
