@@ -142,7 +142,6 @@ export default {
           parseInt(localStorage.credits) >= parseInt(localStorage.skipPrice)
         ) {
           event.target.classList.add("success");
-          console.log(event.target.classList);
           let successTimer = setTimeout(() => {
             event.target.classList.remove("success");
             clearTimeout(successTimer);
