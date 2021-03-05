@@ -146,7 +146,14 @@ export default {
               this.playCard(ACCEPT_CARD);
             } else {
               this.resetCardPosition();
-              this.$emit(FAIL_ACCEPT_CARD);
+              // this Timeout is needed so that the fail event fires only when the card
+              // has settles back down. Failure to have this can lead to the viewport being
+              // larger than normal which allows unexpected scrolling of modal wrappers.
+              // See CSS below, specifically the line starting with &.isAnimating for timing.
+              let animationTimer = setTimeout(() => {
+                clearTimeout(animationTimer);
+                this.$emit(FAIL_ACCEPT_CARD);
+              }, 500);
             }
           } else if (x < -interactXThreshold) this.playCard(REJECT_CARD);
           else if (y > interactYThreshold) {
@@ -271,7 +278,7 @@ $fs-card-title: 1.125em;
   }
 
   &.isAnimating {
-    transition: transform 0.7s $ease-out-back;
+    transition: transform 0.5s $ease-out-back;
   }
 
   text-decoration: none;
