@@ -446,6 +446,10 @@ button.copied::after {
   content: " 👍";
 }
 
+button.success::after {
+  content: " 👍";
+}
+
 button.wait::after {
   content: " ⏳";
 }
