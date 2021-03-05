@@ -1,6 +1,7 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
+      <h3>Buy 10 credits for GBP £{{ price }}</h3>
       <!-- Display a payment form -->
       <form @submit="payWithCard($event)">
         <div id="card-element">⏳<!--Stripe.js injects the Card Element--></div>
@@ -33,6 +34,7 @@ export default {
       card: {},
       canPayNow: false,
       cardError: "",
+      price: "...",
     };
   },
   methods: {
@@ -67,6 +69,11 @@ export default {
     },
   },
   async mounted() {
+    this.price = await fetch("https://dev.lilley.io/payments/prices")
+      .then(function(result) {
+        return result.json();
+      })
+      .then((json) => (json.creditsBundle10 / 100).toFixed(2));
     this.stripe = await loadStripe(
       "pk_test_51IMXW3AQfv8gg5JbltVApZu0UrsGNTl1UzzWTV80QRclffQdb9V7HUNasEblD1yNmrTsFP0QrJ1ehFFAwldVq7uP00XKzGPort"
     );
