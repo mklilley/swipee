@@ -1,61 +1,105 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h2>Settings</h2>
-      <button v-on:click="$emit('reloadCards', { remote: true })">
-        Restore data from online storage
-      </button>
-      <br /><br />
+      <div class="settings">
+        <h2>Settings</h2>
 
-      <button v-on:click="creditsModalVisible = true">
-        Your credits
-      </button>
+        <div class="your-data">
+          <h3
+            :class="{ open: yourDataVisible }"
+            @click.prevent="yourDataVisible = !yourDataVisible"
+          >
+            Your data
+          </h3>
+          <div v-if="yourDataVisible" class="items">
+            Number of cards: <strong>{{ numberOfCards }}</strong> <br /><br />
 
-      <br /><br />
+            <button v-if="!allCardsVisible" v-on:click="toggleAllCards($event)">
+              Show all cards <br />
+              PRICE: {{ skipPrice }}
+            </button>
+            <button v-else v-on:click="toggleAllCards($event)">
+              Hide cards
+            </button>
 
-      <button v-on:click="feedbackModalVisible = true">
-        Send feedback
-      </button>
+            <br /><br />
+            <button v-on:click="downloadData">
+              Download your data
+            </button>
 
-      <br /><br />
+            <br /><br />
 
-      <button v-on:click="welcomeModalVisible = true">
-        Show welome screen again
-      </button>
+            <button v-on:click="deleteDataModalVisible = true">
+              Delete all your data
+            </button>
 
-      <br /><br />
+            <br /><br />
 
-      <button v-on:click="deleteDataModalVisible = true">
-        Delete all your data
-      </button>
+            <button v-on:click="importDataModalVisible = true">
+              Import data from file
+            </button>
+          </div>
+        </div>
+        <br />
 
-      <br /><br />
+        <div class="online-storage">
+          <h3
+            :class="{ open: onlineStorageVisible }"
+            @click.prevent="onlineStorageVisible = !onlineStorageVisible"
+          >
+            Online storage
+          </h3>
+          <div v-if="onlineStorageVisible" class="items">
+            <button v-on:click="$emit('reloadCards', { remote: true })">
+              Restore data from online storage
+            </button>
+          </div>
+        </div>
 
-      <button v-on:click="importDataModalVisible = true">
-        Import data from file
-      </button>
+        <br />
 
-      <br /><br />
+        <div class="purchases">
+          <h3
+            :class="{ open: purchasesVisible }"
+            @click.prevent="purchasesVisible = !purchasesVisible"
+          >
+            Purchases
+          </h3>
+          <div v-if="purchasesVisible" class="items">
+            <button v-on:click="creditsModalVisible = true">
+              Your credits
+            </button>
+          </div>
+        </div>
 
-      <button v-on:click="resetAppModalVisible = true">
-        Reset App
-      </button>
+        <br />
 
-      <br /><br />
+        <div class="help">
+          <h3
+            :class="{ open: helpVisible }"
+            @click.prevent="helpVisible = !helpVisible"
+          >
+            Help
+          </h3>
+          <div v-if="helpVisible" class="items">
+            <button v-on:click="feedbackModalVisible = true">
+              Send feedback
+            </button>
 
-      <button v-on:click="downloadData">
-        Download your data
-      </button>
+            <br /><br />
 
-      <br /><br />
+            <button v-on:click="welcomeModalVisible = true">
+              Show welome screen again
+            </button>
 
-      <button v-if="!allCardsVisible" v-on:click="toggleAllCards($event)">
-        Show all cards <br />
-        Price: {{ skipPrice }}
-      </button>
-      <button v-else v-on:click="toggleAllCards($event)">
-        Hide cards
-      </button>
+            <br /><br />
+
+            <button v-on:click="resetAppModalVisible = true">
+              Reset App
+            </button>
+          </div>
+        </div>
+      </div>
     </template>
   </Modal>
 
@@ -120,7 +164,7 @@ export default {
     ImportData,
     ResetApp,
   },
-  props: ["allCardsVisible", "skipPrice"],
+  props: ["allCardsVisible", "skipPrice", "numberOfCards"],
   data() {
     return {
       useRemoteStorage: JSON.parse(localStorage.useRemoteStorage),
@@ -131,6 +175,10 @@ export default {
       deleteDataModalVisible: false,
       importDataModalVisible: false,
       resetAppModalVisible: false,
+      yourDataVisible: false,
+      onlineStorageVisible: false,
+      helpVisible: false,
+      purchasesVisible: false,
     };
   },
   methods: {
@@ -201,5 +249,85 @@ input {
   display: block;
   color: #e44e42;
   font-weight: 600;
+}
+
+.settings {
+  text-align: left;
+}
+
+.settings h2 {
+  text-align: center;
+}
+
+.settings h3 {
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin: 0;
+  width: 100%;
+  color: white;
+  padding: 10px;
+}
+
+.settings h3.open {
+  border-radius: 5px 5px 0px 0px;
+}
+
+.settings .items {
+  box-sizing: border-box;
+  border-radius: 0px 0px 5px 5px;
+  width: 100%;
+  padding: 10px;
+}
+
+.your-data button {
+  background-color: rgb(223, 17, 101);
+  border-color: rgb(223, 17, 101);
+}
+
+.your-data .items {
+  background-color: rgb(223, 17, 101, 0.1);
+}
+
+.your-data h3 {
+  background-color: rgb(223, 17, 101);
+}
+
+.online-storage button {
+  background-color: rgb(115, 52, 94);
+  border-color: rgb(115, 52, 94);
+}
+
+.online-storage .items {
+  background-color: rgb(115, 52, 94, 0.1);
+}
+
+.online-storage h3 {
+  background-color: rgb(115, 52, 94);
+}
+
+.help button {
+  background-color: rgb(115, 52, 94);
+  border-color: rgb(115, 52, 94);
+}
+
+.help .items {
+  background-color: rgb(115, 52, 94, 0.1);
+}
+
+.help h3 {
+  background-color: rgb(115, 52, 94);
+}
+
+.purchases button {
+  background-color: rgb(223, 17, 101);
+  border-color: rgb(223, 17, 101);
+}
+
+.purchases .items {
+  background-color: rgb(223, 17, 101, 0.1);
+}
+
+.purchases h3 {
+  background-color: rgb(223, 17, 101);
 }
 </style>
