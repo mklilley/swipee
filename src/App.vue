@@ -20,6 +20,7 @@
   <Settings
     :allCardsVisible="allCardsVisible"
     :skipPrice="skipPrice"
+    :numberOfCards="cards.length"
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
