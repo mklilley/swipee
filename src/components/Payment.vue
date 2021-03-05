@@ -56,9 +56,9 @@ export default {
         console.log(result.paymentIntent.id);
         localStorage.credits = parseInt(localStorage.credits) + 10;
         this.$emit("paymentSuccess");
-        event.submitter.classList.toggle("success");
+        event.submitter.classList.add("success");
         let successTimer = setTimeout(() => {
-          event.submitter.classList.toggle("success");
+          event.submitter.classList.remove("success");
           clearTimeout(successTimer);
           this.$emit("close");
         }, 1000);
@@ -125,13 +125,5 @@ input {
   display: block;
   color: #e44e42;
   font-weight: 600;
-}
-
-button.wait::after {
-  content: " ⏳";
-}
-
-button.success::after {
-  content: " 👍";
 }
 </style>
