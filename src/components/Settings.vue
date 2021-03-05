@@ -50,9 +50,22 @@
             Online storage
           </h3>
           <div v-if="onlineStorageVisible" class="items">
-            <button v-on:click="$emit('reloadCards', { remote: true })">
+            <!-- <button v-on:click="$emit('reloadCards', { remote: true })">
               Restore data from online storage
-            </button>
+            </button> -->
+
+            <div v-if="useRemoteStorage">
+              My storage box ID:<br />
+              <strong>{{ boxID }}</strong>
+              <button @click.prevent="copyToClipboard(boxID, $event)">
+                copy</button
+              ><br /><br />
+              My storage box key:<br />
+              <strong>{{ apiKey }}</strong>
+              <button @click.prevent="copyToClipboard(apiKey, $event)">
+                copy</button
+              ><br /><br />
+            </div>
           </div>
         </div>
 
@@ -179,9 +192,26 @@ export default {
       onlineStorageVisible: false,
       helpVisible: false,
       purchasesVisible: false,
+      boxID: "",
+      apiKey: "",
     };
   },
   methods: {
+    copyToClipboard(text, event) {
+      navigator.clipboard.writeText(text).then(
+        () => {
+          console.log("Async: Copying to clipboard was successful!");
+          event.target.classList.toggle("copied");
+          let copyTimer = setTimeout(() => {
+            event.target.classList.toggle("copied");
+            clearTimeout(copyTimer);
+          }, 1000);
+        },
+        function(err) {
+          console.error("Async: Could not copy text: ", err);
+        }
+      );
+    },
     toggleAllCards(event) {
       if (this.allCardsVisible) {
         this.$emit("hideCards");
@@ -235,6 +265,8 @@ export default {
   },
   async mounted() {
     this.boxStatus = await db.status();
+    this.boxID = await db.id({ my: true });
+    this.apiKey = await db.apiKey({ my: true });
   },
 };
 </script>
