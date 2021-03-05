@@ -50,7 +50,8 @@
       <br /><br />
 
       <button v-on:click="$emit('toggleAllCards')">
-        Toggle show all cards
+        <span v-if="!allCardsVisible">Show all cards</span>
+        <span v-else> Hide cards</span>
       </button>
     </template>
   </Modal>
@@ -116,6 +117,7 @@ export default {
     ImportData,
     ResetApp,
   },
+  props: ["allCardsVisible"],
   data() {
     return {
       credits: parseInt(localStorage.credits),

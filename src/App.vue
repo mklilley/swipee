@@ -18,6 +18,7 @@
   <Welcome v-if="welcomeModalVisible" @close="closeWelcomeModal"></Welcome>
 
   <Settings
+    :allCardsVisible="showAllCards"
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
