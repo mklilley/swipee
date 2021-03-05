@@ -28,7 +28,7 @@ export default {
     return {
       stripe: {},
       purchase: {
-        items: [{ creditsBundle10: 1 }],
+        items: [{ code: "creditsBundle10", quantity: 1 }],
       },
       paymentIntent: {},
       card: {},
