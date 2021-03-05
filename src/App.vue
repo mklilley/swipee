@@ -248,9 +248,6 @@ export default {
     removeCardFromDeck() {
       this.cards.shift();
     },
-    addCardToDeck(card) {
-      this.cards.unshift(card.title);
-    },
     closeWelcomeModal() {
       this.welcomeModalVisible = false;
       localStorage.setItem("haveSeenWelcome", true);
