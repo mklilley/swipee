@@ -300,8 +300,8 @@ export default {
     useCreditsUpdatePrice() {
       localStorage.credits =
         parseInt(localStorage.credits) - parseInt(localStorage.skipPrice);
-      localStorage.skipPrice = parseInt(localStorage.skipPrice) * 2;
-      this.skipPrice = localStorage.skipPrice;
+      this.skipPrice = this.skipPrice * 2;
+      localStorage.skipPrice = this.skipPrice;
     },
     removeCardFromDeck(i) {
       this.cards.splice(i, 1);
