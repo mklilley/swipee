@@ -141,7 +141,13 @@ export default {
     }
 
     this.filterItems = this.initialFilterItems();
-    this.skipPrice = localStorage.skipPrice;
+
+    if (parseInt(localStorage.skipPrice) > 0) {
+      this.skipPrice = parseInt(localStorage.skipPrice);
+    } else {
+      this.skipPrice = 1;
+      localStorage.skipPrice = 1;
+    }
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
@@ -178,7 +184,7 @@ export default {
       selectedFilterItemsObject: {},
       filterItems: [],
       allCardsVisible: false,
-      skipPrice: 0,
+      skipPrice: 1,
       boxStatus: {},
       syncWarningVisible: false,
     };
