@@ -31,6 +31,7 @@
   <Credits
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
+    :skipPrice="skipPrice"
   ></Credits>
 
   <AddCard
@@ -57,6 +58,7 @@
       :card="card"
       :is-current="index === 0 || allCardsVisible"
       :stacked="!allCardsVisible"
+      :skipPrice="skipPrice"
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
       @hideCard="removeCardFromDeck(index)"

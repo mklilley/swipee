@@ -77,6 +77,10 @@ export default {
       type: Boolean,
       required: true,
     },
+    skipPrice: {
+      type: Number,
+      required: true,
+    },
   },
 
   data() {
@@ -90,7 +94,6 @@ export default {
         rotation: 0,
       },
       swipeDirection: "",
-      skipPrice: parseInt(localStorage.skipPrice),
     };
   },
 
@@ -112,7 +115,6 @@ export default {
       listeners: {
         start: () => {
           this.isInteractAnimating = false;
-          this.skipPrice = parseInt(localStorage.skipPrice);
         },
         move: (event) => {
           const {
@@ -140,9 +142,7 @@ export default {
           this.isInteractAnimating = true;
 
           if (x > interactXThreshold) {
-            if (
-              parseInt(localStorage.credits) >= parseInt(localStorage.skipPrice)
-            ) {
+            if (parseInt(localStorage.credits) >= this.skipPrice) {
               this.playCard(ACCEPT_CARD);
             } else {
               this.resetCardPosition();

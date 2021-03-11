@@ -26,6 +26,7 @@ import Payment from "@/components/Payment.vue";
 export default {
   name: "Credits",
   emits: ["close"],
+  props: ["skipPrice"],
   components: {
     Modal,
     Payment,
@@ -33,7 +34,6 @@ export default {
   data() {
     return {
       credits: parseInt(localStorage.credits),
-      skipPrice: parseInt(localStorage.skipPrice),
       paymentModalVisible: false,
       creditsTitle: "",
     };

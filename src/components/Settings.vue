@@ -166,6 +166,7 @@
   <Credits
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
+    :skipPrice="skipPrice"
   ></Credits>
 </template>
 
@@ -237,9 +238,7 @@ export default {
       if (this.allCardsVisible) {
         this.$emit("hideCards");
       } else {
-        if (
-          parseInt(localStorage.credits) >= parseInt(localStorage.skipPrice)
-        ) {
+        if (parseInt(localStorage.credits) >= this.skipPrice) {
           event.target.classList.add("success");
           let successTimer = setTimeout(() => {
             event.target.classList.remove("success");
