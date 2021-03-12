@@ -98,4 +98,11 @@ app.post("/credits", async (req, res) => {
       .json({ type: "error", message: "Badly formatted credits data" });
   }
 });
+
+app.post("/" + process.env.PAYMENT_CONFIRMATION, async (req, res) => {
+  const event = req.body;
+  console.log(event.data.object);
+  res.json({ received: true });
+});
+
 app.listen(PORT, () => console.log(`Node server listening on port ${PORT}!`));
