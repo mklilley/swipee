@@ -158,11 +158,14 @@ export default {
     const msInDay = 1000 * 60 * 60 * 24;
     const msSinceLastShuffle =
       new Date() - Date.parse(localStorage.lastShuffle);
+    if (msSinceLastShuffle > 0) {
+      // this prevents user from messing with local storage to get a free reshuffle
     if (msSinceLastShuffle > msInDay) {
       this.newShuffleSeed();
       this.createSuffleTimer(msInDay);
     } else {
       this.createSuffleTimer(msInDay - msSinceLastShuffle);
+    }
     }
 
     await this.loadCards();
