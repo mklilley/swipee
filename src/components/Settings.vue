@@ -59,7 +59,7 @@
             ><br />
 
             <div>
-              <label class="switch">
+              <label class="container">
                 Toggle online storage
                 <input
                   :disabled="boxStatus == false"
@@ -67,12 +67,13 @@
                   v-model="useRemoteStorage"
                   @change="toggleRemoteStorage($event)"
                 />
-                <span class="slider round"></span> </label
-              ><br /><br />
+                <span class="checkmark"></span>
+              </label>
+              <br />
             </div>
 
-            <div>
-              <label v-if="useRemoteStorage" class="switch">
+            <div v-if="useRemoteStorage">
+              <label class="container">
                 Toggle sync warnings
                 <input
                   :disabled="boxStatus == false"
@@ -80,8 +81,9 @@
                   v-model="showSyncWarnings"
                   @change="toggleSyncWarnings()"
                 />
-                <span class="slider round"></span><br /><br />
+                <span class="checkmark"></span>
               </label>
+              <br />
             </div>
 
             <div v-if="useRemoteStorage">
@@ -97,9 +99,8 @@
               ><br /><br />
             </div>
           </div>
+          <br />
         </div>
-
-        <br />
 
         <div class="purchases">
           <h3
@@ -435,7 +436,85 @@ input {
   background-color: rgb(223, 17, 101);
 }
 
-input.wait::after {
-  content: " ⏳";
+/* Custom checkbox code from https://www.w3schools.com/howto/howto_css_custom_checkbox.asp */
+.container {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #ccc;
+}
+
+/* On mouse-over, add a grey background color */
+.container:hover input ~ .checkmark {
+  background-color: rgb(182, 182, 182);
+}
+
+/* When the checkbox is checked, add a purple background */
+.container input:checked ~ .checkmark {
+  background-color: rgb(115, 52, 94);
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.container input.wait ~ .checkmark:after {
+  position: absolute;
+  display: block;
+  content: "⏳";
+  left: 2px;
+  top: -1px;
+  width: 0px;
+  height: 0px;
+  border: none;
+  -webkit-transform: rotate(0deg);
+  -ms-transform: rotate(0deg);
+  transform: rotate(0deg);
 }
 </style>
