@@ -184,7 +184,6 @@ export default {
       this.credits = 0;
       localStorage.credits = 0;
     }
-    console.log(this.credits);
 
     await this.loadCards();
 
