@@ -129,8 +129,8 @@ export default {
     if (localStorage.seed === undefined) {
       localStorage.seed = 1;
     }
-    if (localStorage.lastShuffle === undefined) {
-      localStorage.lastShuffle = new Date();
+    if (localStorage.lastReset === undefined) {
+      localStorage.lastReset = new Date();
     }
     if (localStorage.skipPrice === undefined) {
       localStorage.skipPrice = 1;
@@ -144,28 +144,30 @@ export default {
 
     this.filterItems = this.initialFilterItems();
 
+    // need to JSON prase in order for true/false to be boolean rather than string
+    this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
+
+    // If it's been longer than 24 hours since card shuffle and price reset then change
+    // shuffleSeed and reset skipPrice
+    const msInDay = 1000 * 60 * 60 * 24;
+    const msSinceLastReset = new Date() - Date.parse(localStorage.lastReset);
+    if (msSinceLastReset > 0) {
+      // this prevents user from messing with local storage to get a free reset
+      if (msSinceLastReset > msInDay) {
+        this.newShuffleSeed();
+        this.resetSkipPrice();
+        localStorage.lastReset = new Date();
+        this.createResetTimer(msInDay);
+      } else {
+        this.createResetTimer(msInDay - msSinceLastReset);
+      }
+    }
+
     if (parseInt(localStorage.skipPrice) > 0) {
       this.skipPrice = parseInt(localStorage.skipPrice);
     } else {
       this.skipPrice = 1;
       localStorage.skipPrice = 1;
-    }
-
-    // need to JSON prase in order for true/false to be boolean rather than string
-    this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
-
-    // If it's been longer than 24 hours since card shuffle then change shuffleSeed - this shuffles up the deck in a new way
-    const msInDay = 1000 * 60 * 60 * 24;
-    const msSinceLastShuffle =
-      new Date() - Date.parse(localStorage.lastShuffle);
-    if (msSinceLastShuffle > 0) {
-      // this prevents user from messing with local storage to get a free reshuffle
-    if (msSinceLastShuffle > msInDay) {
-      this.newShuffleSeed();
-      this.createSuffleTimer(msInDay);
-    } else {
-      this.createSuffleTimer(msInDay - msSinceLastShuffle);
-    }
     }
 
     await this.loadCards();
@@ -200,12 +202,18 @@ export default {
   },
 
   methods: {
-    createSuffleTimer(timeInMs) {
-      const shuffleTimer = setTimeout(() => {
+    createResetTimer(timeInMs) {
+      const resetTimer = setTimeout(() => {
         this.newShuffleSeed();
+        this.resetSkipPrice();
+        localStorage.lastReset = new Date();
         this.loadCards();
-        clearTimeout(shuffleTimer);
+        clearTimeout(resetTimer);
       }, timeInMs);
+    },
+    resetSkipPrice() {
+      this.skipPrice = 1;
+      localStorage.skipPrice = 1;
     },
     async checkForRemoteCardChanges() {
       this.syncInfo = "";
@@ -374,7 +382,6 @@ export default {
     },
     newShuffleSeed() {
       localStorage.seed = parseInt(localStorage.seed) + 1;
-      localStorage.lastShuffle = new Date();
     },
     shuffle(cards) {
       const shuffledDeck = shuffleSeed.shuffle(
