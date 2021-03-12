@@ -141,6 +141,9 @@ export default {
     if (localStorage.showSyncWarnings === undefined) {
       localStorage.showSyncWarnings = true;
     }
+    if (localStorage.lastKeepAliveDate === undefined) {
+      localStorage.lastKeepAliveDate = new Date();
+    }
 
     this.filterItems = this.initialFilterItems();
 
@@ -175,7 +178,7 @@ export default {
     this.boxStatus = await db.status();
 
     if (JSON.parse(localStorage.useRemoteStorage)) {
-      //this.keepDataAlive();
+      this.keepDataAlive();
       if (JSON.parse(localStorage.showSyncWarnings) && this.boxStatus) {
         this.checkForRemoteCardChanges();
       }
@@ -230,6 +233,23 @@ export default {
           new Date(localStorage.remoteUpdatedOn)
         ) {
           this.syncWarningVisible = true;
+        }
+      }
+    },
+    async keepDataAlive() {
+      let msInDay = 1000 * 60 * 60 * 24;
+      let numDaysSinceKeepAlive =
+        (new Date() - Date.parse(localStorage.lastKeepAliveDate)) / msInDay;
+      if (numDaysSinceKeepAlive > 90) {
+        let keepAliveSuccess = await db.keepAlive();
+        if (keepAliveSuccess) {
+          localStorage.lastKeepAliveDate = new Date();
+        } else {
+          alert(
+            `Your online storage data will be deleted in ${Math.round(
+              360 - numDaysSinceKeepAlive
+            )} days`
+          );
         }
       }
     },
