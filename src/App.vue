@@ -154,12 +154,15 @@ export default {
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
 
-    // If it's been longer than 24 hours since last app load then change shuffleSeed - this shuffles up the deck in a new way
+    // If it's been longer than 24 hours since card shuffle then change shuffleSeed - this shuffles up the deck in a new way
     const msInDay = 1000 * 60 * 60 * 24;
-    const daySinceLastLoad =
-      (new Date() - Date.parse(localStorage.lastShuffle)) / msInDay;
-    if (daySinceLastLoad > 1) {
+    const msSinceLastShuffle =
+      new Date() - Date.parse(localStorage.lastShuffle);
+    if (msSinceLastShuffle > msInDay) {
       this.newShuffleSeed();
+      this.createSuffleTimer(msInDay);
+    } else {
+      this.createSuffleTimer(msInDay - msSinceLastShuffle);
     }
 
     await this.loadCards();
@@ -194,6 +197,13 @@ export default {
   },
 
   methods: {
+    createSuffleTimer(timeInMs) {
+      const shuffleTimer = setTimeout(() => {
+        this.newShuffleSeed();
+        this.loadCards();
+        clearTimeout(shuffleTimer);
+      }, timeInMs);
+    },
     async checkForRemoteCardChanges() {
       this.syncInfo = "";
       //First check if local card number is different to what's on remote
