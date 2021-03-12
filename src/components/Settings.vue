@@ -59,6 +59,19 @@
             ><br />
 
             <div>
+              <label class="switch">
+                Toggle online storage
+                <input
+                  :disabled="boxStatus == false"
+                  type="checkbox"
+                  v-model="useRemoteStorage"
+                  @change="toggleRemoteStorage($event)"
+                />
+                <span class="slider round"></span> </label
+              ><br /><br />
+            </div>
+
+            <div>
               <label v-if="useRemoteStorage" class="switch">
                 Toggle sync warnings
                 <input
@@ -216,6 +229,45 @@ export default {
     };
   },
   methods: {
+    async toggleRemoteStorage(event) {
+      // if useRemoteStorage has been turned off, we need to remove any
+      // cards from the remote storage and then recreate locally, else we need to delete
+      // locally and recreate on remote
+      event.target.classList.add("wait");
+      const cards = await db.read();
+
+      let promDelete = [];
+      let promCreate = [];
+      for (let card of cards) {
+        promDelete.push(db.delete(card.id, { remote: !this.useRemoteStorage }));
+        promCreate.push(
+          db.create(
+            pick(card, [
+              "action",
+              "deck",
+              "description",
+              "domain",
+              "image",
+              "skipped",
+              "time",
+              "title",
+              "url",
+            ]),
+            { remote: this.useRemoteStorage }
+          )
+        );
+      }
+      await Promise.all(promDelete);
+      await Promise.all(promCreate);
+
+      event.target.classList.remove("wait");
+
+      // persist useRemoteStorage in local storage
+      localStorage.useRemoteStorage = this.useRemoteStorage;
+
+      // Reload the cards from the data store to update the view
+      this.$emit("reloadCards");
+    },
     toggleSyncWarnings() {
       localStorage.showSyncWarnings = this.showSyncWarnings;
     },
@@ -381,5 +433,9 @@ input {
 
 .purchases h3 {
   background-color: rgb(223, 17, 101);
+}
+
+input.wait::after {
+  content: " ⏳";
 }
 </style>
