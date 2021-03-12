@@ -20,18 +20,22 @@
   <Settings
     :allCardsVisible="allCardsVisible"
     :skipPrice="skipPrice"
+    :credits="credits"
     :numberOfCards="numberOfCards"
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
     @showCards="showAllCards"
     @hideCards="allCardsVisible = false"
+    @addCredits="addCredits"
   ></Settings>
 
   <Credits
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
     :skipPrice="skipPrice"
+    :credits="credits"
+    @addCredits="addCredits"
   ></Credits>
 
   <AddCard
@@ -59,6 +63,7 @@
       :is-current="index === 0 || allCardsVisible"
       :stacked="!allCardsVisible"
       :skipPrice="skipPrice"
+      :credits="credits"
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
       @hideCard="removeCardFromDeck(index)"
@@ -173,6 +178,14 @@ export default {
       localStorage.skipPrice = 1;
     }
 
+    if (parseInt(localStorage.credits) >= 0) {
+      this.credits = parseInt(localStorage.credits);
+    } else {
+      this.credits = 0;
+      localStorage.credits = 0;
+    }
+    console.log(this.credits);
+
     await this.loadCards();
 
     this.boxStatus = await db.status();
@@ -201,10 +214,15 @@ export default {
       boxStatus: {},
       syncWarningVisible: false,
       numberOfCards: 0,
+      credits: 0,
     };
   },
 
   methods: {
+    addCredits() {
+      this.credits += this.credits + 10;
+      localStorage.credits = this.credits;
+    },
     createResetTimer(timeInMs) {
       const resetTimer = setTimeout(() => {
         this.newShuffleSeed();
@@ -342,9 +360,10 @@ export default {
       this.useCreditsUpdatePrice();
     },
     useCreditsUpdatePrice() {
-      localStorage.credits =
-        parseInt(localStorage.credits) - parseInt(localStorage.skipPrice);
+      this.credits = this.credits - this.skipPrice;
       this.skipPrice = this.skipPrice * 2;
+
+      localStorage.credits = this.credits;
       localStorage.skipPrice = this.skipPrice;
     },
     removeCardFromDeck(i) {

@@ -15,7 +15,7 @@
   <Payment
     v-if="paymentModalVisible"
     @close="paymentModalVisible = false"
-    @paymentSuccess="updateCredits"
+    @paymentSuccess="$emit('addCredits')"
   ></Payment>
 </template>
 
@@ -25,32 +25,24 @@ import Payment from "@/components/Payment.vue";
 
 export default {
   name: "Credits",
-  emits: ["close"],
-  props: ["skipPrice"],
+  emits: ["close", "addCredits"],
+  props: ["skipPrice", "credits"],
   components: {
     Modal,
     Payment,
   },
   data() {
     return {
-      credits: parseInt(localStorage.credits),
       paymentModalVisible: false,
-      creditsTitle: "",
     };
   },
-  methods: {
-    updateCredits() {
-      this.credits = parseInt(localStorage.credits);
-      this.updateModalTitle();
-    },
-    updateModalTitle() {
-      this.creditsTitle =
-        this.credits < this.skipPrice ? "Not enough credits" : "Credits";
+  computed: {
+    creditsTitle() {
+      return this.credits < this.skipPrice ? "Not enough credits" : "Credits";
     },
   },
-  async mounted() {
-    this.updateModalTitle();
-  },
+  methods: {},
+  async mounted() {},
 };
 </script>
 

@@ -181,6 +181,8 @@
     v-if="creditsModalVisible"
     @close="creditsModalVisible = false"
     :skipPrice="skipPrice"
+    :credits="credits"
+    @addCredits="$emit('addCredits')"
   ></Credits>
 </template>
 
@@ -199,7 +201,7 @@ import pick from "lodash/pick";
 
 export default {
   name: "Settings",
-  emits: ["close", "reloadCards", "hideCards", "showCards"],
+  emits: ["close", "reloadCards", "hideCards", "showCards", "addCredits"],
   components: {
     Modal,
     Credits,
@@ -209,7 +211,7 @@ export default {
     ImportData,
     ResetApp,
   },
-  props: ["allCardsVisible", "skipPrice", "numberOfCards"],
+  props: ["allCardsVisible", "skipPrice", "numberOfCards", "credits"],
   data() {
     return {
       useRemoteStorage: JSON.parse(localStorage.useRemoteStorage),
@@ -291,7 +293,7 @@ export default {
       if (this.allCardsVisible) {
         this.$emit("hideCards");
       } else {
-        if (parseInt(localStorage.credits) >= this.skipPrice) {
+        if (this.credits >= this.skipPrice) {
           event.target.classList.add("success");
           let successTimer = setTimeout(() => {
             event.target.classList.remove("success");

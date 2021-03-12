@@ -86,7 +86,6 @@ export default {
         this.cardError = result.error.message;
       } else {
         // The payment succeeded!
-        localStorage.credits = parseInt(localStorage.credits) + 10;
         this.$emit("paymentSuccess");
         event.submitter.classList.add("success");
         let successTimer = setTimeout(() => {

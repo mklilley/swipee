@@ -81,6 +81,10 @@ export default {
       type: Number,
       required: true,
     },
+    credits: {
+      type: Number,
+      required: true,
+    },
   },
 
   data() {
@@ -142,7 +146,7 @@ export default {
           this.isInteractAnimating = true;
 
           if (x > interactXThreshold) {
-            if (parseInt(localStorage.credits) >= this.skipPrice) {
+            if (this.credits >= this.skipPrice) {
               this.playCard(ACCEPT_CARD);
             } else {
               this.resetCardPosition();
