@@ -76,4 +76,26 @@ app.get("/prices", async (req, res) => {
   res.send(PRICES);
 });
 
+let serverCredits = 10;
+app.post("/credits", async (req, res) => {
+  const clientCredits = req.body.credits;
+
+  let validated = false;
+
+  validated =
+    typeof clientCredits === "number" &&
+    clientCredits % 1 === 0 &&
+    clientCredits > 0;
+
+  if (validated) {
+    if (serverCredits > clientCredits) {
+      serverCredits = clientCredits;
+    }
+    res.send({ credits: serverCredits });
+  } else {
+    res
+      .status(400)
+      .json({ type: "error", message: "Badly formatted credits data" });
+  }
+});
 app.listen(PORT, () => console.log(`Node server listening on port ${PORT}!`));
