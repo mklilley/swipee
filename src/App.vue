@@ -20,7 +20,7 @@
   <Settings
     :allCardsVisible="allCardsVisible"
     :skipPrice="skipPrice"
-    :numberOfCards="cards.length"
+    :numberOfCards="numberOfCards"
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
@@ -189,6 +189,7 @@ export default {
       skipPrice: 1,
       boxStatus: {},
       syncWarningVisible: false,
+      numberOfCards: 0,
     };
   },
 
@@ -196,9 +197,9 @@ export default {
     async checkForRemoteCardChanges() {
       this.syncInfo = "";
       //First check if local card number is different to what's on remote
-      if (this.boxStatus.numCards !== this.cards.length) {
+      if (this.boxStatus.numCards !== this.numberOfCards) {
         // Show sync warning to user
-        this.syncInfo = `Local cards: ${this.cards.length}, Remote cards: ${this.boxStatus.numCards}.`;
+        this.syncInfo = `Local cards: ${this.numberOfCards}, Remote cards: ${this.boxStatus.numCards}.`;
         this.syncWarningVisible = true;
       } else if (this.boxStatus.remoteUpdatedOn) {
         // Next check if the online storage has been updated since the user last did
@@ -322,7 +323,7 @@ export default {
         } else {
           if ((now - Date.parse(card.skipped)) / msInDay > 1) {
             // After 1 day, return skipped cards back to the deck. Don't await for the
-            // storage to update - to that async so the filter can run quickly
+            // storage to update so that async so the filter can run quickly
             db.update(
               card.id,
               {
@@ -372,6 +373,10 @@ export default {
     loadCards: async function(options = {}) {
       // First read all cards from storage
       let cards = await db.read(options);
+
+      // Save number of cards to variable to feed into settings component
+      this.numberOfCards = cards.length;
+
       // Next shuffle the cards
       cards = this.shuffle(cards);
       // Next remove cards that were skipped less than 24 hours ago
