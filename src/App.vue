@@ -92,6 +92,8 @@ import pick from "lodash/pick";
 
 import { db } from "@/services/storage";
 
+import checkCredits from "@/services/credits";
+
 import * as shuffleSeed from "shuffle-seed";
 
 export default {
@@ -178,12 +180,10 @@ export default {
       localStorage.skipPrice = 1;
     }
 
-    if (parseInt(localStorage.credits) >= 0) {
-      this.credits = parseInt(localStorage.credits);
-    } else {
-      this.credits = 0;
-      localStorage.credits = 0;
-    }
+    this.credits = parseInt(localStorage.credits);
+    // Check local storage credits with the server
+    this.credits = await checkCredits(this.credits);
+    localStorage.credits = this.credits;
 
     await this.loadCards();
 
