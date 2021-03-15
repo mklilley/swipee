@@ -219,7 +219,7 @@ export default {
 
   methods: {
     addCredits() {
-      this.credits += this.credits + 10;
+      this.credits += 10;
       localStorage.credits = this.credits;
     },
     createResetTimer(timeInMs) {
