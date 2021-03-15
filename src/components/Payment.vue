@@ -46,6 +46,10 @@
 import Modal from "@/components/Modal.vue";
 import { loadStripe } from "@stripe/stripe-js/pure";
 
+import { db } from "@/services/storage";
+
+// import checkCredits from "@/services/credits";
+
 export default {
   name: "Payment",
   emits: ["close", "paymentSuccess"],
@@ -57,6 +61,10 @@ export default {
       stripe: {},
       purchase: {
         items: [{ code: "creditsBundle10", quantity: 1 }],
+        auth: {
+          boxID: "",
+          apiKey: "",
+        },
       },
       paymentIntent: {},
       card: {},
@@ -98,6 +106,9 @@ export default {
     },
   },
   async mounted() {
+    this.purchase.auth.boxID = await db.id();
+    this.purchase.auth.apiKey = await db.apiKey();
+
     this.price = await fetch("https://dev.lilley.io/payments/prices")
       .then(async (result) => {
         const json = await result.json();
@@ -115,7 +126,7 @@ export default {
     );
 
     this.paymentIntent = await fetch(
-      "https://dev.lilley.io/payments/create-payment-intent",
+      "http://localhost:9000/create-payment-intent",
       {
         method: "POST",
         headers: {
