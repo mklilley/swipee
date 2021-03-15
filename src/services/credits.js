@@ -7,7 +7,13 @@ export default async function(credits) {
   const apiKey = await db.apiKey();
 
   const options = {
-    body: JSON.stringify({ boxID: boxID, apiKey: apiKey, credits: credits }),
+    body: JSON.stringify({
+      auth: {
+        boxID: boxID,
+        apiKey: apiKey,
+      },
+      credits: credits,
+    }),
     headers: { "Content-Type": "application/json" },
     method: "POST",
   };
