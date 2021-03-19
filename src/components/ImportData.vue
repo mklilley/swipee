@@ -1,7 +1,7 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h1>Import data from file</h1>
+      <h2>Import data from file</h2>
 
       <input type="file" @change="readFile" /><br /><br />
       <span class="error" v-show="error"

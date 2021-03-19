@@ -1,7 +1,7 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h1>Delete all data</h1>
+      <h2>Delete all data</h2>
       <span
         class="error"
         v-if="(boxStatus == false) & (useRemoteStorage == true)"

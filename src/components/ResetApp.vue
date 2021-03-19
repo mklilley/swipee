@@ -1,7 +1,7 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h1>ResetApp</h1>
+      <h2>Reset App</h2>
       Resetting the app will delete all local data and give you new online
       storage credentials. Your online data will persist, but you will lose
       access to it unless you have taken note of your storage ID and key.
