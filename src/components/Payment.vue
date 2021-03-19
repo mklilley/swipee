@@ -122,7 +122,7 @@ export default {
     );
 
     this.paymentIntent = await fetch(
-      "http://localhost:9000/create-payment-intent",
+      "https://dev.lilley.io/payments/create-payment-intent",
       {
         method: "POST",
         headers: {

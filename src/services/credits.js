@@ -1,4 +1,4 @@
-const api = "http://localhost:9000/credits/";
+const api = "https://dev.lilley.io/payments/credits";
 
 import { db } from "@/services/storage";
 
