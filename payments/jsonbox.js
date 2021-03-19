@@ -48,7 +48,7 @@ const box = {
     if (!id) {
       let fetchURL = API_URL + "?limit=1000";
       fetchURL = query
-        ? fetchURL + "q=" + querystring.encode(query, ",")
+        ? fetchURL + "&q=" + querystring.encode(query, ",", ":")
         : fetchURL;
       response = await fetch(fetchURL, options).catch((err) => {
         console.log(err);
