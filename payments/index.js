@@ -35,21 +35,19 @@ function calculateCredits(items) {
   return totalCredits;
 }
 
-function authValidator(auth) {
+function authValidator(boxID, apiKey) {
   let isValidated = false;
 
-  if (typeof auth === "object") {
-    if (auth.hasOwnProperty("apiKey") && auth.hasOwnProperty("boxID")) {
-      if (typeof auth.boxID === "string" && typeof auth.apiKey === "string") {
-        // Check that the user has entered a valid boxID, i.e.
-        // 20 character HEX string
-        let isHex20 = auth.boxID.match("^[0-9a-f]{20}$");
-        // Check that the user has entered a valid  valid apiKey i.e a UUID
-        let isUUID = auth.apiKey.match(
-          "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-        );
-        isValidated = !(isHex20 === null || isUUID === null);
-      }
+  if (boxID && apiKey) {
+    if (typeof boxID === "string" && typeof apiKey === "string") {
+      // Check that the user has entered a valid boxID, i.e.
+      // 20 character HEX string
+      let isHex20 = boxID.match("^[0-9a-f]{20}$");
+      // Check that the user has entered a valid  valid apiKey i.e a UUID
+      let isUUID = apiKey.match(
+        "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+      );
+      isValidated = !(isHex20 === null || isUUID === null);
     }
   }
 
@@ -85,11 +83,15 @@ function itemsValidator(items) {
   return isValidated;
 }
 
-async function getUserData(auth) {
-  let user = await db.read(null, { boxID: auth.boxID });
+async function getUserData(boxID, apiKey) {
+  console.log(boxID);
+  let user = await db.read(null, { boxID: boxID });
+  console.log(user);
   if (Object.keys(user).length === 1) {
     user = Object.values(user)[0];
-    if (user.auth.apiKey === auth.apiKey) {
+    console.log(user.apiKey);
+    console.log(apiKey);
+    if (user.apiKey === apiKey) {
       return user;
     } else {
       // User supplied a valid boxID but not valid apiKey
@@ -97,15 +99,16 @@ async function getUserData(auth) {
     }
   } else {
     // If there is no user corresponding to the auth data and if not then create them.
-    return await db.create({ auth: auth, credits: 10 });
+    return await db.create({ boxID: boxID, apiKey: apiKey, credits: 10 });
   }
 }
 
 app.post("/create-payment-intent", express.json(), async (req, res) => {
+  const { items, boxID, apiKey } = req.body;
 
   // input validation
   let itemsValidated = itemsValidator(items);
-  let authValidated = authValidator(auth);
+  let authValidated = authValidator(boxID, apiKey);
 
   if (!itemsValidated) {
     // error in some input data, return error
@@ -121,7 +124,7 @@ app.post("/create-payment-intent", express.json(), async (req, res) => {
     });
   } else {
     // Check that there is a user corresponding to the auth data and if not then create them.
-    const user = await getUserData(auth);
+    const user = await getUserData(boxID, apiKey);
     if (!user) {
       // This happens if a user exist but they've not supplied the correct apiKey
       res.status(401).json({
@@ -148,13 +151,14 @@ app.get("/prices", express.json(), async (req, res) => {
 });
 
 app.post("/credits", express.json(), async (req, res) => {
+  const { credits, boxID, apiKey } = req.body;
 
   // validation
   let creditsValidated = false;
   creditsValidated =
     typeof credits === "number" && credits % 1 === 0 && credits > 0;
 
-  let authValidated = authValidator(auth);
+  let authValidated = authValidator(boxID, apiKey);
 
   if (!creditsValidated) {
     // error in some input data, return error
@@ -169,7 +173,7 @@ app.post("/credits", express.json(), async (req, res) => {
       message: "Badly formatted authorisation data",
     });
   } else {
-    const user = await getUserData(auth);
+    const user = await getUserData(boxID, apiKey);
     if (!user) {
       // This happens if a user exist but they've not supplied the correct apiKey
       res.status(401).json({
@@ -180,7 +184,8 @@ app.post("/credits", express.json(), async (req, res) => {
       if (credits < user.credits) {
         // Client has used some credits already. Therefore should update server record of their credits
         await db.update(user.id, {
-          auth: auth,
+          boxID: boxID,
+          apiKey: apiKey,
           credits: credits,
         });
         res.send({ credits: credits });
@@ -210,16 +215,16 @@ app.post(
       return res.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-  // TODO: Validate that stripe sent the message
+    // TODO: Validate that stripe sent the message
 
-  if (event.type === "payment_intent.succeeded") {
-    const metadata = JSON.parse(event.data.object.metadata.data);
-    const user = await getUserData(metadata.auth);
+    if (event.type === "payment_intent.succeeded") {
+      const metadata = JSON.parse(event.data.object.metadata.data);
+      const user = await getUserData(metadata.auth);
 
-    const totalCredits = calculateCredits(metadata.items) + user.credits;
+      const totalCredits = calculateCredits(metadata.items) + user.credits;
 
-    await db.update(user.id, { auth: metadata.auth, credits: totalCredits });
-  }
+      await db.update(user.id, { auth: metadata.auth, credits: totalCredits });
+    }
     return res.json({ received: true });
   }
 );

@@ -8,10 +8,8 @@ export default async function(credits) {
 
   const options = {
     body: JSON.stringify({
-      auth: {
-        boxID: boxID,
-        apiKey: apiKey,
-      },
+      boxID: boxID,
+      apiKey: apiKey,
       credits: credits,
     }),
     headers: { "Content-Type": "application/json" },
