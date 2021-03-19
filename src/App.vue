@@ -131,7 +131,7 @@ export default {
       );
     }
     if (localStorage.useRemoteStorage === undefined) {
-      localStorage.useRemoteStorage = false;
+      localStorage.useRemoteStorage = true;
     }
     if (localStorage.seed === undefined) {
       localStorage.seed = 1;
