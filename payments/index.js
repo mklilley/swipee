@@ -17,7 +17,6 @@ const CREDITS = JSON.parse(process.env.CREDITS);
 
 app.use(cors());
 app.use(express.static("."));
-app.use(express.json());
 
 function calculateOrderAmount(items) {
   let totalCost = 0;
@@ -195,8 +194,22 @@ app.post("/credits", async (req, res) => {
   }
 });
 
-app.post("/" + process.env.STRIPE_WEBHOOK, async (req, res) => {
-  const event = req.body;
+app.post(
+  "/" + process.env.STRIPE_WEBHOOK,
+  express.raw({ type: "application/json" }),
+  async (req, res) => {
+    const payload = req.body;
+
+    const sig = req.headers["stripe-signature"];
+
+    let event;
+
+    try {
+      event = stripe.webhooks.constructEvent(payload, sig, stripeWebhookSecret);
+    } catch (err) {
+      console.log(err);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
 
   // TODO: Validate that stripe sent the message
 
@@ -208,7 +221,8 @@ app.post("/" + process.env.STRIPE_WEBHOOK, async (req, res) => {
 
     await db.update(user.id, { auth: metadata.auth, credits: totalCredits });
   }
-  res.json({ received: true });
-});
+    return res.json({ received: true });
+  }
+);
 
 app.listen(PORT, () => console.log(`Node server listening on port ${PORT}!`));
