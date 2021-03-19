@@ -100,8 +100,7 @@ async function getUserData(auth) {
   }
 }
 
-app.post("/create-payment-intent", async (req, res) => {
-  const { items, auth } = req.body;
+app.post("/create-payment-intent", express.json(), async (req, res) => {
 
   // input validation
   let itemsValidated = itemsValidator(items);
@@ -143,12 +142,11 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-app.get("/prices", async (req, res) => {
+app.get("/prices", express.json(), async (req, res) => {
   res.send(PRICES);
 });
 
-app.post("/credits", async (req, res) => {
-  const { credits, auth } = req.body;
+app.post("/credits", express.json(), async (req, res) => {
 
   // validation
   let creditsValidated = false;
