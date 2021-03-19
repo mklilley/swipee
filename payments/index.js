@@ -84,13 +84,9 @@ function itemsValidator(items) {
 }
 
 async function getUserData(boxID, apiKey) {
-  console.log(boxID);
   let user = await db.read(null, { boxID: boxID });
-  console.log(user);
   if (Object.keys(user).length === 1) {
     user = Object.values(user)[0];
-    console.log(user.apiKey);
-    console.log(apiKey);
     if (user.apiKey === apiKey) {
       return user;
     } else {
