@@ -15,7 +15,7 @@
 
       <br /><br />
       <button v-on:click="ignoreSyncWarnings()">
-        Ignore sync warnings
+        Ignore future sync warnings
       </button>
     </template>
   </Modal>
