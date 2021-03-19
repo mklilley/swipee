@@ -413,29 +413,29 @@ input {
 }
 
 .help button {
-  background-color: rgb(115, 52, 94);
-  border-color: rgb(115, 52, 94);
-}
-
-.help .items {
-  background-color: rgb(115, 52, 94, 0.1);
-}
-
-.help h3 {
-  background-color: rgb(115, 52, 94);
-}
-
-.purchases button {
   background-color: rgb(223, 17, 101);
   border-color: rgb(223, 17, 101);
 }
 
-.purchases .items {
+.help .items {
   background-color: rgb(223, 17, 101, 0.1);
 }
 
-.purchases h3 {
+.help h3 {
   background-color: rgb(223, 17, 101);
+}
+
+.purchases button {
+  background-color: rgb(67, 41, 88);
+  border-color: rgb(67, 41, 88);
+}
+
+.purchases .items {
+  background-color: rgb(67, 41, 88, 0.1);
+}
+
+.purchases h3 {
+  background-color: rgb(67, 41, 88);
 }
 
 /* Custom checkbox code from https://www.w3schools.com/howto/howto_css_custom_checkbox.asp */

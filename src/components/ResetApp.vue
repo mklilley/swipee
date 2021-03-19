@@ -47,7 +47,7 @@ input {
 }
 
 button {
-  background-color: rgb(115, 52, 94);
-  border-color: rgb(115, 52, 94);
+  background-color: rgb(223, 17, 101);
+  border-color: rgb(223, 17, 101);
 }
 </style>
