@@ -59,10 +59,8 @@ export default {
       stripe: {},
       purchase: {
         items: [{ code: "creditsBundle10", quantity: 1 }],
-        auth: {
-          boxID: "",
-          apiKey: "",
-        },
+        boxID: "",
+        apiKey: "",
       },
       paymentIntent: {},
       card: {},
@@ -104,8 +102,8 @@ export default {
     },
   },
   async mounted() {
-    this.purchase.auth.boxID = await db.id();
-    this.purchase.auth.apiKey = await db.apiKey();
+    this.purchase.boxID = await db.id();
+    this.purchase.apiKey = await db.apiKey();
 
     this.price = await fetch("https://dev.lilley.io/payments/prices")
       .then(async (result) => {

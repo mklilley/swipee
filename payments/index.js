@@ -219,11 +219,15 @@ app.post(
 
     if (event.type === "payment_intent.succeeded") {
       const metadata = JSON.parse(event.data.object.metadata.data);
-      const user = await getUserData(metadata.auth);
+      const user = await getUserData(metadata.boxID, metadata.apiKey);
 
       const totalCredits = calculateCredits(metadata.items) + user.credits;
 
-      await db.update(user.id, { auth: metadata.auth, credits: totalCredits });
+      await db.update(user.id, {
+        boxID: metadata.boxID,
+        apiKey: metadata.apiKey,
+        credits: totalCredits,
+      });
     }
     return res.json({ received: true });
   }
