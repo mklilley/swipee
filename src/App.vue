@@ -119,15 +119,15 @@ export default {
           action: "read",
           time: "short",
           url: "",
-          image: "https://cdn.onlinewebfonts.com/svg/img_435127.png",
+          image: "https://dev.lilley.io/swipee/swipe.png",
           description:
-            "Swipe left to discard. Swipe right to save for later. Save with caution - it'll cost you. The price doubles for each saved card but does reset after 24 hours. We've given you 10 free credits to get you started.",
+            "Swipe left to discard. Swipe right to save for later. Save with caution - it'll cost you. The price doubles for each card saved but it does reset every 24 hours. We've given you 10 free credits to get you started. Enjoy!",
           domain: "",
           skipped: false,
           title: "How to use Swipee",
           id: 1,
         },
-        { remote: false }
+        { remote: true }
       );
     }
     if (localStorage.useRemoteStorage === undefined) {
