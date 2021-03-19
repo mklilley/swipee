@@ -48,8 +48,6 @@ import { loadStripe } from "@stripe/stripe-js/pure";
 
 import { db } from "@/services/storage";
 
-// import checkCredits from "@/services/credits";
-
 export default {
   name: "Payment",
   emits: ["close", "paymentSuccess"],
