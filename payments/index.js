@@ -95,7 +95,12 @@ async function getUserData(boxID, apiKey) {
     }
   } else {
     // If there is no user corresponding to the auth data and if not then create them.
-    return await db.create({ boxID: boxID, apiKey: apiKey, credits: 10 });
+    return await db.create({
+      boxID: boxID,
+      apiKey: apiKey,
+      credits: 10,
+      receipts: [],
+    });
   }
 }
 
@@ -180,9 +185,10 @@ app.post("/credits", express.json(), async (req, res) => {
       if (credits < user.credits) {
         // Client has used some credits already. Therefore should update server record of their credits
         await db.update(user.id, {
-          boxID: boxID,
-          apiKey: apiKey,
+          boxID: user.boxID,
+          apiKey: user.apiKey,
           credits: credits,
+          receipts: user.receipts,
         });
         res.send({ credits: credits });
       } else {
@@ -223,8 +229,24 @@ app.post(
         boxID: metadata.boxID,
         apiKey: metadata.apiKey,
         credits: totalCredits,
+        receipts: user.receipts,
       });
     }
+
+    if (event.type === "charge.succeeded") {
+      const metadata = JSON.parse(event.data.object.metadata.data);
+      const receipt_url = event.data.object.receipt_url;
+      const user = await getUserData(metadata.boxID, metadata.apiKey);
+      user.receipts.push(receipt_url);
+
+      await db.update(user.id, {
+        boxID: metadata.boxID,
+        apiKey: metadata.apiKey,
+        credits: user.credits,
+        receipts: user.receipts,
+      });
+    }
+
     return res.json({ received: true });
   }
 );
