@@ -1,7 +1,7 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h1>Swipee</h1>
+      <h1><img src="@/assets/logo.svg" alt="Swipee logo" /><br />Swipee</h1>
       <h2>The no-list reading list app</h2>
       <a
         href="https://www.buymeacoffee.com/mklilley"
