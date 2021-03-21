@@ -180,14 +180,14 @@ export default {
       localStorage.skipPrice = 1;
     }
 
+    await this.loadCards();
+
+    this.boxStatus = await db.status();
+
     this.credits = parseInt(localStorage.credits);
     // Check local storage credits with the server
     this.credits = await checkCredits(this.credits);
     localStorage.credits = this.credits;
-
-    await this.loadCards();
-
-    this.boxStatus = await db.status();
 
     if (JSON.parse(localStorage.useRemoteStorage)) {
       this.keepDataAlive();
