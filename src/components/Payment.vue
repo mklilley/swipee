@@ -118,11 +118,11 @@ export default {
       });
 
     this.stripe = await loadStripe(
-      "pk_live_51IMXW3AQfv8gg5JblOSAf00hHSty9D14XsfK2IXHS7aAfo1UUsFvK0KCfjTezRtCo23j3fYRT8nYK1KvXGu925ih00HW4etGg1"
+      "pk_test_51IMXW3AQfv8gg5JbltVApZu0UrsGNTl1UzzWTV80QRclffQdb9V7HUNasEblD1yNmrTsFP0QrJ1ehFFAwldVq7uP00XKzGPort"
     );
 
     this.paymentIntent = await fetch(
-      "https://swipee.lilley.io/payments/create-payment-intent",
+      "http://swipee.lilley.io/payments/create-payment-intent",
       {
         method: "POST",
         headers: {
