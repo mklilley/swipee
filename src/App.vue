@@ -140,9 +140,9 @@ export default {
     if (localStorage.lastReset === undefined) {
       localStorage.lastReset = new Date();
     }
-    if (localStorage.showSyncWarnings === undefined) {
-      localStorage.showSyncWarnings = true;
-    }
+    // if (localStorage.showSyncWarnings === undefined) {
+    //   localStorage.showSyncWarnings = true;
+    // }
     if (localStorage.lastKeepAliveDate === undefined) {
       localStorage.lastKeepAliveDate = new Date();
     }
@@ -183,7 +183,7 @@ export default {
 
     if (JSON.parse(localStorage.useRemoteStorage)) {
       this.keepDataAlive();
-      if (JSON.parse(localStorage.showSyncWarnings) && this.boxStatus) {
+      if (this.boxStatus) {
         this.checkForRemoteCardChanges();
       }
     }
@@ -230,8 +230,9 @@ export default {
       //First check if local card number is different to what's on remote
       if (this.boxStatus.numCards !== this.numberOfCards) {
         // Show sync warning to user
-        this.syncInfo = `Local cards: ${this.numberOfCards}, Remote cards: ${this.boxStatus.numCards}.`;
-        this.syncWarningVisible = true;
+        //this.syncInfo = `Local cards: ${this.numberOfCards}, Remote cards: ${this.boxStatus.numCards}.`;
+        //this.syncWarningVisible = true;
+        await this.loadCards({ remote: true });
       } else if (this.boxStatus.remoteUpdatedOn) {
         // Next check if the online storage has been updated since the user last did
         // an update from this device. If so then show sync warning screen
@@ -239,7 +240,8 @@ export default {
           new Date(this.boxStatus.remoteUpdatedOn) >
           new Date(localStorage.remoteUpdatedOn)
         ) {
-          this.syncWarningVisible = true;
+          await this.loadCards({ remote: true });
+          //this.syncWarningVisible = true;
         }
       }
     },

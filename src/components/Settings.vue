@@ -72,7 +72,7 @@
               <br />
             </div>
 
-            <div v-if="useRemoteStorage">
+            <!-- <div v-if="useRemoteStorage">
               <label class="container">
                 Toggle sync warnings
                 <input
@@ -84,7 +84,7 @@
                 <span class="checkmark"></span>
               </label>
               <br />
-            </div>
+            </div> -->
 
             <div v-if="useRemoteStorage">
               My storage box ID:<br />
