@@ -29,7 +29,7 @@ export default async function() {
       return json;
     }
   } else {
-    console.log(response.statusText);
+    console.log((response || {}).statusText);
     return false;
   }
 }
