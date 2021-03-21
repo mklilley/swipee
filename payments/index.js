@@ -100,6 +100,7 @@ async function getUserData(boxID, apiKey) {
       boxID: boxID,
       apiKey: apiKey,
       credits: 10,
+      skipPrice: 1,
       receipts: [],
     });
   }
@@ -189,6 +190,7 @@ app.post("/credits", express.json(), async (req, res) => {
           boxID: user.boxID,
           apiKey: user.apiKey,
           credits: credits,
+          skipPrice: user.skipPrice,
           receipts: user.receipts,
         });
         res.send({ credits: credits });
@@ -196,6 +198,43 @@ app.post("/credits", express.json(), async (req, res) => {
         // Either no credits have been used or user credits are more than recorded on the server which cannot legitimately happen.
         // In these cases we return the server credits value.
         res.send({ credits: user.credits });
+      }
+    }
+  }
+});
+
+app.post("/skip", express.json(), async (req, res) => {
+  const { boxID, apiKey } = req.body;
+
+  const authValidated = authValidator(boxID, apiKey);
+
+  if (authValidated) {
+    const user = await getUserData(boxID, apiKey);
+    if (!user) {
+      // This happens if a user exist but they've not supplied the correct apiKey
+      return res.status(401).json({
+        type: "error",
+        message: "Unauthorised request",
+      });
+    } else {
+      let credits;
+      let skipPrice;
+      if (user.credits >= user.skipPrice) {
+        credits = user.credits - user.skipPrice;
+        skipPrice = skipPrice * 2;
+        await db.update(user.id, {
+          boxID: user.boxID,
+          apiKey: user.apiKey,
+          credits: credits,
+          skipPrice: skipPrice,
+          receipts: user.receipts,
+        });
+        return res.send({ credits: credits, skipPrice: skipPrice });
+      } else {
+        return res.status(403).json({
+          type: "error",
+          message: "Not enough credits to skip",
+        });
       }
     }
   }
@@ -230,6 +269,7 @@ app.post(
         boxID: metadata.boxID,
         apiKey: metadata.apiKey,
         credits: totalCredits,
+        skipPrice: user.skipPrice,
         receipts: user.receipts,
       });
     }
@@ -244,6 +284,7 @@ app.post(
         boxID: metadata.boxID,
         apiKey: metadata.apiKey,
         credits: user.credits,
+        skipPrice: user.skipPrice,
         receipts: user.receipts,
       });
     }
