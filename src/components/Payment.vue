@@ -122,7 +122,7 @@ export default {
     );
 
     this.paymentIntent = await fetch(
-      "http://swipee.lilley.io/payments/create-payment-intent",
+      "https://swipee.lilley.io/payments/create-payment-intent",
       {
         method: "POST",
         headers: {
