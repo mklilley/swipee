@@ -93,6 +93,7 @@ import pick from "lodash/pick";
 import { db } from "@/services/storage";
 
 import checkCreditsAndPrice from "@/services/credits";
+import skipCard from "@/services/skip";
 
 import * as shuffleSeed from "shuffle-seed";
 
@@ -347,9 +348,12 @@ export default {
       );
       this.useCreditsUpdatePrice();
     },
-    useCreditsUpdatePrice() {
-      this.credits = this.credits - this.skipPrice;
-      this.skipPrice = this.skipPrice * 2;
+    async useCreditsUpdatePrice() {
+      const creditsAndPrice = await skipCard();
+      if (creditsAndPrice) {
+        this.credits = creditsAndPrice.credits;
+        this.skipPrice = creditsAndPrice.skipPrice;
+      }
     },
     removeCardFromDeck(i) {
       this.cards.splice(i, 1);
