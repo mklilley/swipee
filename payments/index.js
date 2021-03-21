@@ -202,7 +202,7 @@ app.post("/skip", express.json(), async (req, res) => {
       let skipPrice;
       if (user.credits >= user.skipPrice) {
         credits = user.credits - user.skipPrice;
-        skipPrice = skipPrice * 2;
+        skipPrice = user.skipPrice * 2;
         await db.update(user.id, {
           boxID: user.boxID,
           apiKey: user.apiKey,
