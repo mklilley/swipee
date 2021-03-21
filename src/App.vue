@@ -92,7 +92,7 @@ import pick from "lodash/pick";
 
 import { db } from "@/services/storage";
 
-import checkCredits from "@/services/credits";
+import checkCreditsAndPrice from "@/services/credits";
 
 import * as shuffleSeed from "shuffle-seed";
 
@@ -139,12 +139,6 @@ export default {
     if (localStorage.lastReset === undefined) {
       localStorage.lastReset = new Date();
     }
-    if (localStorage.skipPrice === undefined) {
-      localStorage.skipPrice = 1;
-    }
-    if (localStorage.credits === undefined) {
-      localStorage.credits = 10;
-    }
     if (localStorage.showSyncWarnings === undefined) {
       localStorage.showSyncWarnings = true;
     }
@@ -173,21 +167,18 @@ export default {
       }
     }
 
-    if (parseInt(localStorage.skipPrice) > 0) {
-      this.skipPrice = parseInt(localStorage.skipPrice);
-    } else {
-      this.skipPrice = 1;
-      localStorage.skipPrice = 1;
-    }
-
     await this.loadCards();
 
     this.boxStatus = await db.status();
 
-    this.credits = parseInt(localStorage.credits);
     // Check local storage credits with the server
-    this.credits = await checkCredits(this.credits);
-    localStorage.credits = this.credits;
+    const check = await checkCreditsAndPrice();
+    if (check) {
+      this.credits = check.credits;
+      this.skipPrice = check.skipPrice;
+    } else {
+      alert("Problem getting your 'Save for later' credits balance. ");
+    }
 
     if (JSON.parse(localStorage.useRemoteStorage)) {
       this.keepDataAlive();
@@ -220,7 +211,6 @@ export default {
   methods: {
     addCredits() {
       this.credits += 10;
-      localStorage.credits = this.credits;
     },
     createResetTimer(timeInMs) {
       const resetTimer = setTimeout(() => {
@@ -233,7 +223,6 @@ export default {
     },
     resetSkipPrice() {
       this.skipPrice = 1;
-      localStorage.skipPrice = 1;
     },
     async checkForRemoteCardChanges() {
       this.syncInfo = "";
@@ -361,9 +350,6 @@ export default {
     useCreditsUpdatePrice() {
       this.credits = this.credits - this.skipPrice;
       this.skipPrice = this.skipPrice * 2;
-
-      localStorage.credits = this.credits;
-      localStorage.skipPrice = this.skipPrice;
     },
     removeCardFromDeck(i) {
       this.cards.splice(i, 1);
