@@ -154,22 +154,11 @@ app.get("/prices", express.json(), async (req, res) => {
 });
 
 app.post("/credits", express.json(), async (req, res) => {
-  const { credits, boxID, apiKey } = req.body;
-
-  // validation
-  let creditsValidated = false;
-  creditsValidated =
-    typeof credits === "number" && credits % 1 === 0 && credits > 0;
+  const { boxID, apiKey } = req.body;
 
   let authValidated = authValidator(boxID, apiKey);
 
-  if (!creditsValidated) {
-    // error in some input data, return error
-    res.status(400).json({
-      type: "error",
-      message: "Badly formatted credits data",
-    });
-  } else if (!authValidated) {
+  if (!authValidated) {
     // error in some auth data, return error
     res.status(400).json({
       type: "error",
@@ -184,21 +173,7 @@ app.post("/credits", express.json(), async (req, res) => {
         message: "Unauthorised request",
       });
     } else {
-      if (credits < user.credits) {
-        // Client has used some credits already. Therefore should update server record of their credits
-        await db.update(user.id, {
-          boxID: user.boxID,
-          apiKey: user.apiKey,
-          credits: credits,
-          skipPrice: user.skipPrice,
-          receipts: user.receipts,
-        });
-        res.send({ credits: credits });
-      } else {
-        // Either no credits have been used or user credits are more than recorded on the server which cannot legitimately happen.
-        // In these cases we return the server credits value.
-        res.send({ credits: user.credits });
-      }
+      res.send({ credits: user.credits });
     }
   }
 });
