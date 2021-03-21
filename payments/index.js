@@ -6,9 +6,11 @@ const express = require("express");
 var cors = require("cors");
 const app = express();
 
-// const stripe = require("stripe")(process.env.STRIPE_API_KEY_TEST);
-const stripe = require("stripe")(process.env.STRIPE_API_KEY);
-const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
+const stripe = require("stripe")(process.env.STRIPE_API_KEY_TEST);
+// const stripe = require("stripe")(process.env.STRIPE_API_KEY);
+
+const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET_TEST;
+// const stripeWebhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 
 const db = require("./jsonbox.js");
 
