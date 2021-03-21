@@ -1,4 +1,4 @@
-const api = "https://dev.lilley.io/payments/credits";
+const api = "https://swipee.lilley.io/payments/credits";
 
 import { db } from "@/services/storage";
 
