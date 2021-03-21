@@ -118,7 +118,7 @@ export default {
       });
 
     this.stripe = await loadStripe(
-      "pk_test_51IMXW3AQfv8gg5JbltVApZu0UrsGNTl1UzzWTV80QRclffQdb9V7HUNasEblD1yNmrTsFP0QrJ1ehFFAwldVq7uP00XKzGPort"
+      "pk_live_51IMXW3AQfv8gg5JblOSAf00hHSty9D14XsfK2IXHS7aAfo1UUsFvK0KCfjTezRtCo23j3fYRT8nYK1KvXGu925ih00HW4etGg1"
     );
 
     this.paymentIntent = await fetch(
