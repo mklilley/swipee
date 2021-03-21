@@ -15,7 +15,7 @@
   <Payment
     v-if="paymentModalVisible"
     @close="paymentModalVisible = false"
-    @paymentSuccess="$emit('addCredits')"
+    @paymentSuccess="$emit('updateCredits')"
   ></Payment>
 </template>
 
@@ -27,7 +27,7 @@ import checkCredits from "@/services/credits";
 
 export default {
   name: "Credits",
-  emits: ["close", "addCredits"],
+  emits: ["close", "updateCredits"],
   props: ["skipPrice", "credits"],
   components: {
     Modal,

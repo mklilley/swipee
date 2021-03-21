@@ -27,7 +27,7 @@
     @reloadCards="loadCards"
     @showCards="showAllCards"
     @hideCards="allCardsVisible = false"
-    @addCredits="addCredits"
+    @updateCredits="updateCredits"
   ></Settings>
 
   <Credits
@@ -35,7 +35,7 @@
     @close="creditsModalVisible = false"
     :skipPrice="skipPrice"
     :credits="credits"
-    @addCredits="addCredits"
+    @updateCredits="updateCredits"
   ></Credits>
 
   <AddCard
@@ -210,8 +210,12 @@ export default {
   },
 
   methods: {
-    addCredits() {
-      this.credits += 10;
+    async updateCredits() {
+      const creditsAndPrice = await checkCreditsAndPrice();
+      if (creditsAndPrice) {
+        this.credits = checkCreditsAndPrice.credits;
+        this.skipPrice = checkCreditsAndPrice.skipPrice;
+      }
     },
     createResetTimer(timeInMs) {
       const resetTimer = setTimeout(() => {

@@ -182,7 +182,7 @@
     @close="creditsModalVisible = false"
     :skipPrice="skipPrice"
     :credits="credits"
-    @addCredits="$emit('addCredits')"
+    @updateCredits="$emit('updateCredits')"
   ></Credits>
 </template>
 
@@ -201,7 +201,7 @@ import pick from "lodash/pick";
 
 export default {
   name: "Settings",
-  emits: ["close", "reloadCards", "hideCards", "showCards", "addCredits"],
+  emits: ["close", "reloadCards", "hideCards", "showCards", "updateCredits"],
   components: {
     Modal,
     Credits,
