@@ -208,7 +208,13 @@ app.post("/skip", express.json(), async (req, res) => {
 
   const authValidated = authValidator(boxID, apiKey);
 
-  if (authValidated) {
+  if (!authValidated) {
+    // error in some auth data, return error
+    res.status(400).json({
+      type: "error",
+      message: "Badly formatted authorisation data",
+    });
+  } else {
     const user = await getUserData(boxID, apiKey);
     if (!user) {
       // This happens if a user exist but they've not supplied the correct apiKey
