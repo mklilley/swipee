@@ -173,7 +173,7 @@ app.post("/credits", express.json(), async (req, res) => {
         message: "Unauthorised request",
       });
     } else {
-      res.send({ credits: user.credits });
+      res.send({ credits: user.credits, skipPrice: user.skipPrice });
     }
   }
 });
