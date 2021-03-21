@@ -1,8 +1,9 @@
-const api = "https://swipee.lilley.io/payments/credits";
+// const api = "https://swipee.lilley.io/payments/credits";
+const api = "http://localhost:9000/credits";
 
 import { db } from "@/services/storage";
 
-export default async function(credits) {
+export default async function() {
   const boxID = await db.id();
   const apiKey = await db.apiKey();
 
@@ -10,7 +11,6 @@ export default async function(credits) {
     body: JSON.stringify({
       boxID: boxID,
       apiKey: apiKey,
-      credits: credits,
     }),
     headers: { "Content-Type": "application/json" },
     method: "POST",
@@ -22,12 +22,14 @@ export default async function(credits) {
 
   if ((response || {}).ok) {
     let json = await response.json();
-    if (response.error) {
-      return credits;
+    if (response.status !== 200) {
+      console.log(response.message);
+      return false;
     } else {
-      return json.credits;
+      return json;
     }
   } else {
-    return credits;
+    console.log(response.statusText);
+    return false;
   }
 }
