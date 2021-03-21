@@ -1,4 +1,4 @@
-const LINK_PREVIEW_API = "https://dev.lilley.io/link-preview/";
+const LINK_PREVIEW_API = "https://swipee.lilley.io/link-preview/";
 
 export default async function(url) {
   const options = {
