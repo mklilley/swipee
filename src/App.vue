@@ -210,12 +210,8 @@ export default {
   },
 
   methods: {
-    async updateCredits() {
-      const creditsAndPrice = await checkCreditsAndPrice();
-      if (creditsAndPrice) {
-        this.credits = checkCreditsAndPrice.credits;
-        this.skipPrice = checkCreditsAndPrice.skipPrice;
-      }
+    updateCredits() {
+      this.credits += 10;
     },
     createResetTimer(timeInMs) {
       const resetTimer = setTimeout(() => {
