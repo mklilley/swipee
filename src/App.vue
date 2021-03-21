@@ -349,6 +349,8 @@ export default {
       this.useCreditsUpdatePrice();
     },
     async useCreditsUpdatePrice() {
+      this.credits = this.credits - this.skipPrice;
+      this.skipPrice = this.skipPrice * 2;
       const creditsAndPrice = await skipCard();
       if (creditsAndPrice) {
         this.credits = creditsAndPrice.credits;
