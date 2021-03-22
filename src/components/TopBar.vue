@@ -1,26 +1,28 @@
 <template>
-  <div class="top-bar">
-    <div
-      @click.prevent="$emit('filter')"
-      v-if="numCards != 0 || filterBarVisible"
-    >
-      <i class="gg-filters"></i>
-    </div>
+  <div>
+    <div class="top-bar">
+      <div
+        @click.prevent="$emit('filter')"
+        v-if="numCards != 0 || filterBarVisible"
+      >
+        <i class="gg-filters"></i>
+      </div>
 
-    <div
-      id="show-modal"
-      @click.prevent="$emit('add')"
-      v-if="numCards != 0 && !readOnly"
-    >
-      <i class="gg-add"></i>
-    </div>
+      <div
+        id="show-modal"
+        @click.prevent="$emit('add')"
+        v-if="numCards != 0 && !readOnly"
+      >
+        <i class="gg-add"></i>
+      </div>
 
-    <div class="misc" v-if="readOnly">
-      View only mode. <br />
-      Edit your own cards
-      <button @click.prevent="switchBox({ my: true })">here</button>
+      <div @click.prevent="$emit('settings')">
+        <i class="gg-menu-boxed"></i>
+      </div>
     </div>
-    <div @click.prevent="$emit('settings')"><i class="gg-menu-boxed"></i></div>
+    <div v-if="onLine" class="connection-status">
+      No internet connection 😭
+    </div>
   </div>
 </template>
 
@@ -28,6 +30,10 @@
 export default {
   emits: ["filter", "add", "settings"],
   props: {
+    onLine: {
+      type: Boolean,
+      required: true,
+    },
     numCards: {
       type: Number,
       required: true,
@@ -172,5 +178,18 @@ export default {
   left: 0;
   right: 0;
   width: 100vw;
+}
+
+.connection-status {
+  z-index: 100000;
+  position: fixed;
+  background-color: red;
+  color: white;
+  width: 100vw;
+  font-size: 16px;
+  font-weight: bold;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 </style>

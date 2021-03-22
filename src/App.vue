@@ -6,6 +6,7 @@
     :numCards="cards.length"
     :filterBarVisible="filterVisible"
     :readOnly="false"
+    :onLine="onLine"
   ></TopBar>
 
   <ChipsMultiselect
@@ -65,10 +66,11 @@
       :stacked="!allCardsVisible"
       :skipPrice="skipPrice"
       :credits="credits"
+      :onLine="onLine"
       @cardAccepted="handleCardSkipped(card.id)"
       @cardRejected="handleCardRejected(card.id)"
       @hideCard="removeCardFromDeck(index)"
-      @failCardAccepted="creditsModalVisible = true"
+      @failCardAccepted="skipCardFail"
     />
     <div class="no-card" v-if="cards.length == 0">
       <p v-on:click.stop="addModalVisible = true">
@@ -112,6 +114,9 @@ export default {
   },
 
   async mounted() {
+    window.addEventListener("online", this.updateConnectionStatus);
+    window.addEventListener("offline", this.updateConnectionStatus);
+
     // If first time using the app, we need to set up some localStorage variables
     if (localStorage.haveSeenWelcome === undefined) {
       localStorage.haveSeenWelcome = false;
@@ -203,10 +208,21 @@ export default {
       credits: 0,
       seed: 1,
       msInDay: 1000 * 60 * 60 * 24,
+      onLine: navigator.onLine,
     };
   },
 
   methods: {
+    skipCardFail() {
+      if (this.onLine) {
+        this.creditsModalVisible = true;
+      } else {
+        alert("Cannot skip cards without an internet connection");
+      }
+    },
+    updateConnectionStatus() {
+      this.onLine = navigator.onLine;
+    },
     updateCredits() {
       this.credits += 10;
     },

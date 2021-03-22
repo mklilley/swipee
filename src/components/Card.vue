@@ -65,6 +65,10 @@ export default {
   },
   emits: [HIDE_CARD, ACCEPT_CARD, REJECT_CARD, SKIP_CARD, FAIL_ACCEPT_CARD],
   props: {
+    onLine: {
+      type: Boolean,
+      required: true,
+    },
     card: {
       type: Object,
       required: true,
@@ -146,7 +150,7 @@ export default {
           this.isInteractAnimating = true;
 
           if (x > interactXThreshold) {
-            if (this.credits >= this.skipPrice) {
+            if (this.credits >= this.skipPrice && this.onLine) {
               this.playCard(ACCEPT_CARD);
             } else {
               this.resetCardPosition();
