@@ -20,7 +20,7 @@
         <i class="gg-menu-boxed"></i>
       </div>
     </div>
-    <div v-if="onLine" class="connection-status">
+    <div v-if="!onLine" class="connection-status">
       No internet connection 😭
     </div>
   </div>
