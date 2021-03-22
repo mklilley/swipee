@@ -23,8 +23,6 @@
 import Modal from "@/components/Modal.vue";
 import Payment from "@/components/Payment.vue";
 
-import checkCredits from "@/services/credits";
-
 export default {
   name: "Credits",
   emits: ["close", "updateCredits"],
@@ -44,9 +42,7 @@ export default {
     },
   },
   methods: {},
-  async mounted() {
-    checkCredits(this.credits);
-  },
+  async mounted() {},
 };
 </script>
 
