@@ -86,10 +86,10 @@ const box = {
   },
   status: async function() {
     const options = {
-      method: "GET"
+      method: "GET",
     };
 
-    const response = await fetch(API_META_URL, options).catch(err => {
+    const response = await fetch(API_META_URL, options).catch((err) => {
       console.log(err);
     });
 
@@ -121,8 +121,8 @@ const box = {
     // If user entered a newApiKey for this box, then check it is a valid UUID
 
     let isUUID = newApiKey.match(
-        "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
-      );
+      "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    );
 
     let errorMessage = "";
     if (isHex20 === null) {
@@ -153,13 +153,13 @@ const box = {
     const options = {
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
-      method: "POST"
+      method: "POST",
     };
     if (apiKey) {
       options.headers["X-API-KEY"] = apiKey;
     }
 
-    const response = await fetch(API_URL, options).catch(err => {
+    const response = await fetch(API_URL, options).catch((err) => {
       console.log(err);
     });
 
@@ -177,17 +177,17 @@ const box = {
   },
   read: async function(id) {
     const options = {
-      method: "GET"
+      method: "GET",
     };
     let response;
 
     if (id === undefined) {
       options;
-      response = await fetch(API_URL + "?limit=1000", options).catch(err => {
+      response = await fetch(API_URL + "?limit=1000", options).catch((err) => {
         console.log(err);
       });
     } else {
-      response = await fetch(API_URL + "/" + id, options).catch(err => {
+      response = await fetch(API_URL + "/" + id, options).catch((err) => {
         console.log(err);
       });
     }
@@ -198,7 +198,7 @@ const box = {
       let allItems = {};
 
       // Rename the json data "_id" keys to "id"
-      json.forEach(item => {
+      json.forEach((item) => {
         item.id = item["_id"];
         delete item["_id"];
         // Add the update item to allItems
@@ -214,13 +214,13 @@ const box = {
     const options = {
       body: JSON.stringify(data),
       headers: { "Content-Type": "application/json" },
-      method: "PUT"
+      method: "PUT",
     };
     if (apiKey) {
       options.headers["X-API-KEY"] = apiKey;
     }
 
-    const response = await fetch(API_URL + "/" + id, options).catch(err => {
+    const response = await fetch(API_URL + "/" + id, options).catch((err) => {
       console.log(err);
     });
 
@@ -233,14 +233,14 @@ const box = {
   },
   delete: async function(id) {
     const options = {
-      method: "DELETE"
+      method: "DELETE",
     };
     if (apiKey) {
       options.headers = { "X-API-KEY": apiKey };
     }
     let response;
 
-    response = await fetch(API_URL + "/" + id, options).catch(err => {
+    response = await fetch(API_URL + "/" + id, options).catch((err) => {
       console.log(err);
     });
 
@@ -250,7 +250,7 @@ const box = {
     } else {
       return false;
     }
-  }
+  },
 };
 
 export { box };
