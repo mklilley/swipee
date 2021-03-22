@@ -1,4 +1,5 @@
-const api = "https://swipee.lilley.io/payments/credits";
+// const api = "https://swipee.lilley.io/payments/data";
+const api = "http://localhost:9000/data";
 
 import { db } from "@/services/storage";
 
