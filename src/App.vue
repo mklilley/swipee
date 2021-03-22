@@ -128,7 +128,7 @@ export default {
           url: "",
           image: "https://swipee.lilley.io/swipe.png",
           description:
-            "Swipe left to discard. Swipe right to save for later. Save with caution - it'll cost you. The price doubles for each card saved but it does reset every 24 hours. We've given you 10 free credits to get you started. Enjoy!",
+            "Swipe left to discard. Swipe right to save for later. Save with caution - it'll cost you. The price doubles for each card saved but it does reset every 24 hours as the deck is reshuffled. We've given you 10 free credits to get you started. Enjoy!",
           domain: "",
           skipped: false,
           title: "How to use Swipee",
