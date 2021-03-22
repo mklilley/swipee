@@ -1,7 +1,7 @@
 {
-  "name": "swipee-payments",
+  "name": "swipee-api",
   "version": "1.0.0",
-  "description": "Stripe implementation for Swipee",
+  "description": "Api for Swipee",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

@@ -105,7 +105,7 @@ export default {
     this.purchase.boxID = await db.id();
     this.purchase.apiKey = await db.apiKey();
 
-    this.price = await fetch("https://swipee.lilley.io/payments/prices")
+    this.price = await fetch("https://swipee.lilley.io/api/prices")
       .then(async (result) => {
         const json = await result.json();
         if (result.status == 200) {
@@ -122,7 +122,7 @@ export default {
     );
 
     this.paymentIntent = await fetch(
-      "https://swipee.lilley.io/payments/create-payment-intent",
+      "https://swipee.lilley.io/api/create-payment-intent",
       {
         method: "POST",
         headers: {
