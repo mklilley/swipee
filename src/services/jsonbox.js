@@ -119,12 +119,10 @@ const box = {
     // 20 character HEX string
     let isHex20 = newBoxID.match("^[0-9a-f]{20}$");
     // If user entered a newApiKey for this box, then check it is a valid UUID
-    let isUUID;
-    if (newApiKey) {
-      isUUID = newApiKey.match(
+
+    let isUUID = newApiKey.match(
         "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
       );
-    }
 
     let errorMessage = "";
     if (isHex20 === null) {
@@ -141,14 +139,13 @@ const box = {
 
     // In there are no validation errors in newBoxID or newApiKey then change boxID and apikey
     localStorage.setItem("jsonbox", newBoxID);
+    localStorage.setItem("myJsonbox", newBoxID);
 
     API_URL = API_BASE + newBoxID;
     API_META_URL = API_BASE_META + newBoxID;
 
-    // if no apiKey is supplied then store blank apiKey (this will evetually be)
-    // treated as a publicly editable box TODO
-    apiKey = newApiKey ? newApiKey : "";
-    localStorage.setItem("apiKey", apiKey);
+    localStorage.setItem("apiKey", newApiKey);
+    localStorage.setItem("myApiKey", newApiKey);
 
     return true;
   },
