@@ -19,8 +19,7 @@ const PORT = process.env.PORT || 9000;
 const PRICES = JSON.parse(process.env.PRICES);
 const CREDITS = JSON.parse(process.env.CREDITS);
 
-app.use(cors());
-app.use(express.static("."));
+app.use(cors({ origin: "https://swipee.lilley.io" }));
 
 function calculateOrderAmount(items) {
   let totalCost = 0;
