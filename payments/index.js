@@ -91,7 +91,7 @@ async function getUserData(boxID, apiKey) {
   if (Object.keys(user).length === 1) {
     user = Object.values(user)[0];
     if (user.apiKey === apiKey) {
-      user.lastReset = await resetTimer(user);
+      user = await resetPriceAndSeed(user);
       return user;
     } else {
       // User supplied a valid boxID but not valid apiKey
@@ -105,27 +105,34 @@ async function getUserData(boxID, apiKey) {
       credits: 10,
       skipPrice: 1,
       lastReset: new Date(),
+      seed: 1,
       receipts: [],
     });
   }
 }
 
-async function resetTimer(user) {
+async function resetPriceAndSeed(user) {
   const msInDay = 1000 * 60 * 60 * 24;
   const msSinceLastReset = new Date() - Date.parse(user.lastReset);
   if (msSinceLastReset > msInDay) {
     const newReset = new Date();
+
+    user.lastReset = newReset;
+    user.seed = user.seed + 1;
+    user.skipPrice = 1;
+
     await db.update(user.id, {
       boxID: user.boxID,
       apiKey: user.apiKey,
       credits: user.credits,
       skipPrice: 1,
       lastReset: newReset,
+      seed: user.seed + 1,
       receipts: user.receipts,
     });
-    return newReset;
   }
-  return user.lastReset;
+
+  return user;
 }
 
 app.post("/create-payment-intent", express.json(), async (req, res) => {
@@ -231,6 +238,7 @@ app.post("/skip", express.json(), async (req, res) => {
           credits: credits,
           skipPrice: skipPrice,
           lastReset: user.lastReset,
+          seed: user.seed,
           receipts: user.receipts,
         });
         return res.send({ credits: credits, skipPrice: skipPrice });
@@ -275,6 +283,7 @@ app.post(
         credits: totalCredits,
         skipPrice: user.skipPrice,
         lastReset: user.lastReset,
+        seed: user.seed,
         receipts: user.receipts,
       });
     }
@@ -291,6 +300,7 @@ app.post(
         credits: user.credits,
         skipPrice: user.skipPrice,
         lastReset: user.lastReset,
+        seed: user.seed,
         receipts: user.receipts,
       });
     }
