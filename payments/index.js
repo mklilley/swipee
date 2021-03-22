@@ -119,7 +119,7 @@ async function resetTimer(user) {
       boxID: user.boxID,
       apiKey: user.apiKey,
       credits: user.credits,
-      skipPrice: user.skipPrice,
+      skipPrice: 1,
       lastReset: newReset,
       receipts: user.receipts,
     });
