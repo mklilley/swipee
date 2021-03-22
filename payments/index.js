@@ -91,6 +91,7 @@ async function getUserData(boxID, apiKey) {
   if (Object.keys(user).length === 1) {
     user = Object.values(user)[0];
     if (user.apiKey === apiKey) {
+      user.lastReset = await resetTimer(user);
       return user;
     } else {
       // User supplied a valid boxID but not valid apiKey
@@ -103,9 +104,28 @@ async function getUserData(boxID, apiKey) {
       apiKey: apiKey,
       credits: 10,
       skipPrice: 1,
+      lastReset: new Date(),
       receipts: [],
     });
   }
+}
+
+async function resetTimer(user) {
+  const msInDay = 1000 * 60 * 60 * 24;
+  const msSinceLastReset = new Date() - Date.parse(user.lastReset);
+  if (msSinceLastReset > msInDay) {
+    const newReset = new Date();
+    await db.update(user.id, {
+      boxID: user.boxID,
+      apiKey: user.apiKey,
+      credits: user.credits,
+      skipPrice: user.skipPrice,
+      lastReset: newReset,
+      receipts: user.receipts,
+    });
+    return newReset;
+  }
+  return user.lastReset;
 }
 
 app.post("/create-payment-intent", express.json(), async (req, res) => {
@@ -210,6 +230,7 @@ app.post("/skip", express.json(), async (req, res) => {
           apiKey: user.apiKey,
           credits: credits,
           skipPrice: skipPrice,
+          lastReset: user.lastReset,
           receipts: user.receipts,
         });
         return res.send({ credits: credits, skipPrice: skipPrice });
@@ -253,6 +274,7 @@ app.post(
         apiKey: metadata.apiKey,
         credits: totalCredits,
         skipPrice: user.skipPrice,
+        lastReset: user.lastReset,
         receipts: user.receipts,
       });
     }
@@ -268,6 +290,7 @@ app.post(
         apiKey: metadata.apiKey,
         credits: user.credits,
         skipPrice: user.skipPrice,
+        lastReset: user.lastReset,
         receipts: user.receipts,
       });
     }
