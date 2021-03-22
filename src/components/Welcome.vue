@@ -26,7 +26,7 @@
         <h3 class="open">The joy of Swipee</h3>
         <div class="items">
           Swipee makes the choice for you. Instead of a reading list, Swipee
-          uses a deck of swipable cards - left to discard, right to save for
+          uses a deck of swipeable cards - left to discard, right to save for
           later. This way, you'll never have to see your ever growing list of
           content 🙌 . Swipee also helps you to be more honest about the content
           you want to save for later. By using financial incentives, Swipee
