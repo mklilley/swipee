@@ -28,6 +28,7 @@
     @showCards="showAllCards"
     @hideCards="allCardsVisible = false"
     @updateCredits="updateCredits"
+    @switchedBox="switchedBox"
   ></Settings>
 
   <Credits
@@ -452,6 +453,16 @@ export default {
     },
     addSavedCardToDeck(newCard) {
       this.cards.push(newCard);
+    },
+    async switchedBox() {
+      const data = await getAppData();
+      if (data) {
+        this.credits = data.credits;
+        this.skipPrice = data.skipPrice;
+        this.seed = data.seed;
+        localStorage.seed = data.seed;
+      }
+      await this.loadCards({ remote: true });
     },
   },
 };

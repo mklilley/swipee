@@ -132,8 +132,14 @@
 
             <br /><br />
 
+            <button v-on:click="syncHelpModalVisible = true">
+              Sync data across multiple devices
+            </button>
+
+            <br /><br />
+
             <button v-on:click="welcomeModalVisible = true">
-              Show welome screen again
+              Show welcome screen again
             </button>
 
             <br /><br />
@@ -184,6 +190,12 @@
     :credits="credits"
     @updateCredits="$emit('updateCredits')"
   ></Credits>
+
+  <SyncHelp
+    v-if="syncHelpModalVisible"
+    @close="syncHelpModalVisible = false"
+    @switchedBox="reloadStorageDetails"
+  ></SyncHelp>
 </template>
 
 <script>
@@ -194,6 +206,7 @@ import Welcome from "@/components/Welcome.vue";
 import DeleteData from "@/components/DeleteData.vue";
 import ImportData from "@/components/ImportData.vue";
 import ResetApp from "@/components/ResetApp.vue";
+import SyncHelp from "@/components/SyncHelp.vue";
 
 import { db } from "@/services/storage";
 
@@ -210,6 +223,7 @@ export default {
     DeleteData,
     ImportData,
     ResetApp,
+    SyncHelp,
   },
   props: ["allCardsVisible", "skipPrice", "numberOfCards", "credits"],
   data() {
@@ -226,6 +240,7 @@ export default {
       onlineStorageVisible: false,
       helpVisible: false,
       purchasesVisible: false,
+      syncHelpModalVisible: false,
       boxID: "",
       apiKey: "",
       showSyncWarnings: localStorage.showSyncWarnings,
@@ -336,6 +351,13 @@ export default {
       element.click();
 
       document.body.removeChild(element);
+    },
+    async reloadStorageDetails() {
+      this.boxStatus = await db.status();
+      this.boxID = await db.id({ my: true });
+      this.apiKey = await db.apiKey({ my: true });
+
+      this.$emit("switchedBox");
     },
   },
   async mounted() {
