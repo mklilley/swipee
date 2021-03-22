@@ -92,7 +92,7 @@ import pick from "lodash/pick";
 
 import { db } from "@/services/storage";
 
-import checkCreditsAndPrice from "@/services/credits";
+import getAppData from "@/services/data";
 import skipCard from "@/services/skip";
 
 import * as shuffleSeed from "shuffle-seed";
@@ -147,35 +147,30 @@ export default {
       localStorage.lastKeepAliveDate = new Date();
     }
 
+    this.seed = parseInt(localStorage.seed);
+
     this.filterItems = this.initialFilterItems();
 
     // need to JSON prase in order for true/false to be boolean rather than string
     this.welcomeModalVisible = !JSON.parse(localStorage.haveSeenWelcome);
 
-    // If it's been longer than 24 hours since card shuffle and price reset then change
-    // shuffleSeed and reset skipPrice
-    const msInDay = 1000 * 60 * 60 * 24;
-    const msSinceLastReset = new Date() - Date.parse(localStorage.lastReset);
-    if (msSinceLastReset > 0) {
-      // this prevents user from messing with local storage to get a free reset
-      if (msSinceLastReset > msInDay) {
-        this.newShuffleSeed();
-        localStorage.lastReset = new Date();
-        this.createResetTimer(msInDay);
-      } else {
-        this.createResetTimer(msInDay - msSinceLastReset);
-      }
-    }
+    // If it's been longer than 24 hours since card shuffle then reset random seed and also set timer
+    // for another 24 hours to reset seed and check for skipPrice from server
+    this.checkResetTimer();
 
     await this.loadCards();
 
     this.boxStatus = await db.status();
 
-    // Check local storage credits with the server
-    const check = await checkCreditsAndPrice();
-    if (check) {
-      this.credits = check.credits;
-      this.skipPrice = check.skipPrice;
+    const data = await getAppData();
+    if (data) {
+      this.credits = data.credits;
+      this.skipPrice = data.skipPrice;
+      if (this.seed !== data.seed) {
+        this.seed = data.seed;
+        localStorage.seed = data.seed;
+        await this.loadCards();
+      }
     } else {
       alert("Problem getting your 'Save for later' credits balance. ");
     }
@@ -205,6 +200,8 @@ export default {
       syncWarningVisible: false,
       numberOfCards: 0,
       credits: 0,
+      seed: 1,
+      msInDay: 1000 * 60 * 60 * 24,
     };
   },
 
@@ -212,12 +209,36 @@ export default {
     updateCredits() {
       this.credits += 10;
     },
+    checkResetTimer() {
+      const msSinceLastReset = new Date() - Date.parse(localStorage.lastReset);
+      if (msSinceLastReset > 0) {
+        // this prevents user from messing with local storage to get a free reset
+        if (msSinceLastReset > this.msInDay) {
+          this.newShuffleSeed();
+          localStorage.lastReset = new Date();
+          this.createResetTimer(this.msInDay);
+        } else {
+          this.createResetTimer(this.msInDay - msSinceLastReset);
+        }
+      }
+    },
     createResetTimer(timeInMs) {
       const resetTimer = setTimeout(() => {
         this.newShuffleSeed();
-        localStorage.lastReset = new Date();
         this.loadCards();
+        localStorage.lastReset = new Date();
+        getAppData().then((data) => {
+          this.credits = data.credits;
+          this.skipPrice = data.skipPrice;
+          if (this.seed !== data.seed) {
+            this.seed = data.seed;
+            localStorage.seed = data.seed;
+            this.loadCards();
+          }
+          localStorage.seed = data.seed;
+        });
         clearTimeout(resetTimer);
+        this.createResetTimer(this.msInDay);
       }, timeInMs);
     },
     async checkForRemoteCardChanges() {
@@ -241,9 +262,9 @@ export default {
       }
     },
     async keepDataAlive() {
-      let msInDay = 1000 * 60 * 60 * 24;
       let numDaysSinceKeepAlive =
-        (new Date() - Date.parse(localStorage.lastKeepAliveDate)) / msInDay;
+        (new Date() - Date.parse(localStorage.lastKeepAliveDate)) /
+        this.msInDay;
       if (numDaysSinceKeepAlive > 90) {
         let keepAliveSuccess = await db.keepAlive();
         if (keepAliveSuccess) {
@@ -362,14 +383,13 @@ export default {
       localStorage.setItem("haveSeenWelcome", true);
     },
     removeSkippedCards(cards) {
-      const msInDay = 1000 * 60 * 60 * 24;
       const now = new Date();
-      const cardsWithoutSkipped = cards.filter(function(card) {
+      const cardsWithoutSkipped = cards.filter((card) => {
         if (!card.skipped) {
           // If card hasn't been skipped then show it
           return true;
         } else {
-          if ((now - Date.parse(card.skipped)) / msInDay > 1) {
+          if ((now - Date.parse(card.skipped)) / this.msInDay > 1) {
             // After 1 day, return skipped cards back to the deck. Don't await for the
             // storage to update so that async so the filter can run quickly
             db.update(
@@ -408,13 +428,11 @@ export default {
       }
     },
     newShuffleSeed() {
-      localStorage.seed = parseInt(localStorage.seed) + 1;
+      this.seed += 1;
+      localStorage.seed = this.seed;
     },
     shuffle(cards) {
-      const shuffledDeck = shuffleSeed.shuffle(
-        cards,
-        parseInt(localStorage.seed)
-      );
+      const shuffledDeck = shuffleSeed.shuffle(cards, this.seed);
       return shuffledDeck;
     },
     loadCards: async function(options = {}) {
