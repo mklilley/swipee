@@ -182,7 +182,7 @@ app.get("/prices", express.json(), async (req, res) => {
   res.send(PRICES);
 });
 
-app.post("/credits", express.json(), async (req, res) => {
+app.post("/data", express.json(), async (req, res) => {
   const { boxID, apiKey } = req.body;
 
   let authValidated = authValidator(boxID, apiKey);
@@ -202,7 +202,11 @@ app.post("/credits", express.json(), async (req, res) => {
         message: "Unauthorised request",
       });
     } else {
-      res.send({ credits: user.credits, skipPrice: user.skipPrice });
+      res.send({
+        credits: user.credits,
+        skipPrice: user.skipPrice,
+        seed: user.seed,
+      });
     }
   }
 });
