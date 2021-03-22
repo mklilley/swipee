@@ -54,7 +54,7 @@
           <h3 class="open">Add to home screen</h3>
           <div class="items">
             For the best experience, add Swipee to your home screen - you can
-            then view your cards in full screen mode 🙌.
+            then view your cards in full screen mode.
             <a
               vue-if="addToHomeScreenURL"
               target="_blank"
