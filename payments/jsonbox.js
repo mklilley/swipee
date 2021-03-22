@@ -2,9 +2,7 @@ const querystring = require("querystring");
 const fetch = require("node-fetch");
 
 const apiKey = process.env.JSON_BOX_API_KEY;
-
-// const API_URL = "http://localhost:5000/swipee_" + process.env.JSON_BOX_ID;
-const API_URL = "https://json.lilley.io/swipee_" + process.env.JSON_BOX_ID;
+const API_URL = process.env.JSON_BOX_PATH + process.env.JSON_BOX_ID;
 
 // Box object is composed of:
 // create : Function to create a new "document" in the jsonbox
