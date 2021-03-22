@@ -160,7 +160,6 @@ export default {
       // this prevents user from messing with local storage to get a free reset
       if (msSinceLastReset > msInDay) {
         this.newShuffleSeed();
-        this.resetSkipPrice();
         localStorage.lastReset = new Date();
         this.createResetTimer(msInDay);
       } else {
@@ -216,14 +215,10 @@ export default {
     createResetTimer(timeInMs) {
       const resetTimer = setTimeout(() => {
         this.newShuffleSeed();
-        this.resetSkipPrice();
         localStorage.lastReset = new Date();
         this.loadCards();
         clearTimeout(resetTimer);
       }, timeInMs);
-    },
-    resetSkipPrice() {
-      this.skipPrice = 1;
     },
     async checkForRemoteCardChanges() {
       this.syncInfo = "";
