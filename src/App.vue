@@ -26,8 +26,8 @@
     v-if="settingsModalVisible"
     @close="settingsModalVisible = false"
     @reloadCards="loadCards"
-    @showCards="showAllCards"
-    @hideCards="allCardsVisible = false"
+    @showCards="showAllCards(true)"
+    @hideCards="showAllCards(false)"
     @updateCredits="updateCredits"
     @switchedBox="switchedBox"
   ></Settings>
@@ -295,9 +295,14 @@ export default {
         }
       }
     },
-    showAllCards() {
-      this.allCardsVisible = true;
-      this.useCreditsUpdatePrice();
+    showAllCards(show) {
+      if (show === true) {
+        this.allCardsVisible = true;
+        this.useCreditsUpdatePrice();
+      } else {
+        this.allCardsVisible = false;
+      }
+      this.loadCards();
     },
     async toggleFilterBar() {
       this.filterItems = this.initialFilterItems();
@@ -461,8 +466,10 @@ export default {
 
       // Next shuffle the cards
       cards = this.shuffle(cards);
-      // Next remove cards that were skipped less than 24 hours ago
-      cards = this.removeSkippedCards(cards);
+      if (!this.allCardsVisible) {
+        // Next remove cards that were skipped less than 24 hours ago
+        cards = this.removeSkippedCards(cards);
+      }
       // Next remove cards that have been filterd out
       cards = this.removedFilteredCards(cards);
       this.cards = cards;
