@@ -1,4 +1,6 @@
-const api = "https://swipee.lilley.io/api/skip";
+import { routes } from "@/services/routes";
+
+const api = routes.api + "skip";
 
 import { db } from "@/services/storage";
 

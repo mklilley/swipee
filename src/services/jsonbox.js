@@ -1,3 +1,5 @@
+import { routes } from "@/services/routes";
+
 // See https://github.com/vasanthv/jsonbox for full details of how the
 // jsonbox api works
 
@@ -25,10 +27,10 @@ function createUUID() {
 
 // This API_BASE is used to make most api requests to create, read, update and
 // delete data
-const API_BASE = "https://json.lilley.io/swipee_";
+const API_BASE = routes.jsonbox + "swipee_";
 
 // This API_BASE_META is being used to test if the service is available
-const API_BASE_META = "https://json.lilley.io/_meta/swipee_";
+const API_BASE_META = routes.jsonbox + "_meta/swipee_";
 
 // Check to see if the app is already storing data in a jsonbox and if not then
 // create a new boxID to be used as such.

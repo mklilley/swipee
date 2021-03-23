@@ -1,4 +1,6 @@
-const LINK_PREVIEW_API = "https://swipee.lilley.io/link-preview/";
+import { routes } from "@/services/routes";
+
+const LINK_PREVIEW_API = routes.linkPreview + "link-preview/";
 
 export default async function(url) {
   const options = {

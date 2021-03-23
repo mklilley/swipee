@@ -48,6 +48,8 @@ import { loadStripe } from "@stripe/stripe-js/pure";
 
 import { db } from "@/services/storage";
 
+import { routes } from "@/services/routes";
+
 export default {
   name: "Payment",
   emits: ["close", "paymentSuccess"],
@@ -105,7 +107,7 @@ export default {
     this.purchase.boxID = await db.id();
     this.purchase.apiKey = await db.apiKey();
 
-    this.price = await fetch("https://swipee.lilley.io/api/prices")
+    this.price = await fetch(routes.api + "prices")
       .then(async (result) => {
         const json = await result.json();
         if (result.status == 200) {
@@ -121,16 +123,13 @@ export default {
       "pk_live_51IMXW3AQfv8gg5JblOSAf00hHSty9D14XsfK2IXHS7aAfo1UUsFvK0KCfjTezRtCo23j3fYRT8nYK1KvXGu925ih00HW4etGg1"
     );
 
-    this.paymentIntent = await fetch(
-      "https://swipee.lilley.io/api/create-payment-intent",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(this.purchase),
-      }
-    )
+    this.paymentIntent = await fetch(routes.api + "create-payment-intent", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(this.purchase),
+    })
       .then(async (result) => {
         const json = await result.json();
         if (result.status == 200) {
