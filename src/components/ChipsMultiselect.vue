@@ -1,6 +1,9 @@
-// From https://github.com/zisuzon/v-chips-multiselect - I ouldn't get it to
-work as plugin in vue3 so created my own component from the source code // I
-also had to adapt and use vue3-click-away instead of v-on-click-outside
+/* From https://github.com/zisuzon/v-chips-multiselect - I couldn't get it to
+work as plugin in vue3 so created my own component from the source code. I also
+had to adapt the code to use vue3-click-away instead of v-on-click-outside. To
+use v-model with a vue3 component I needed to look at
+https://v3.vuejs.org/guide/component-basics.html#using-v-model-on-components */
+
 <template>
   <div v-click-away="deactivate" class="filter">
     <div class="selecteditems" @click.prevent="toggleActivate()">

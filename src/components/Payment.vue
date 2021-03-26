@@ -1,3 +1,4 @@
+// Code adapted from https://stripe.com/docs/payments/integration-builder
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
