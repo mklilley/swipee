@@ -89,12 +89,17 @@ async function getUserData(boxID, apiKey) {
   let user = await db.read(null, { boxID: boxID });
   if (Object.keys(user).length === 1) {
     user = Object.values(user)[0];
+    if (apiKey) {
     if (user.apiKey === apiKey) {
       user = await resetPriceAndSeed(user);
       return user;
     } else {
       // User supplied a valid boxID but not valid apiKey
       return false;
+    }
+  } else {
+      user = await resetPriceAndSeed(user);
+      return user;
     }
   } else {
     // If there is no user corresponding to the auth data and if not then create them.
@@ -163,6 +168,7 @@ app.post("/create-payment-intent", express.json(), async (req, res) => {
         message: "Unauthorised request",
       });
     } else {
+      delete req.body["apiKey"];
       //Create a PaymentIntent with the order amount and currency
       const paymentIntent = await stripe.paymentIntents.create({
         amount: calculateOrderAmount(items),
@@ -276,13 +282,13 @@ app.post(
 
     if (event.type === "payment_intent.succeeded") {
       const metadata = JSON.parse(event.data.object.metadata.data);
-      const user = await getUserData(metadata.boxID, metadata.apiKey);
+      const user = await getUserData(metadata.boxID);
 
       const totalCredits = calculateCredits(metadata.items) + user.credits;
 
       await db.update(user.id, {
-        boxID: metadata.boxID,
-        apiKey: metadata.apiKey,
+        boxID: user.boxID,
+        apiKey: user.apiKey,
         credits: totalCredits,
         skipPrice: user.skipPrice,
         lastReset: user.lastReset,
@@ -294,12 +300,12 @@ app.post(
     if (event.type === "charge.succeeded") {
       const metadata = JSON.parse(event.data.object.metadata.data);
       const receipt_url = event.data.object.receipt_url;
-      const user = await getUserData(metadata.boxID, metadata.apiKey);
+      const user = await getUserData(metadata.boxID);
       user.receipts.push(receipt_url);
 
       await db.update(user.id, {
-        boxID: metadata.boxID,
-        apiKey: metadata.apiKey,
+        boxID: user.boxID,
+        apiKey: user.apiKey,
         credits: user.credits,
         skipPrice: user.skipPrice,
         lastReset: user.lastReset,
