@@ -53,7 +53,7 @@ if (apiKey === null) {
   localStorage.setItem("myApiKey", apiKey);
 }
 
-let API_URL = API_BASE + boxID;
+let API_URL = API_BASE + boxID + "/cards";
 let API_META_URL = API_BASE_META + boxID;
 
 // Box object is composed of:
