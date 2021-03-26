@@ -4,6 +4,13 @@
       <h2>Import data from file</h2>
 
       <input type="file" @change="readFile" /><br /><br />
+          See
+        <a
+          href="https://github.com/mklilley/swipee/blob/main/import-data-help.md"
+          refl="noopener" target="_blank"
+          >Swipee Github</a
+        >
+        for help formatting your data.
       <span class="error" v-show="error"
         >{{ addFromFileError }} <br />
         <pre v-show="error == 'JSON'">
@@ -33,11 +40,7 @@ https://eg.com/video,watch,long
           image, deck, skipped.</span
         >
         <br />
-        See
-        <a href="https://github.com/mklilley/swipee" refl="noopener"
-          >Swipee Github</a
-        >
-        for more help formatting your data.
+
       </span>
 
       <button v-show="fileOK" v-on:click="addDataFromFile(file, $event)">
