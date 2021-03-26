@@ -6,7 +6,7 @@ Swipee understands two data formats, [JSON](https://www.w3schools.com/whatis/wha
 
 ## [JSON](https://www.w3schools.com/whatis/whatis_json.asp)
 
-This data format is most useful when importing data that you've previously downloaded from Swipee using `Settings > Download your data`.
+This data format is most useful when importing data that you've previously downloaded from Swipee using `Settings > Your data > Download your data`.
 
 To import many links from a JSON formatted file, you must create an array (denoted by [...]) of JSON objects (denoted by {...}).
 
