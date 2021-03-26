@@ -49,10 +49,26 @@ I use Google's [recaptcha](https://www.google.com/recaptcha) with [vue-recaptcha
 
 - `npm install "https://github.com/DanSnow/vue-recaptcha.git#vue-v3" --save`
 
-In order to take payments, I used [Stripe](https://stripe.com/docs) and in particular I used their [integration builder](https://stripe.com/docs/checkout/integration-builder) selecting the `Custom payment flow` to avoid redirects and page reloads that come with usual payment flow. I combined and adapted the `checkout.html` `client.js` and `global.css` into a single component `src/components/Payment.vue`. To make stripe work inside of a vue component I needed to include the `stripe-js` module:
+In order to take payments for Swipee credits, I used [Stripe](https://stripe.com/docs) and in particular I used their [integration builder](https://stripe.com/docs/checkout/integration-builder) selecting the `Custom payment flow` to avoid redirects and page reloads that come with usual payment flow. I combined and adapted the `checkout.html` `client.js` and `global.css` into a single component `src/components/Payment.vue`. To make stripe work inside of a vue component I needed to include the [stripe-js](https://github.com/stripe/stripe-js) module:
 
 - `npm install @stripe/stripe-js --save`
 
 To speed up the download time of the app, I followed this [performance optimisation article](https://medium.com/@aetherus.zhou/vue-cli-3-performance-optimization-55316dcd491c) and opted for "lazy loading" of routes and also compression of the build files. Because Vue3 uses webpack version 4, I needed to use a less up to date version of the `compression-webpack-plugin` to avoid build errors. Specifically:
 
 - `npm install --save-dev compression-webpack-plugin@6.1.1`
+
+### Back end
+
+To make the swipable cards look nice, we use [link-preview-lite](https://github.com/mklilley/link-preview-lite) - a simple NodeJS server that generates a link preview based on information in the head of the link html.
+
+Although uses can store their swipable card data on their devices [localStorage](https://blog.logrocket.com/the-complete-guide-to-using-localstorage-in-javascript-apps-ba44edb53a36/), I created an online storage option in case the localStorage gets wiped (this can sometimes happen on mobile devices). This remote storage also allows users to sync data across devices.
+
+I am using an an open-source json storage system ([jsonbox](https://jsonbox.io/)) for the online storage. I [slightly adapted it](https://github.com/mklilley/jsonbox/) and deployed it on my server using the [instructions](https://github.com/mklilley/jsonbox#how-to-run-locally) that jsonbox provides.
+
+To check users' Swipee credits and to initiate and confirm stripe payments, I created a node server. Check out the [api](tree/main/api) folder for more details about how I set that up.
+
+I use [Formspree](https://formspree.io/) to process the feedback form and route responses to my personal email address.
+
+## Disclaimer
+
+I code for fun in my spare time so this is not a professional app/service. Please don't use this app to store sensitive information - it's not been stress tested for data security bugs. Data lives on your device and you can export it to a text file at any time. There is also an online storage option. There is no backup of the online storage - so if your data is lost due to some technical issues then it is lost forever. I'll do my best to keep the app/service running indefinitely, but if it starts getting abused then I might have to shut it down.
