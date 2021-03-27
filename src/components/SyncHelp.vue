@@ -3,24 +3,29 @@
     <template v-slot:body>
       <h2>Device sync</h2>
 
-      Enter the storage box ID and key from another device below. This will link
-      the devices together and keep them in sync.
-      <br /><br />
+      <div v-if="useRemoteStorage">
+        Enter the storage box ID and key from another device below. This will
+        link the devices together and keep them in sync.
+        <br /><br />
 
-      <input
-        v-on:keypress.enter="switchBox()"
-        v-model.trim="switchBoxID"
-        type="text"
-        placeholder="Box ID"
-      /><br /><br />
-      <input
-        v-on:keypress.enter="switchBox()"
-        v-model.trim="switchApiKey"
-        type="text"
-        placeholder="Key"
-      /><br /><br />
-      <button v-on:click="switchBox()">Link devices</button>
-      <span class="error" v-show="error">{{ switchBoxError }}</span>
+        <input
+          v-on:keypress.enter="switchBox()"
+          v-model.trim="switchBoxID"
+          type="text"
+          placeholder="Box ID"
+        /><br /><br />
+        <input
+          v-on:keypress.enter="switchBox()"
+          v-model.trim="switchApiKey"
+          type="text"
+          placeholder="Key"
+        /><br /><br />
+        <button v-on:click="switchBox()">Link devices</button>
+        <span class="error" v-show="error">{{ switchBoxError }}</span>
+      </div>
+      <div v-else>
+        You need to enable online storage to sync data with another device.
+      </div>
     </template>
   </Modal>
 </template>
@@ -39,6 +44,7 @@ export default {
   props: ["message"],
   data() {
     return {
+      useRemoteStorage: JSON.parse(localStorage.useRemoteStorage),
       switchBoxError: "",
       switchApiKey: "",
       switchBoxID: "",
