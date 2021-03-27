@@ -107,6 +107,15 @@ const db = {
       cards = JSON.parse(localStorage.getItem(key)) || {};
     }
 
+    // from https://stackoverflow.com/a/31102605 - used to make sure consistency across
+    // synced devices
+    cards = Object.keys(cards)
+      .sort()
+      .reduce((arr, key) => {
+        arr.push(cards[key]);
+        return arr;
+      }, []);
+
     // Return the cards as an array
     return Object.values(cards);
   },
