@@ -90,14 +90,14 @@ async function getUserData(boxID, apiKey) {
   if (Object.keys(user).length === 1) {
     user = Object.values(user)[0];
     if (apiKey) {
-    if (user.apiKey === apiKey) {
-      user = await resetPriceAndSeed(user);
-      return user;
+      if (user.apiKey === apiKey) {
+        user = await resetPriceAndSeed(user);
+        return user;
+      } else {
+        // User supplied a valid boxID but not valid apiKey
+        return false;
+      }
     } else {
-      // User supplied a valid boxID but not valid apiKey
-      return false;
-    }
-  } else {
       user = await resetPriceAndSeed(user);
       return user;
     }
@@ -129,9 +129,9 @@ async function resetPriceAndSeed(user) {
       boxID: user.boxID,
       apiKey: user.apiKey,
       credits: user.credits,
-      skipPrice: 1,
-      lastReset: newReset,
-      seed: user.seed + 1,
+      skipPrice: user.skipPrice,
+      lastReset: user.lastReset,
+      seed: user.seed,
       receipts: user.receipts,
     });
   }
