@@ -138,6 +138,12 @@
 
             <br /><br />
 
+            <button v-on:click="migrateModalVisible = true">
+              Migrating links from Pocket
+            </button>
+
+            <br /><br />
+
             <button v-on:click="welcomeModalVisible = true">
               Show welcome screen again
             </button>
@@ -196,6 +202,11 @@
     @close="syncHelpModalVisible = false"
     @switchedBox="reloadStorageDetails"
   ></SyncHelp>
+
+  <Migrate
+    v-if="migrateModalVisible"
+    @close="migrateModalVisible = false"
+  ></Migrate>
 </template>
 
 <script>
@@ -207,6 +218,7 @@ import DeleteData from "@/components/DeleteData.vue";
 import ImportData from "@/components/ImportData.vue";
 import ResetApp from "@/components/ResetApp.vue";
 import SyncHelp from "@/components/SyncHelp.vue";
+import Migrate from "@/components/Migrate.vue";
 
 import { db } from "@/services/storage";
 
@@ -224,6 +236,7 @@ export default {
     ImportData,
     ResetApp,
     SyncHelp,
+    Migrate,
   },
   props: ["allCardsVisible", "skipPrice", "numberOfCards", "credits"],
   data() {
@@ -241,6 +254,7 @@ export default {
       helpVisible: false,
       purchasesVisible: false,
       syncHelpModalVisible: false,
+      migrateModalVisible: false,
       boxID: "",
       apiKey: "",
       showSyncWarnings: localStorage.showSyncWarnings,
