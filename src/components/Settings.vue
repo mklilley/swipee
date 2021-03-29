@@ -14,7 +14,11 @@
           <div v-if="yourDataVisible" class="items">
             Number of cards: <strong>{{ numberOfCards }}</strong> <br /><br />
 
-            <button v-if="!allCardsVisible" v-on:click="toggleAllCards($event)">
+            <button
+              :disabled="numberOfCards <= 1"
+              v-if="!allCardsVisible"
+              v-on:click="toggleAllCards($event)"
+            >
               Show all cards <br />
               PRICE: {{ skipPrice }}
             </button>
