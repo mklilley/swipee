@@ -325,6 +325,7 @@ export default {
     toggleAllCards(event) {
       if (this.allCardsVisible) {
         this.$emit("hideCards");
+        this.$emit("close");
       } else {
         if (this.credits >= this.skipPrice) {
           event.target.classList.add("success");
@@ -332,6 +333,7 @@ export default {
             event.target.classList.remove("success");
             clearTimeout(successTimer);
             this.$emit("showCards");
+            this.$emit("close");
           }, 700);
         } else {
           this.creditsModalVisible = true;
