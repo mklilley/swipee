@@ -375,6 +375,7 @@ export default {
       await db.delete(cardId, {
         remote: JSON.parse(localStorage.useRemoteStorage),
       });
+      this.numberOfCards += -1;
     },
     async handleCardSkipped(cardId) {
       console.log("handleCardSkipped");
@@ -476,6 +477,7 @@ export default {
     },
     addSavedCardToDeck(newCard) {
       this.cards.push(newCard);
+      this.numberOfCards += 1;
     },
     async switchedBox() {
       const data = await getAppData();
