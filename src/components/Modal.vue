@@ -57,11 +57,14 @@ export default {
 .modal-wrapper {
   display: table-cell;
   vertical-align: middle;
+  max-width: 100vw;
 }
 
 .modal-container {
   position: relative;
-  width: 300px;
+  width: 400px;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0px auto;
   padding: 20px 30px;
   background-color: #fff;
