@@ -79,13 +79,18 @@
         <h3 class="open">Online data storage</h3>
         <div class="items">
           <span v-if="useRemoteStorage">
-            Your reading list cards will also be backed up in an online storage
-            "box" for free (you can turn this off in settings).<br /><br />
-            If you don't use the app for a year, however, your data will be
-            deleted. <br /><br />
-            Here is your storage box ID:<br /><br />
+            I don't want your data, so I've made a deliberate choice not to
+            create personally identifiable Swipee accounts. I have however
+            created a free online storage option (which you can turn off in
+            settings). <br /><br />
+            The online storage works as a backup of your reading list data and
+            also allows you to sync that data across devices (see help for more
+            details). <br /><br />
+            If you want to restore/sync data to a new device, you'll need your
+            unique storage box ID (think of this like a username):<br /><br />
             <strong>{{ boxID }}</strong> <br /><br />
-            Here is your personal storage key:<br /><br />
+
+            and storage key (think of this like a password):<br /><br />
             <strong>{{ apiKey }}</strong> <br /><br />
             <button
               @click.prevent="
@@ -97,15 +102,26 @@
             >
               Copy your box ID and key
             </button>
-            and keep them safe - anyone with your box ID can view your data and
-            anyone with your key can edit and delete your data.
+            and store them outside of Swipee. Anyone with your box ID can view
+            your data and anyone with your key can edit and delete your data so
+            please keep them safe.
             <br /><br />
 
-            There is no backup of the online data, so if your data is lost due
-            to some technical issues, it's lost forever.<br /><br />
+            Now for some disclaimers:<br />
 
-            Please don't use this app to store sensitive information - it's not
-            been stress tested for data security bugs.<br /><br />
+            <li>
+              If you don't use the app for a year, your data will be deleted.
+            </li>
+
+            <li>
+              There is no backup of the online data, so if your data is lost due
+              to some technical issues, it's lost forever.
+            </li>
+
+            <li>
+              Please don't use this app to store sensitive information - it's
+              not been stress tested for data security bugs.
+            </li>
           </span>
           <span v-else>
             Currently disabled in settings
