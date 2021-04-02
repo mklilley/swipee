@@ -230,7 +230,14 @@ import pick from "lodash/pick";
 
 export default {
   name: "Settings",
-  emits: ["close", "reloadCards", "hideCards", "showCards", "updateCredits"],
+  emits: [
+    "close",
+    "reloadCards",
+    "hideCards",
+    "showCards",
+    "updateCredits",
+    "switchedBox",
+  ],
   components: {
     Modal,
     Credits,
