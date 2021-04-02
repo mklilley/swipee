@@ -1,12 +1,21 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h2>Device sync</h2>
+      <h2>Restore/sync data</h2>
 
       <div v-if="useRemoteStorage">
-        Enter the storage box ID and key from another device below. This will
-        link the devices together and keep them in sync.
-        <br /><br />
+        Enter a storage box ID and key below. This will: <br />
+        <br />
+        <div class="left">
+          <strong>1.</strong> Remove all reading list data from this device and
+          replace it with data from the online storage box provided.
+        </div>
+        <br />
+        <div class="left">
+          <strong>2.</strong> Keep this device in sync with any other device
+          using the same online storage box.
+        </div>
+        <br />
 
         <input
           v-on:keypress.enter="switchBox()"
@@ -20,7 +29,7 @@
           type="text"
           placeholder="Key"
         /><br /><br />
-        <button v-on:click="switchBox()">Link devices</button>
+        <button v-on:click="switchBox()">Restore and Sync</button>
         <span class="error" v-show="error">{{ switchBoxError }}</span>
       </div>
       <div v-else>
@@ -86,5 +95,9 @@ input {
   display: block;
   color: #e44e42;
   font-weight: 600;
+}
+
+.left {
+  text-align: left;
 }
 </style>
