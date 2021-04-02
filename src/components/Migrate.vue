@@ -4,9 +4,12 @@
       <h2>Migrating from Pocket</h2>
 
       <div class="left">
-        Moving your links from Pocket to Swipee is a bit clunky at the moment.
-        I'm working on making this process better. For now this is what you need
-        to do:
+        Moving your links from
+        <a href="https://getpocket.com/" rel="noopener" target="_blank"
+          >Pocket</a
+        >
+        to Swipee is a bit clunky at the moment. I'm working on making this
+        process better. For now this is what you need to do:
       </div>
       <br />
       <div class="left">
