@@ -365,11 +365,12 @@ h3 {
 
 .card .overlay .swipe-price {
   position: absolute;
-  top: 10px;
+  top: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  font-size: 25px;
 }
 
 .card img {
@@ -448,6 +449,7 @@ h3 {
 }
 
 .gg-dollar {
+  --ggs: 1.5;
   box-sizing: border-box;
   position: relative;
   display: block;
