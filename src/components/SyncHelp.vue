@@ -1,7 +1,7 @@
 <template>
   <Modal v-on:close="$emit('close')">
     <template v-slot:body>
-      <h2>Restore/sync data</h2>
+      <h2>{{ message }} data</h2>
 
       <div v-if="useRemoteStorage">
         Enter a storage box ID and key below. This will: <br />
@@ -13,7 +13,7 @@
         <br />
         <div class="left">
           <strong>2.</strong> Keep this device in sync with any other device
-          using the same online storage box.
+          that uses the same online storage box.
         </div>
         <br />
 
@@ -29,7 +29,7 @@
           type="text"
           placeholder="Key"
         /><br /><br />
-        <button v-on:click="switchBox()">Restore and Sync</button>
+        <button v-on:click="switchBox()">{{ message }}</button>
         <span class="error" v-show="error">{{ switchBoxError }}</span>
       </div>
       <div v-else>

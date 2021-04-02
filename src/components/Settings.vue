@@ -130,30 +130,42 @@
             Help
           </h3>
           <div v-if="helpVisible" class="items">
-            <button v-on:click="feedbackModalVisible = true">
-              Send feedback
-            </button>
-
-            <br /><br />
-
-            <button v-on:click="syncHelpModalVisible = true">
-              Sync data across multiple devices
-            </button>
-
-            <br /><br />
-
-            <button v-on:click="migrateModalVisible = true">
-              Migrating links from Pocket
-            </button>
-
-            <br /><br />
-
             <button v-on:click="welcomeModalVisible = true">
               Show welcome screen again
             </button>
 
             <br /><br />
 
+            <button v-on:click="migrateModalVisible = true">
+              Migrating links from "Pocket"
+            </button>
+            <br /><br />
+            <button
+              v-on:click="
+                syncHelpMessage = 'Sync';
+                syncHelpModalVisible = true;
+              "
+            >
+              Sync data across multiple devices
+            </button>
+
+            <br /><br />
+
+            <button
+              v-on:click="
+                syncHelpMessage = 'Restore';
+                syncHelpModalVisible = true;
+              "
+            >
+              Restore data
+            </button>
+
+            <br /><br />
+            <button v-on:click="feedbackModalVisible = true">
+              Send feedback
+            </button>
+
+            <br /><br />
             <button v-on:click="resetAppModalVisible = true">
               Reset App
             </button>
@@ -205,6 +217,7 @@
     v-if="syncHelpModalVisible"
     @close="syncHelpModalVisible = false"
     @switchedBox="reloadStorageDetails"
+    :message="syncHelpMessage"
   ></SyncHelp>
 
   <Migrate
@@ -269,6 +282,7 @@ export default {
       boxID: "",
       apiKey: "",
       showSyncWarnings: localStorage.showSyncWarnings,
+      syncHelpMessage: "Sync",
     };
   },
   methods: {
