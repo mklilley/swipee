@@ -250,6 +250,7 @@ export default {
     "showCards",
     "updateCredits",
     "switchedBox",
+    "showFirstTime",
   ],
   components: {
     Modal,
@@ -355,6 +356,10 @@ export default {
             clearTimeout(successTimer);
             this.$emit("showCards");
             this.$emit("close");
+            if (JSON.parse(localStorage.firstShowAll)) {
+              this.$emit("showFirstTime", "Show all cards");
+              localStorage.firstShowAll = false;
+            }
           }, 700);
         } else {
           this.creditsModalVisible = true;

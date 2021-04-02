@@ -30,6 +30,7 @@
     @hideCards="showAllCards(false)"
     @updateCredits="updateCredits"
     @switchedBox="switchedBox"
+    @showFirstTime="showFirstTime"
   ></Settings>
 
   <Credits
@@ -53,6 +54,13 @@
     :message="syncInfo"
     @reloadCards="loadCards"
   ></SyncWarning>
+
+  <FirstTime
+    v-if="firstTimeVisible"
+    @close="firstTimeVisible = false"
+    :action="firstTimeAction"
+    :skipPrice="skipPrice"
+  ></FirstTime>
 
   <div
     class="cards"
@@ -89,6 +97,7 @@ import Settings from "@/components/Settings";
 import Credits from "@/components/Credits";
 import ChipsMultiselect from "@/components/ChipsMultiselect";
 import SyncWarning from "@/components/SyncWarning";
+import FirstTime from "@/components/FirstTime";
 
 import isEqual from "lodash/isEqual";
 import pick from "lodash/pick";
@@ -111,6 +120,7 @@ export default {
     Credits,
     ChipsMultiselect,
     SyncWarning,
+    FirstTime,
   },
 
   async mounted() {
@@ -136,6 +146,12 @@ export default {
         },
         { remote: true }
       );
+    }
+    if (localStorage.firstSwipeRight === undefined) {
+      localStorage.firstSwipeRight = true;
+    }
+    if (localStorage.firstShowAll === undefined) {
+      localStorage.firstShowAll = true;
     }
     if (localStorage.useRemoteStorage === undefined) {
       localStorage.useRemoteStorage = true;
@@ -209,10 +225,16 @@ export default {
       seed: 1,
       msInDay: 1000 * 60 * 60 * 24,
       onLine: navigator.onLine,
+      firstTimeVisible: false,
+      firstTimeAction: "Save for later",
     };
   },
 
   methods: {
+    showFirstTime(action) {
+      this.firstTimeAction = action;
+      this.firstTimeVisible = true;
+    },
     skipCardFail() {
       if (this.onLine) {
         this.creditsModalVisible = true;
@@ -388,6 +410,10 @@ export default {
         { remote: JSON.parse(localStorage.useRemoteStorage) }
       );
       this.useCreditsUpdatePrice();
+      if (JSON.parse(localStorage.firstSwipeRight)) {
+        this.showFirstTime("Save for later");
+        localStorage.firstSwipeRight = false;
+      }
     },
     async useCreditsUpdatePrice() {
       this.credits = this.credits - this.skipPrice;
